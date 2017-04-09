@@ -1,7 +1,16 @@
 package net.bouzuya.blog;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import net.bouzuya.blog.adapters.EntryAdapter;
+import net.bouzuya.blog.models.Entry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,6 +20,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         List<Entry> entryList = newEntries();
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.entry_list);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        RecyclerView.Adapter adapter = new EntryAdapter(entryList);
+        recyclerView.setAdapter(adapter);
     }
 
     @NonNull
