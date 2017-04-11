@@ -24,12 +24,12 @@ public class MainActivity extends AppCompatActivity {
 
         mEntryList = newEntries();
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.entry_list);
-        recyclerView.setHasFixedSize(true);
+        RecyclerView entryListView = (RecyclerView) findViewById(R.id.entry_list);
+        entryListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        entryListView.setLayoutManager(layoutManager);
         mAdapter = new EntryAdapter(mEntryList);
-        recyclerView.setAdapter(mAdapter);
+        entryListView.setAdapter(mAdapter);
     }
 
     @NonNull
