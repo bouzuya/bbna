@@ -14,18 +14,20 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private List<Entry> mEntryList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        List<Entry> entryList = newEntries();
+        mEntryList = newEntries();
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.entry_list);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerView.Adapter adapter = new EntryAdapter(entryList);
+        RecyclerView.Adapter adapter = new EntryAdapter(mEntryList);
         recyclerView.setAdapter(adapter);
     }
 
