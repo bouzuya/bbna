@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
         if (data.isOk()) {
             Log.d(TAG, "onLoadFinished: isOk");
             List<Entry> newEntryList = data.getValue();
+            mEntryList.clear();
             mEntryList.addAll(newEntryList);
             mAdapter.notifyDataSetChanged();
             String message = "load " + newEntryList.size() + " entries";
