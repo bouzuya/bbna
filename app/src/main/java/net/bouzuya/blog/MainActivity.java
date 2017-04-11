@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mEntryList = newEntries();
+        mEntryList = new ArrayList<>();
 
         RecyclerView entryListView = (RecyclerView) findViewById(R.id.entry_list);
         entryListView.setHasFixedSize(true);
@@ -75,16 +75,8 @@ public class MainActivity extends AppCompatActivity
         entryListView.setLayoutManager(layoutManager);
         mAdapter = new EntryAdapter(mEntryList);
         entryListView.setAdapter(mAdapter);
+
         LoaderManager loaderManager = getSupportLoaderManager();
         loaderManager.initLoader(ENTRY_LIST_JSON_LOADER_ID, null, this);
-    }
-
-    @NonNull
-    private List<Entry> newEntries() {
-        List<Entry> entryList = new ArrayList<>();
-        entryList.add(new Entry("2017-01-01", "entry 1"));
-        entryList.add(new Entry("2017-01-02", "entry 2"));
-        entryList.add(new Entry("2017-01-03", "entry 3"));
-        return entryList;
     }
 }
