@@ -14,6 +14,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private RecyclerView.Adapter mAdapter;
     private List<Entry> mEntryList;
 
     @Override
@@ -27,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerView.Adapter adapter = new EntryAdapter(mEntryList);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new EntryAdapter(mEntryList);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @NonNull
