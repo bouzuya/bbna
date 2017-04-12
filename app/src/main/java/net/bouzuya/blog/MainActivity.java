@@ -1,5 +1,6 @@
 package net.bouzuya.blog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -98,5 +99,11 @@ public class MainActivity extends AppCompatActivity
         int position = mEntryListView.getChildAdapterPosition(view);
         Entry entry = mEntryList.get(position);
         Log.d(TAG, "onClick: " + entry.getDate());
+
+        Intent intent = new Intent(MainActivity.this, EntryDetailActivity.class);
+        String html =
+                "<html><head></head><body><h1>" + entry.getDate() + "</h1></body></html>";
+        intent.putExtra("html", html);
+        startActivity(intent);
     }
 }
