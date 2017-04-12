@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import net.bouzuya.blog.adapters.EntryAdapter;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Result<List<Entry>>> {
+        implements LoaderManager.LoaderCallbacks<Result<List<Entry>>>, View.OnClickListener {
 
     public static final int ENTRY_LIST_LOADER_ID = 0;
 
@@ -75,10 +77,26 @@ public class MainActivity extends AppCompatActivity
         mEntryListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mEntryListView.setLayoutManager(layoutManager);
-        mAdapter = new EntryAdapter(mEntryList);
+        mAdapter = new EntryAdapter(mEntryList) {
+            @Override
+            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                ViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+                viewHolder.layoutView.setOnClickListener(MainActivity.this);
+                return viewHolder;
+            }
+        };
         mEntryListView.setAdapter(mAdapter);
 
         LoaderManager loaderManager = getSupportLoaderManager();
         loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (mEntryListView == null) { return; }
+        if (mEntryList == null) { return; }
+        int position = mEntryListView.getChildAdapterPosition(view);
+        Entry entry = mEntryList.get(position);
+        Log.d(TAG, "onClick: " + entry.getDate());
     }
 }
