@@ -13,11 +13,13 @@ import java.util.List;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewGroup layoutView;
         public TextView dateTextView;
         public TextView titleTextView;
 
         public ViewHolder(View view) {
             super(view);
+            this.layoutView = (ViewGroup) view.findViewById(R.id.entry);
             this.dateTextView = (TextView) view.findViewById(R.id.entry_date);
             this.titleTextView = (TextView) view.findViewById(R.id.entry_title);
         }
@@ -45,7 +47,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.entry, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        ViewHolder holder = new ViewHolder(view);
+        return holder;
     }
 }
