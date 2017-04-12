@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity
 
     private RecyclerView.Adapter mAdapter;
     private List<Entry> mEntryList;
+    private RecyclerView mEntryListView;
 
     @Override
     public Loader<Result<List<Entry>>> onCreateLoader(int id, Bundle args) {
@@ -70,12 +71,12 @@ public class MainActivity extends AppCompatActivity
 
         mEntryList = new ArrayList<>();
 
-        RecyclerView entryListView = (RecyclerView) findViewById(R.id.entry_list);
-        entryListView.setHasFixedSize(true);
+        mEntryListView = (RecyclerView) findViewById(R.id.entry_list);
+        mEntryListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        entryListView.setLayoutManager(layoutManager);
+        mEntryListView.setLayoutManager(layoutManager);
         mAdapter = new EntryAdapter(mEntryList);
-        entryListView.setAdapter(mAdapter);
+        mEntryListView.setAdapter(mAdapter);
 
         LoaderManager loaderManager = getSupportLoaderManager();
         loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, this);
