@@ -13,15 +13,13 @@ import java.util.List;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mDateTextView;
-        public TextView mTitleTextView;
+        public TextView dateTextView;
+        public TextView titleTextView;
 
         public ViewHolder(View view) {
             super(view);
-            TextView dateTextView = (TextView) view.findViewById(R.id.entry_date);
-            mDateTextView = dateTextView;
-            TextView titleTextView = (TextView) view.findViewById(R.id.entry_title);
-            mTitleTextView = titleTextView;
+            this.dateTextView = (TextView) view.findViewById(R.id.entry_date);
+            this.titleTextView = (TextView) view.findViewById(R.id.entry_title);
         }
     }
 
@@ -39,8 +37,8 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Entry entry = mEntryList.get(position);
-        holder.mDateTextView.setText(entry.getDate());
-        holder.mTitleTextView.setText(entry.getTitle());
+        holder.dateTextView.setText(entry.getDate());
+        holder.titleTextView.setText(entry.getTitle());
     }
 
     @Override
