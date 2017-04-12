@@ -19,7 +19,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Result<List<Entry>>> {
 
-    public static final int ENTRY_LIST_JSON_LOADER_ID = 0;
+    public static final int ENTRY_LIST_LOADER_ID = 0;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
     public Loader<Result<List<Entry>>> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "onCreateLoader: ");
         switch (id) {
-            case ENTRY_LIST_JSON_LOADER_ID:
+            case ENTRY_LIST_LOADER_ID:
                 return new EntryListLoader(this);
             default:
                 return null;
@@ -78,6 +78,6 @@ public class MainActivity extends AppCompatActivity
         entryListView.setAdapter(mAdapter);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        loaderManager.initLoader(ENTRY_LIST_JSON_LOADER_ID, null, this);
+        loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, this);
     }
 }
