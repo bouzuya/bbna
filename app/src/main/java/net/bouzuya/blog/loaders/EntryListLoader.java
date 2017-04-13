@@ -1,4 +1,4 @@
-package net.bouzuya.blog;
+package net.bouzuya.blog.loaders;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

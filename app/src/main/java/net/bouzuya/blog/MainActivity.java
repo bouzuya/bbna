@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import net.bouzuya.blog.adapters.EntryAdapter;
+import net.bouzuya.blog.loaders.EntryListLoader;
 import net.bouzuya.blog.models.Entry;
 import net.bouzuya.blog.models.Result;
 
