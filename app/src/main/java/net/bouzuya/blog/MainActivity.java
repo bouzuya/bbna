@@ -17,7 +17,6 @@ import net.bouzuya.blog.loaders.EntryListLoader;
 import net.bouzuya.blog.models.Entry;
 import net.bouzuya.blog.models.Result;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -27,8 +26,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private RecyclerView.Adapter mAdapter;
-    private List<Entry> mEntryList;
+    private EntryAdapter mAdapter;
     private RecyclerView mEntryListView;
 
     @Override
@@ -48,8 +46,7 @@ public class MainActivity extends AppCompatActivity
         if (data.isOk()) {
             Log.d(TAG, "onLoadFinished: isOk");
             List<Entry> newEntryList = data.getValue();
-            mEntryList.clear();
-            mEntryList.addAll(newEntryList);
+            mAdapter.changeDataSet(newEntryList);
             mAdapter.notifyDataSetChanged();
             String message = "load " + newEntryList.size() + " entries";
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -73,8 +70,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mEntryList = new ArrayList<>();
-
         mEntryListView = (RecyclerView) findViewById(R.id.entry_list);
         mEntryListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -95,10 +90,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
-        if (mEntryListView == null) { return; }
-        if (mEntryList == null) { return; }
+        if (mEntryListView == null) {
+            return;
+        }
         int position = mEntryListView.getChildAdapterPosition(view);
-        Entry entry = mEntryList.get(position);
+        Entry entry = mAdapter.getItem(position);
         Log.d(TAG, "onClick: " + entry.getDate());
 
         Intent intent = new Intent(MainActivity.this, EntryDetailActivity.class);
