@@ -19,8 +19,7 @@ import net.bouzuya.blog.models.Result;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Result<List<Entry>>>, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int ENTRY_LIST_LOADER_ID = 0;
 
@@ -29,22 +28,11 @@ public class MainActivity extends AppCompatActivity
     private EntryAdapter mAdapter;
     private RecyclerView mEntryListView;
 
-    @Override
-    public Loader<Result<List<Entry>>> onCreateLoader(int id, Bundle args) {
-        Log.d(TAG, "onCreateLoader: ");
-        switch (id) {
-            case ENTRY_LIST_LOADER_ID:
-                return new EntryListLoader(this);
-            default:
-                return null;
-        }
-    }
 
-    @Override
-    public void onLoadFinished(Loader<Result<List<Entry>>> loader, Result<List<Entry>> data) {
-        Log.d(TAG, "onLoadFinished: ");
+    public void onLoadEntryListFinished(Result<List<Entry>> data) {
+        Log.d(TAG, "onLoadEntryListFinished: ");
         if (data.isOk()) {
-            Log.d(TAG, "onLoadFinished: isOk");
+            Log.d(TAG, "onLoadEntryListFinished: isOk");
             List<Entry> newEntryList = data.getValue();
             mAdapter.changeDataSet(newEntryList);
             mAdapter.notifyDataSetChanged();
@@ -52,16 +40,10 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         } else {
             Exception e = data.getException();
-            Log.e(TAG, "onLoadFinished: isNg", e);
+            Log.e(TAG, "onLoadEntryListFinished: ", e);
             String message = "load error";
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Result<List<Entry>>> loader) {
-        Log.d(TAG, "onLoaderReset: ");
-        // do nothing
     }
 
     @Override
@@ -84,8 +66,7 @@ public class MainActivity extends AppCompatActivity
         };
         mEntryListView.setAdapter(mAdapter);
 
-        LoaderManager loaderManager = getSupportLoaderManager();
-        loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, this);
+        initEntryListLoader();
     }
 
     @Override
@@ -102,5 +83,31 @@ public class MainActivity extends AppCompatActivity
                 "<html><head></head><body><h1>" + entry.getDate() + "</h1></body></html>";
         intent.putExtra("html", html);
         startActivity(intent);
+    }
+
+    private void initEntryListLoader() {
+        LoaderManager.LoaderCallbacks<Result<List<Entry>>> callbacks =
+                new LoaderManager.LoaderCallbacks<Result<List<Entry>>>() {
+                    @Override
+                    public Loader<Result<List<Entry>>> onCreateLoader(int id, Bundle args) {
+                        // assert(id === ENTRY_LIST_LOADER_ID);
+                        return new EntryListLoader(MainActivity.this);
+                    }
+
+                    @Override
+                    public void onLoadFinished(
+                            Loader<Result<List<Entry>>> loader,
+                            Result<List<Entry>> data
+                    ) {
+                        MainActivity.this.onLoadEntryListFinished(data);
+                    }
+
+                    @Override
+                    public void onLoaderReset(Loader<Result<List<Entry>>> loader) {
+                        // do nothing
+                    }
+                };
+        LoaderManager loaderManager = getSupportLoaderManager();
+        loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, callbacks);
     }
 }
