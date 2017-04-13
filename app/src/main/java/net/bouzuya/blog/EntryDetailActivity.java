@@ -19,6 +19,6 @@ public class EntryDetailActivity extends AppCompatActivity {
         Bundle extras = intent.getExtras();
         String html = extras.getString("html");
         WebView webView = (WebView) findViewById(R.id.entry_detail);
-        webView.loadData(html, "text/html", "UTF-8");
+        webView.loadData(html, "text/html; charset=UTF-8", "UTF-8");
     }
 }
