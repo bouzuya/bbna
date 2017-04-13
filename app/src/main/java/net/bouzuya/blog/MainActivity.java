@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         mEntryListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mEntryListView.setLayoutManager(layoutManager);
-        mAdapter = new EntryAdapter(mEntryList) {
+        mAdapter = new EntryAdapter() {
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 ViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
