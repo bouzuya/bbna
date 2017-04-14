@@ -37,8 +37,8 @@ public class EntryListLoader extends AsyncTaskLoader<Result<List<Entry>>> {
     @Override
     public Result<List<Entry>> loadInBackground() {
         try {
-            URL postsJsonUrl = newPostsJsonUrl();
-            String jsonString = fetch(postsJsonUrl);
+            URL entryListJsonUrl = newEntryListJsonUrl();
+            String jsonString = fetch(entryListJsonUrl);
             List<Entry> entryList = parse(jsonString);
             return Result.ok(entryList);
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class EntryListLoader extends AsyncTaskLoader<Result<List<Entry>>> {
     }
 
     @NonNull
-    private URL newPostsJsonUrl() {
+    private URL newEntryListJsonUrl() {
         try {
             return new URL("https://blog.bouzuya.net/posts.json");
         } catch (MalformedURLException e) {
