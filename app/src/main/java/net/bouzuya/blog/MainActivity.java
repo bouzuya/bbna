@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 new LoaderManager.LoaderCallbacks<Result<List<Entry>>>() {
                     @Override
                     public Loader<Result<List<Entry>>> onCreateLoader(int id, Bundle args) {
-                        // assert(id === ENTRY_LIST_LOADER_ID);
+                        if (id != ENTRY_LIST_LOADER_ID) throw new AssertionError();
                         return new EntryListLoader(MainActivity.this);
                     }
 
