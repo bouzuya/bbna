@@ -13,14 +13,17 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import net.bouzuya.blog.adapters.EntryAdapter;
+import net.bouzuya.blog.loaders.EntryDetailLoader;
 import net.bouzuya.blog.loaders.EntryListLoader;
 import net.bouzuya.blog.models.Entry;
+import net.bouzuya.blog.models.EntryDetail;
 import net.bouzuya.blog.models.Result;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final int ENTRY_DETAIL_LOADER_ID = 1;
     public static final int ENTRY_LIST_LOADER_ID = 0;
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -28,6 +31,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EntryAdapter mAdapter;
     private RecyclerView mEntryListView;
 
+    public void onLoadEntryDetailFinished(Result<EntryDetail> data) {
+        Log.d(TAG, "onLoadEntryDetailFinished: ");
+        if (data.isOk()) {
+            Log.d(TAG, "onLoadEntryDetailFinished: isOk");
+
+            initEntryDetailLoader(null);
+
+            EntryDetail newEntryDetail = data.getValue();
+            String message = "load " + newEntryDetail.getDate() + "";
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            EntryDetail d = newEntryDetail;
+
+            Intent intent = new Intent(MainActivity.this, EntryDetailActivity.class);
+            String html =
+                    "<html><head></head><body><h1>" + d.getDate() + "</h1></body></html>";
+
+            intent.putExtra("html", html);
+            startActivity(intent);
+        } else {
+            Exception e = data.getException();
+            Log.e(TAG, "onLoadEntryDetailFinished: ", e);
+            String message = "load error";
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
+    }
 
     public void onLoadEntryListFinished(Result<List<Entry>> data) {
         Log.d(TAG, "onLoadEntryListFinished: ");
@@ -67,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mEntryListView.setAdapter(mAdapter);
 
         initEntryListLoader();
+        initEntryDetailLoader(null);
     }
 
     @Override
@@ -78,11 +107,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Entry entry = mAdapter.getItem(position);
         Log.d(TAG, "onClick: " + entry.getDate());
 
-        Intent intent = new Intent(MainActivity.this, EntryDetailActivity.class);
-        String html =
-                "<html><head></head><body><h1>" + entry.getDate() + "</h1></body></html>";
-        intent.putExtra("html", html);
-        startActivity(intent);
+        String date = entry.getDate();
+        initEntryDetailLoader(date);
+    }
+
+    private void initEntryDetailLoader(String dateOrNull) {
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Bundle bundle = new Bundle();
+        bundle.putString("date", dateOrNull);
+        LoaderManager.LoaderCallbacks<Result<EntryDetail>> callbacks =
+                new LoaderManager.LoaderCallbacks<Result<EntryDetail>>() {
+                    @Override
+                    public Loader<Result<EntryDetail>> onCreateLoader(int id, Bundle args) {
+                        if (id != ENTRY_DETAIL_LOADER_ID) throw new AssertionError();
+                        String dateOrNull = args.getString("date");
+                        return new EntryDetailLoader(MainActivity.this, dateOrNull);
+                    }
+
+                    @Override
+                    public void onLoadFinished(
+                            Loader<Result<EntryDetail>> loader,
+                            Result<EntryDetail> data
+                    ) {
+                        MainActivity.this.onLoadEntryDetailFinished(data);
+                    }
+
+                    @Override
+                    public void onLoaderReset(Loader<Result<EntryDetail>> loader) {
+                        // do nothing
+                    }
+                };
+        loaderManager.restartLoader(ENTRY_DETAIL_LOADER_ID, bundle, callbacks);
     }
 
     private void initEntryListLoader() {
