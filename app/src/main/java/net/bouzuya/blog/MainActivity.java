@@ -44,8 +44,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             EntryDetail d = newEntryDetail;
 
             Intent intent = new Intent(MainActivity.this, EntryDetailActivity.class);
-            String html =
-                    "<html><head></head><body><h1>" + d.getDate() + "</h1></body></html>";
+            String html = new StringBuilder()
+                    .append("<html>")
+                    .append("<head></head>")
+                    .append("<body>")
+                    .append("<article>")
+                    .append("<header>")
+                    .append("<h1 class=\"title\">").append(d.getTitle()).append("</h1>")
+//                    .append("<p class=\"pubdate\">").append(d.getPubdate()).append("</p>")
+//                    .append("<p class=\"minutes\">").append(d.getMinutes()).append("</p>")
+//                    .append(d.getTags().isEmpty() ? "" : "<ul class=\"tags\"><li>")
+//                    .append(this.join("</li><li>", d.getTags()))
+//                    .append(d.getTags().isEmpty() ? "" : "</li></ul>")
+                    .append("</header>")
+                    .append("<div class=\"body\">").append(d.getHtml()).append("</div>")
+                    .append("</article>")
+                    .append("</body>")
+                    .append("</html>")
+                    .toString();
 
             intent.putExtra("html", html);
             startActivity(intent);
@@ -165,4 +181,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LoaderManager loaderManager = getSupportLoaderManager();
         loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, callbacks);
     }
+
+//    private String join(String delimiter, List<String> list) {
+//        if (list.isEmpty()) return "";
+//        StringBuilder builder = new StringBuilder();
+//        for (String item : list) {
+//            builder.append(delimiter).append(item);
+//        }
+//        return delimiter.isEmpty()
+//                ? builder.toString()
+//                : builder.substring(delimiter.length()).toString();
+//    }
 }
