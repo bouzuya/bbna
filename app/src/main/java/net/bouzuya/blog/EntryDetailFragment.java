@@ -1,7 +1,7 @@
 package net.bouzuya.blog;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import net.bouzuya.blog.loaders.EntryDetailLoader;
 import net.bouzuya.blog.models.EntryDetail;
@@ -95,7 +94,7 @@ public class EntryDetailFragment extends Fragment {
 
             EntryDetail newEntryDetail = data.getValue();
             String message = "load " + newEntryDetail.getDate() + "";
-            Toast.makeText(this.getContext(), message, Toast.LENGTH_LONG).show();
+            Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
             EntryDetail d = newEntryDetail;
 
             String html = new StringBuilder()
@@ -124,7 +123,7 @@ public class EntryDetailFragment extends Fragment {
             Exception e = data.getException();
             Log.e(TAG, "onLoadEntryDetailFinished: ", e);
             String message = "load error";
-            Toast.makeText(this.getContext(), message, Toast.LENGTH_LONG).show();
+            Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
         }
     }
 

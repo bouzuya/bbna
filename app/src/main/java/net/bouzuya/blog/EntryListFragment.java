@@ -3,6 +3,7 @@ package net.bouzuya.blog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -12,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import net.bouzuya.blog.adapters.EntryAdapter;
 import net.bouzuya.blog.loaders.EntryListLoader;
@@ -106,12 +106,12 @@ public class EntryListFragment extends Fragment implements View.OnClickListener 
             mAdapter.changeDataSet(newEntryList);
             mAdapter.notifyDataSetChanged();
             String message = "load " + newEntryList.size() + " entries";
-            Toast.makeText(this.getContext(), message, Toast.LENGTH_LONG).show();
+            Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
         } else {
             Exception e = data.getException();
             Log.e(TAG, "onLoadEntryListFinished: ", e);
             String message = "load error";
-            Toast.makeText(this.getContext(), message, Toast.LENGTH_LONG).show();
+            Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
         }
     }
 
