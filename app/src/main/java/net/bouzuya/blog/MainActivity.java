@@ -3,8 +3,10 @@ package net.bouzuya.blog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 
 import net.bouzuya.blog.adapters.EntryFragmentPagerAdapter;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mAdapter = new EntryFragmentPagerAdapter(fragmentManager);
         mViewPager.setAdapter(mAdapter);
+        showList();
     }
 
     @Override
@@ -42,9 +45,29 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                showList();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void showDetail(String date) {
         mAdapter.setDetailDate(date);
         mAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(POSITION_DETAIL);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(date);
+    }
+
+    private void showList() {
+        mViewPager.setCurrentItem(POSITION_LIST);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setTitle("blog.bouzuya.net");
     }
 }
