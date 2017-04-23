@@ -45,15 +45,13 @@ public class EntryDetailFragment extends Fragment {
         Bundle arguments = getArguments();
         if (arguments != null) {
             mDate = arguments.getString(DATE);
-            initEntryDetailLoader(mDate);
-        } else {
-            initEntryDetailLoader(null);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        initEntryDetailLoader(mDate);
         return inflater.inflate(R.layout.fragment_entry_detail, container, false);
     }
 
