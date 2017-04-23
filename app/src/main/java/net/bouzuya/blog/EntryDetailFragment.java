@@ -35,6 +35,10 @@ public class EntryDetailFragment extends Fragment {
         return fragment;
     }
 
+    public String getDate() {
+        return mDate;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
