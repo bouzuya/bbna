@@ -19,9 +19,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onEntrySelect(String date) {
-        mAdapter.setDetailDate(date);
-        mAdapter.notifyDataSetChanged();
-        mViewPager.setCurrentItem(POSITION_DETAIL);
+        showDetail(date);
     }
 
     @Override
@@ -42,5 +40,11 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    private void showDetail(String date) {
+        mAdapter.setDetailDate(date);
+        mAdapter.notifyDataSetChanged();
+        mViewPager.setCurrentItem(POSITION_DETAIL);
     }
 }
