@@ -3,6 +3,7 @@
     android:id="@+id/entry"
     android:layout_width="wrap_content"
     android:layout_height="72dp"
+    android:background="@android:color/background_light"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
 
