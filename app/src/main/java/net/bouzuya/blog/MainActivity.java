@@ -18,9 +18,11 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     private EntryFragmentPagerAdapter mAdapter;
     private ViewPager mViewPager;
+    private String mDate;
 
     @Override
     public void onEntrySelect(String date) {
+        mDate = date;
         showDetail(date);
     }
 
@@ -33,6 +35,18 @@ public class MainActivity extends AppCompatActivity
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mAdapter = new EntryFragmentPagerAdapter(fragmentManager);
         mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    MainActivity.this.showList();
+                } else if (position == 1) {
+                    MainActivity.this.showDetail(mDate);
+                } else {
+                    throw new AssertionError();
+                }
+            }
+        });
         showList();
     }
 
