@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
         showList();
+
+        String latestDateOrNull = new BlogPreferences(this).getLatestDate();
+        Log.d(TAG, "onCreate: LatestDate: " + latestDateOrNull);
     }
 
     @Override

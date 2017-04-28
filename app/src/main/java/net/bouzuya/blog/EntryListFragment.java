@@ -107,6 +107,10 @@ public class EntryListFragment extends Fragment implements View.OnClickListener 
             mAdapter.notifyDataSetChanged();
             String message = "load " + newEntryList.size() + " entries";
             Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
+
+            String latestDateOrNull = newEntryList.size() > 0
+                    ? newEntryList.get(0).getDate() : null;
+            new BlogPreferences(this.getContext()).setLatestDate(latestDateOrNull);
         } else {
             Exception e = data.getException();
             Log.e(TAG, "onLoadEntryListFinished: ", e);
