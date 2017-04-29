@@ -112,38 +112,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener 
             mAdapter.notifyDataSetChanged();
             String message = "load " + newEntryList.size() + " entries";
             Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
-
-            Context context = this.getContext();
-            BlogPreferences preferences = new BlogPreferences(context);
-            String oldLatestDate = preferences.getLatestDate();
-            String newLatestDate = newEntryList.size() > 0
-                    ? newEntryList.get(0).getDate() : null;
-            preferences.setLatestDate(newLatestDate);
-            if (newLatestDate != null &&
-                    (oldLatestDate == null || !oldLatestDate.equals(newLatestDate))) {
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.putExtra("latest_date", newLatestDate);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-                        | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                int requestCode = 0;
-                int flags = 0;
-                PendingIntent pendingIntent = PendingIntent.getActivity(
-                        context, requestCode, intent, flags
-                );
-                Notification notification = new NotificationCompat.Builder(context)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .setContentText(newLatestDate)
-                        .setContentTitle("new entry")
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .build();
-                NotificationManager notificationManager =
-                        (NotificationManager) context
-                                .getSystemService(Context.NOTIFICATION_SERVICE);
-                int notificationId = 0;
-                notificationManager.notify(notificationId, notification);
-            }
         } else {
             Exception e = data.getException();
             Log.e(TAG, "onLoadEntryListFinished: ", e);
