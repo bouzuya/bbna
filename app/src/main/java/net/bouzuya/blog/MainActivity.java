@@ -10,6 +10,9 @@ import android.view.MenuItem;
 
 import net.bouzuya.blog.adapters.EntryFragmentPagerAdapter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity
         implements EntryListFragment.OnEntrySelectListener {
 
@@ -17,8 +20,9 @@ public class MainActivity extends AppCompatActivity
     private static final int POSITION_DETAIL = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
     private EntryFragmentPagerAdapter mAdapter;
-    private ViewPager mViewPager;
     private String mDate;
+    @BindView(R.id.view_pager)
+    ViewPager mViewPager;
 
     @Override
     public void onEntrySelect(String date) {
@@ -31,8 +35,8 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mAdapter = new EntryFragmentPagerAdapter(fragmentManager);
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {

@@ -15,6 +15,10 @@ import net.bouzuya.blog.loaders.EntryDetailLoader;
 import net.bouzuya.blog.models.EntryDetail;
 import net.bouzuya.blog.models.Result;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class EntryDetailFragment extends Fragment {
     public static final int ENTRY_DETAIL_LOADER_ID = 1;
 
@@ -22,6 +26,10 @@ public class EntryDetailFragment extends Fragment {
     private static final String TAG = EntryDetailFragment.class.getSimpleName();
 
     private String mDate;
+    private Unbinder unbinder;
+
+    @BindView(R.id.entry_detail)
+    WebView mWebView;
 
     public EntryDetailFragment() {
         // Required empty public constructor
@@ -52,7 +60,15 @@ public class EntryDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         initEntryDetailLoader(mDate);
-        return inflater.inflate(R.layout.fragment_entry_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_entry_detail, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void initEntryDetailLoader(String dateOrNull) {
@@ -118,9 +134,7 @@ public class EntryDetailFragment extends Fragment {
                     .append("</html>")
                     .toString();
 
-            View view = getView();
-            WebView webView = (WebView) view.findViewById(R.id.entry_detail);
-            webView.loadData(html, "text/html; charset=UTF-8", "UTF-8");
+            mWebView.loadData(html, "text/html; charset=UTF-8", "UTF-8");
         } else {
             Exception e = data.getException();
             Log.e(TAG, "onLoadEntryDetailFinished: ", e);

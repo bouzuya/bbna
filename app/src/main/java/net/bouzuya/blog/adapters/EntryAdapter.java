@@ -12,17 +12,21 @@ import net.bouzuya.blog.models.Entry;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.entry)
         public ViewGroup layoutView;
+        @BindView(R.id.entry_date)
         public TextView dateTextView;
+        @BindView(R.id.entry_title)
         public TextView titleTextView;
 
         public ViewHolder(View view) {
             super(view);
-            this.layoutView = (ViewGroup) view.findViewById(R.id.entry);
-            this.dateTextView = (TextView) view.findViewById(R.id.entry_date);
-            this.titleTextView = (TextView) view.findViewById(R.id.entry_title);
+            ButterKnife.bind(this, view);
         }
     }
 

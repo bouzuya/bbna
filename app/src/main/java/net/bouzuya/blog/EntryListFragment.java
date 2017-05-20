@@ -1,17 +1,12 @@
 package net.bouzuya.blog;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,7 +21,14 @@ import net.bouzuya.blog.models.Result;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class EntryListFragment extends Fragment implements View.OnClickListener {
+
+    private Unbinder unbinder;
+
     public interface OnEntrySelectListener {
         void onEntrySelect(String date);
     }
@@ -36,7 +38,9 @@ public class EntryListFragment extends Fragment implements View.OnClickListener 
 
     private OnEntrySelectListener mListener;
     private EntryAdapter mAdapter;
-    private RecyclerView mEntryListView;
+
+    @BindView(R.id.entry_list)
+    RecyclerView mEntryListView;
 
     public static EntryListFragment newInstance() {
         EntryListFragment fragment = new EntryListFragment();
@@ -68,7 +72,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_entry_list, container, false);
-        mEntryListView = (RecyclerView) view.findViewById(R.id.entry_list);
+        unbinder = ButterKnife.bind(this, view);
         mEntryListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mEntryListView.getContext());
         mEntryListView.setLayoutManager(layoutManager);
@@ -95,6 +99,12 @@ public class EntryListFragment extends Fragment implements View.OnClickListener 
         if (mListener != null) {
             mListener.onEntrySelect(date);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
