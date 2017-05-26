@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.bouzuya.blog.R;
-import net.bouzuya.blog.adapters.EntryAdapter;
+import net.bouzuya.blog.views.adapters.EntryAdapter;
 import net.bouzuya.blog.loaders.EntryListLoader;
 import net.bouzuya.blog.models.Entry;
 import net.bouzuya.blog.models.Result;

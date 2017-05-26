@@ -1,4 +1,4 @@
-package net.bouzuya.blog.adapters;
+package net.bouzuya.blog.views.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
