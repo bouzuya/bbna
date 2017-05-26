@@ -8,11 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import net.bouzuya.blog.models.Entry;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.requests.EntryListRequest;
+import net.bouzuya.blog.views.activities.MainActivity;
 
 import java.util.List;
 

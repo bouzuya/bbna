@@ -1,4 +1,4 @@
-package net.bouzuya.blog;
+package net.bouzuya.blog.views.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import net.bouzuya.blog.BlogPreferences;
+import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapters.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.views.fragments.EntryListFragment;
 
