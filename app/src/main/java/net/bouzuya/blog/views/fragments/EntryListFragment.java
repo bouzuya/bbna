@@ -1,4 +1,4 @@
-package net.bouzuya.blog;
+package net.bouzuya.blog.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapters.EntryAdapter;
 import net.bouzuya.blog.loaders.EntryListLoader;
 import net.bouzuya.blog.models.Entry;

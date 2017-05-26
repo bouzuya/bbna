@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import net.bouzuya.blog.adapters.EntryFragmentPagerAdapter;
+import net.bouzuya.blog.views.fragments.EntryListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

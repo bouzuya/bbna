@@ -1,4 +1,4 @@
-package net.bouzuya.blog;
+package net.bouzuya.blog.views.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
+import net.bouzuya.blog.R;
 import net.bouzuya.blog.loaders.EntryDetailLoader;
 import net.bouzuya.blog.models.EntryDetail;
 import net.bouzuya.blog.models.Result;

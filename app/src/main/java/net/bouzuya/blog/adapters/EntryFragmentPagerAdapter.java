@@ -3,10 +3,9 @@ package net.bouzuya.blog.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
-import net.bouzuya.blog.EntryDetailFragment;
-import net.bouzuya.blog.EntryListFragment;
+import net.bouzuya.blog.views.fragments.EntryDetailFragment;
+import net.bouzuya.blog.views.fragments.EntryListFragment;
 
 public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int POSITION_LIST = 0;
