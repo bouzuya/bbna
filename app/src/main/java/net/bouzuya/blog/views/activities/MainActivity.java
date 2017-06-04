@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
-                    MainActivity.this.showList();
+                    mPresenter.onSwitchList();
                 } else if (position == 1) {
                     MainActivity.this.showDetail(mDate);
                 } else {

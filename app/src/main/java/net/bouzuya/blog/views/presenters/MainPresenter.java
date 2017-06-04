@@ -12,4 +12,8 @@ public class MainPresenter {
     public void onCreate() {
         this.view.showList();
     }
+
+    public void onSwitchList() {
+        this.view.showList();
+    }
 }
