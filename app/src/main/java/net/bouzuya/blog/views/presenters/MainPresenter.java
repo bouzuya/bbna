@@ -8,4 +8,8 @@ public class MainPresenter {
     public MainPresenter(MainView view) {
         this.view = view;
     }
+
+    public void onCreate() {
+        this.view.showList();
+    }
 }

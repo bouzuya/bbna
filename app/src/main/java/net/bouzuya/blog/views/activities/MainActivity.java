@@ -60,10 +60,11 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        showList();
 
         String latestDateOrNull = new BlogPreferences(this).getLatestDate();
         Log.d(TAG, "onCreate: LatestDate: " + latestDateOrNull);
+
+        mPresenter.onCreate();
     }
 
     @Override
@@ -85,6 +86,13 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public void showList() {
+        mViewPager.setCurrentItem(POSITION_LIST);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setTitle("blog.bouzuya.net");
+    }
+
     private void showDetail(String date) {
         mAdapter.setDetailDate(date);
         mAdapter.notifyDataSetChanged();
@@ -92,12 +100,5 @@ public class MainActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(date);
-    }
-
-    private void showList() {
-        mViewPager.setCurrentItem(POSITION_LIST);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setTitle("blog.bouzuya.net");
     }
 }
