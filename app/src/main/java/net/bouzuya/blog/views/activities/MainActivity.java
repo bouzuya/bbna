@@ -12,18 +12,22 @@ import net.bouzuya.blog.BlogPreferences;
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.views.adapters.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.views.fragments.EntryListFragment;
+import net.bouzuya.blog.views.presenters.MainPresenter;
+import net.bouzuya.blog.views.views.MainView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements EntryListFragment.OnEntrySelectListener {
+        implements EntryListFragment.OnEntrySelectListener,
+        MainView {
 
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
     private EntryFragmentPagerAdapter mAdapter;
     private String mDate;
+    private MainPresenter mPresenter;
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mPresenter = new MainPresenter(this);
+
         Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
