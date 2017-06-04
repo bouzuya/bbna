@@ -15,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.bouzuya.blog.R;
-import net.bouzuya.blog.views.adapters.EntryAdapter;
 import net.bouzuya.blog.loaders.EntryListLoader;
 import net.bouzuya.blog.models.Entry;
 import net.bouzuya.blog.models.Result;
+import net.bouzuya.blog.views.adapters.EntryAdapter;
+import net.bouzuya.blog.views.presenters.EntryListPresenter;
+import net.bouzuya.blog.views.views.EntryListView;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class EntryListFragment extends Fragment implements View.OnClickListener {
+public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
 
     private Unbinder unbinder;
 
@@ -39,6 +41,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener 
 
     private OnEntrySelectListener mListener;
     private EntryAdapter mAdapter;
+    private EntryListPresenter mPresenter;
 
     @BindView(R.id.entry_list)
     RecyclerView mEntryListView;
@@ -67,6 +70,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initEntryListLoader();
+        mPresenter = new EntryListPresenter(this);
     }
 
     @Override
