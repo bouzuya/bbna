@@ -26,15 +26,13 @@ public class MainActivity extends AppCompatActivity
     private static final int POSITION_DETAIL = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
     private EntryFragmentPagerAdapter mAdapter;
-    private String mDate;
     private MainPresenter mPresenter;
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
     @Override
     public void onEntrySelect(String date) {
-        mDate = date;
-        showDetail(date);
+        mPresenter.onSelectEntry(date);
     }
 
     @Override
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity
                 if (position == 0) {
                     mPresenter.onSwitchList();
                 } else if (position == 1) {
-                    MainActivity.this.showDetail(mDate);
+                    mPresenter.onSwitchDetail();
                 } else {
                     throw new AssertionError();
                 }
@@ -86,19 +84,19 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void showList() {
-        mViewPager.setCurrentItem(POSITION_LIST);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setTitle("blog.bouzuya.net");
-    }
-
-    private void showDetail(String date) {
+    public void showDetail(String date) {
         mAdapter.setDetailDate(date);
         mAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(POSITION_DETAIL);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(date);
+    }
+
+    public void showList() {
+        mViewPager.setCurrentItem(POSITION_LIST);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setTitle("blog.bouzuya.net");
     }
 }
