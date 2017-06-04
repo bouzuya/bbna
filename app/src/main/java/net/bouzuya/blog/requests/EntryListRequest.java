@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import net.bouzuya.blog.models.Entry;
 import net.bouzuya.blog.models.Result;
+import net.bouzuya.blog.parsers.EntryListParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,11 +23,18 @@ import java.util.Comparator;
 import java.util.List;
 
 public class EntryListRequest {
+
+    private final EntryListParser parser;
+
+    public EntryListRequest() {
+        parser = new EntryListParser();
+    }
+
     public Result<List<Entry>> send() {
         try {
             URL entryListJsonUrl = newEntryListJsonUrl();
             String jsonString = fetch(entryListJsonUrl);
-            List<Entry> entryList = parse(jsonString);
+            List<Entry> entryList = parser.parse(jsonString);
             return Result.ok(entryList);
         } catch (Exception e) {
             return Result.ng(e);
@@ -62,36 +70,5 @@ public class EntryListRequest {
             }
             return builder.toString();
         }
-    }
-
-    @NonNull
-    private List<Entry> parse(String jsonString) throws JSONException {
-        List<Entry> entryList = parseEntryListJson(new JSONArray(jsonString));
-        // order by desc
-        Collections.sort(entryList, new Comparator<Entry>() {
-            @Override
-            public int compare(Entry e1, Entry e2) {
-                return e2.getDate().compareTo(e1.getDate());
-            }
-        });
-        return entryList;
-    }
-
-    @NonNull
-    private Entry parseEntryJson(JSONObject jsonEntry) throws JSONException {
-        String date = jsonEntry.getString("date");
-        String title = jsonEntry.getString("title");
-        return new Entry(date, title);
-    }
-
-    @NonNull
-    private List<Entry> parseEntryListJson(JSONArray jsonEntryList) throws JSONException {
-        List<Entry> entryList = new ArrayList<>();
-        for (int i = 0; i < jsonEntryList.length(); i++) {
-            JSONObject jsonEntry = jsonEntryList.getJSONObject(i);
-            Entry entry = parseEntryJson(jsonEntry);
-            entryList.add(entry);
-        }
-        return entryList;
     }
 }
