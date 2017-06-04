@@ -2,6 +2,8 @@ package net.bouzuya.blog.views.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +12,11 @@ import android.view.MenuItem;
 
 import net.bouzuya.blog.BlogPreferences;
 import net.bouzuya.blog.R;
+import net.bouzuya.blog.loaders.PresenterLoader;
 import net.bouzuya.blog.views.adapters.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.views.fragments.EntryListFragment;
 import net.bouzuya.blog.views.presenters.MainPresenter;
+import net.bouzuya.blog.views.presenters.MainPresenterFactory;
 import net.bouzuya.blog.views.views.MainView;
 
 import butterknife.BindView;
@@ -25,44 +29,17 @@ public class MainActivity extends AppCompatActivity
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int PRESENTER_LOADER_ID = 1;
+
     private EntryFragmentPagerAdapter mAdapter;
     private MainPresenter mPresenter;
+
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
     @Override
     public void onEntrySelect(String date) {
         mPresenter.onSelectEntry(date);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        mPresenter = new MainPresenter(this);
-
-        Log.d(TAG, "onCreate: ");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mAdapter = new EntryFragmentPagerAdapter(fragmentManager);
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                if (position == 0) {
-                    mPresenter.onSwitchList();
-                } else if (position == 1) {
-                    mPresenter.onSwitchDetail();
-                } else {
-                    throw new AssertionError();
-                }
-            }
-        });
-
-        String latestDateOrNull = new BlogPreferences(this).getLatestDate();
-        Log.d(TAG, "onCreate: LatestDate: " + latestDateOrNull);
-
-        mPresenter.onCreate();
     }
 
     @Override
@@ -98,5 +75,68 @@ public class MainActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle("blog.bouzuya.net");
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
+        super.onCreate(savedInstanceState);
+
+        LoaderManager loaderManager = getSupportLoaderManager();
+        loaderManager.initLoader(
+                PRESENTER_LOADER_ID,
+                null,
+                new LoaderManager.LoaderCallbacks<MainPresenter>() {
+                    @Override
+                    public Loader<MainPresenter> onCreateLoader(int id, Bundle args) {
+                        return new PresenterLoader<>(MainActivity.this, new MainPresenterFactory());
+                    }
+
+                    @Override
+                    public void onLoadFinished(Loader<MainPresenter> loader, MainPresenter data) {
+                        MainActivity.this.mPresenter = data;
+                    }
+
+                    @Override
+                    public void onLoaderReset(Loader<MainPresenter> loader) {
+                        MainActivity.this.mPresenter = null;
+                    }
+                });
+
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        mAdapter = new EntryFragmentPagerAdapter(fragmentManager);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    mPresenter.onSwitchList();
+                } else if (position == 1) {
+                    mPresenter.onSwitchDetail();
+                } else {
+                    throw new AssertionError();
+                }
+            }
+        });
+
+        String latestDateOrNull = new BlogPreferences(this).getLatestDate();
+        Log.d(TAG, "onCreate: LatestDate: " + latestDateOrNull);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mPresenter.onAttach(this);
+        mPresenter.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mPresenter.onDetach();
+
+        super.onStop();
     }
 }

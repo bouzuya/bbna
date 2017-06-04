@@ -16,10 +16,12 @@ import android.view.ViewGroup;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.loaders.EntryListLoader;
+import net.bouzuya.blog.loaders.PresenterLoader;
 import net.bouzuya.blog.models.Entry;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.views.adapters.EntryAdapter;
 import net.bouzuya.blog.views.presenters.EntryListPresenter;
+import net.bouzuya.blog.views.presenters.EntryListPresenterFactory;
 import net.bouzuya.blog.views.views.EntryListView;
 
 import java.util.List;
@@ -30,18 +32,18 @@ import butterknife.Unbinder;
 
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
 
-    private Unbinder unbinder;
-
     public interface OnEntrySelectListener {
         void onEntrySelect(String date);
     }
 
     private static final int ENTRY_LIST_LOADER_ID = 0;
+    private static final int PRESENTER_LOADER_ID = 2;
     private static final String TAG = EntryListFragment.class.getSimpleName();
 
     private OnEntrySelectListener mListener;
     private EntryAdapter mAdapter;
     private EntryListPresenter mPresenter;
+    private Unbinder unbinder;
 
     @BindView(R.id.entry_list)
     RecyclerView mEntryListView;
@@ -70,7 +72,31 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initEntryListLoader();
-        mPresenter = new EntryListPresenter(this);
+
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(
+                PRESENTER_LOADER_ID,
+                null,
+                new LoaderManager.LoaderCallbacks<EntryListPresenter>() {
+                    @Override
+                    public Loader<EntryListPresenter> onCreateLoader(int id, Bundle args) {
+                        return new PresenterLoader<>(
+                                EntryListFragment.this.getContext(), new EntryListPresenterFactory()
+                        );
+                    }
+
+                    @Override
+                    public void onLoadFinished(
+                            Loader<EntryListPresenter> loader, EntryListPresenter data
+                    ) {
+                        EntryListFragment.this.mPresenter = data;
+                    }
+
+                    @Override
+                    public void onLoaderReset(Loader<EntryListPresenter> loader) {
+                        EntryListFragment.this.mPresenter = null;
+                    }
+                });
     }
 
     @Override

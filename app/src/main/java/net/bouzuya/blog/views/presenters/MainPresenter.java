@@ -15,7 +15,7 @@ public class MainPresenter implements Presenter<MainView> {
         this.view = view;
     }
 
-    public void onCreate() {
+    public void onStart() {
         this.view.showList();
     }
 

@@ -13,9 +13,13 @@ import android.webkit.WebView;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.loaders.EntryDetailLoader;
+import net.bouzuya.blog.loaders.PresenterLoader;
 import net.bouzuya.blog.models.EntryDetail;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.views.presenters.EntryDetailPresenter;
+import net.bouzuya.blog.views.presenters.EntryDetailPresenterFactory;
+import net.bouzuya.blog.views.presenters.MainPresenter;
+import net.bouzuya.blog.views.presenters.PresenterFactory;
 import net.bouzuya.blog.views.views.EntryDetailView;
 
 import butterknife.BindView;
@@ -27,6 +31,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
 
     private static final String DATE = "param1";
     private static final String TAG = EntryDetailFragment.class.getSimpleName();
+    public static final int PRESENTER_LOADER_ID = 2;
 
     private String mDate;
     private EntryDetailPresenter mPresenter;
@@ -58,7 +63,31 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         if (arguments != null) {
             mDate = arguments.getString(DATE);
         }
-        mPresenter = new EntryDetailPresenter(this);
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(
+                PRESENTER_LOADER_ID,
+                null,
+                new LoaderManager.LoaderCallbacks<EntryDetailPresenter>() {
+                    @Override
+                    public Loader<EntryDetailPresenter> onCreateLoader(int id, Bundle args) {
+                        return new PresenterLoader<>(
+                                EntryDetailFragment.this.getContext(),
+                                new EntryDetailPresenterFactory()
+                        );
+                    }
+
+                    @Override
+                    public void onLoadFinished(
+                            Loader<EntryDetailPresenter> loader, EntryDetailPresenter data
+                    ) {
+                        EntryDetailFragment.this.mPresenter = data;
+                    }
+
+                    @Override
+                    public void onLoaderReset(Loader<EntryDetailPresenter> loader) {
+                        EntryDetailFragment.this.mPresenter = null;
+                    }
+                });
     }
 
     @Override
