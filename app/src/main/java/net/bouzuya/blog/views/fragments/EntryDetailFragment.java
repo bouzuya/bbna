@@ -15,18 +15,21 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.loaders.EntryDetailLoader;
 import net.bouzuya.blog.models.EntryDetail;
 import net.bouzuya.blog.models.Result;
+import net.bouzuya.blog.views.presenters.EntryDetailPresenter;
+import net.bouzuya.blog.views.views.EntryDetailView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class EntryDetailFragment extends Fragment {
+public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public static final int ENTRY_DETAIL_LOADER_ID = 1;
 
     private static final String DATE = "param1";
     private static final String TAG = EntryDetailFragment.class.getSimpleName();
 
     private String mDate;
+    private EntryDetailPresenter mPresenter;
     private Unbinder unbinder;
 
     @BindView(R.id.entry_detail)
@@ -55,6 +58,7 @@ public class EntryDetailFragment extends Fragment {
         if (arguments != null) {
             mDate = arguments.getString(DATE);
         }
+        mPresenter = new EntryDetailPresenter(this);
     }
 
     @Override
