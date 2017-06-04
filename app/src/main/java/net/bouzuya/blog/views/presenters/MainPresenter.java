@@ -2,12 +2,16 @@ package net.bouzuya.blog.views.presenters;
 
 import net.bouzuya.blog.views.views.MainView;
 
-public class MainPresenter {
-    private final MainView view;
+public class MainPresenter implements Presenter<MainView> {
+    private MainView view;
     private String selectedEntryDateOrNull;
 
-    public MainPresenter(MainView view) {
+    public MainPresenter() {
         this.selectedEntryDateOrNull = null;
+    }
+
+    @Override
+    public void onAttach(MainView view) {
         this.view = view;
     }
 
@@ -26,5 +30,15 @@ public class MainPresenter {
 
     public void onSwitchList() {
         this.view.showList();
+    }
+
+    @Override
+    public void onDestroy() {
+        // do nothing
+    }
+
+    @Override
+    public void onDetach() {
+        this.view = null;
     }
 }
