@@ -7,7 +7,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
 import net.bouzuya.blog.BlogPreferences;
@@ -21,6 +20,7 @@ import net.bouzuya.blog.views.views.MainView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements EntryListFragment.OnEntrySelectListener,
@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity
 
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
-    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int PRESENTER_LOADER_ID = 1;
 
     private EntryFragmentPagerAdapter mAdapter;
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: ");
+        Timber.d("onCreate: ");
         super.onCreate(savedInstanceState);
 
         LoaderManager loaderManager = getSupportLoaderManager();
@@ -120,13 +119,13 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
         String latestDateOrNull = new BlogPreferences(this).getLatestDate();
-        Log.d(TAG, "onCreate: LatestDate: " + latestDateOrNull);
+        Timber.d("onCreate: LatestDate: " + latestDateOrNull);
     }
 
     @Override
     protected void onStart() {
+        Timber.d("onStart: ");
         super.onStart();
 
         mPresenter.onAttach(this);
@@ -135,6 +134,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onStop() {
+        Timber.d("onStop: ");
         mPresenter.onDetach();
 
         super.onStop();

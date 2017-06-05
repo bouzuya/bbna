@@ -5,7 +5,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +17,17 @@ import net.bouzuya.blog.models.EntryDetail;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.views.presenters.EntryDetailPresenter;
 import net.bouzuya.blog.views.presenters.EntryDetailPresenterFactory;
-import net.bouzuya.blog.views.presenters.MainPresenter;
-import net.bouzuya.blog.views.presenters.PresenterFactory;
 import net.bouzuya.blog.views.views.EntryDetailView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public static final int ENTRY_DETAIL_LOADER_ID = 1;
 
     private static final String DATE = "param1";
-    private static final String TAG = EntryDetailFragment.class.getSimpleName();
     public static final int PRESENTER_LOADER_ID = 2;
 
     private String mDate;
@@ -58,6 +55,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Timber.d("onCreate: ");
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -93,6 +91,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Timber.d("onCreateView: ");
         initEntryDetailLoader(mDate);
         View view = inflater.inflate(R.layout.fragment_entry_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
@@ -101,6 +100,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
 
     @Override
     public void onDestroyView() {
+        Timber.d("onDestroyView: ");
         super.onDestroyView();
         unbinder.unbind();
     }
@@ -138,9 +138,9 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
 
 
     private void onLoadEntryDetailFinished(Result<EntryDetail> data) {
-        Log.d(TAG, "onLoadEntryDetailFinished: ");
+        Timber.d("onLoadEntryDetailFinished: ");
         if (data.isOk()) {
-            Log.d(TAG, "onLoadEntryDetailFinished: isOk");
+            Timber.d("onLoadEntryDetailFinished: isOk");
 
             initEntryDetailLoader(null);
 
@@ -171,7 +171,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             mWebView.loadData(html, "text/html; charset=UTF-8", "UTF-8");
         } else {
             Exception e = data.getException();
-            Log.e(TAG, "onLoadEntryDetailFinished: ", e);
+            Timber.e("onLoadEntryDetailFinished: ", e);
             String message = "load error";
             Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
         }

@@ -9,7 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
 
@@ -38,7 +38,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
 
     private static final int ENTRY_LIST_LOADER_ID = 0;
     private static final int PRESENTER_LOADER_ID = 2;
-    private static final String TAG = EntryListFragment.class.getSimpleName();
 
     private OnEntrySelectListener mListener;
     private EntryAdapter mAdapter;
@@ -59,6 +58,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onAttach(Context context) {
+        Timber.d("onAttach: ");
         super.onAttach(context);
         if (context instanceof OnEntrySelectListener) {
             mListener = (OnEntrySelectListener) context;
@@ -70,6 +70,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Timber.d("onCreate: EntryListFragment");
         super.onCreate(savedInstanceState);
         initEntryListLoader();
 
@@ -102,6 +103,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Timber.d("onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_entry_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         mEntryListView.setHasFixedSize(true);
@@ -126,7 +128,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         int position = mEntryListView.getChildAdapterPosition(view);
         Entry entry = mAdapter.getItem(position);
         String date = entry.getDate();
-        Log.d(TAG, "onClick: " + date);
+        Timber.d("onClick: " + date);
         if (mListener != null) {
             mListener.onEntrySelect(date);
         }
@@ -134,20 +136,22 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onDestroyView() {
+        Timber.d("onDestroyView: ");
         super.onDestroyView();
         unbinder.unbind();
     }
 
     @Override
     public void onDetach() {
+        Timber.d("onDetach: ");
         super.onDetach();
         mListener = null;
     }
 
     public void onLoadEntryListFinished(Result<List<Entry>> data) {
-        Log.d(TAG, "onLoadEntryListFinished: ");
+        Timber.d("onLoadEntryListFinished: ");
         if (data.isOk()) {
-            Log.d(TAG, "onLoadEntryListFinished: isOk");
+            Timber.d("onLoadEntryListFinished: isOk");
             List<Entry> newEntryList = data.getValue();
             mAdapter.changeDataSet(newEntryList);
             mAdapter.notifyDataSetChanged();
@@ -155,7 +159,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
             Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
         } else {
             Exception e = data.getException();
-            Log.e(TAG, "onLoadEntryListFinished: ", e);
+            Timber.e("onLoadEntryListFinished: ", e);
             String message = "load error";
             Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
         }

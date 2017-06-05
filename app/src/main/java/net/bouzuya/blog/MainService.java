@@ -17,7 +17,6 @@ import net.bouzuya.blog.views.activities.MainActivity;
 import java.util.List;
 
 public class MainService extends IntentService {
-    private static final String TAG = MainService.class.getSimpleName();
     public static final String ACTION_FETCH_ENTRY_LIST =
             "net.bouzuya.blog.action.FETCH_ENTRY_LIST";
 
