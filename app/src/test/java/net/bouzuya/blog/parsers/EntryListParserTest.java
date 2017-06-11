@@ -2,11 +2,9 @@ package net.bouzuya.blog.parsers;
 
 import junit.framework.Assert;
 
-import net.bouzuya.blog.models.Entry;
+import net.bouzuya.blog.models.EntryList;
 
 import org.junit.Test;
-
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -24,7 +22,7 @@ public class EntryListParserTest {
                 "}" +
                 "]";
         EntryListParser parser = new EntryListParser();
-        List<Entry> parsed = parser.parse(jsonString);
+        EntryList parsed = parser.parse(jsonString);
         assertThat(parsed.size(), is(1));
         assertThat(parsed.get(0).getId().toISO8601DateString(), is("2017-01-01"));
         // not supported yet

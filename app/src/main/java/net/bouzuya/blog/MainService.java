@@ -9,12 +9,11 @@ import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
 import net.bouzuya.blog.models.Entry;
+import net.bouzuya.blog.models.EntryList;
 import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.requests.EntryListRequest;
 import net.bouzuya.blog.views.activities.MainActivity;
-
-import java.util.List;
 
 public class MainService extends IntentService {
     public static final String ACTION_FETCH_ENTRY_LIST =
@@ -76,9 +75,9 @@ public class MainService extends IntentService {
     }
 
     private Optional<Entry> getLatestEntry() {
-        Result<List<Entry>> result = new EntryListRequest().send();
+        Result<EntryList> result = new EntryListRequest().send();
         if (!result.isOk()) return Optional.empty();
-        List<Entry> entryList = result.getValue();
-        return entryList.isEmpty() ? Optional.<Entry>empty() : Optional.of(entryList.get(0));
+        EntryList entryList = result.getValue();
+        return entryList.getLatestEntry();
     }
 }

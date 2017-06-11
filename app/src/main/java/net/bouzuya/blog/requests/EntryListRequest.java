@@ -2,7 +2,7 @@ package net.bouzuya.blog.requests;
 
 import android.support.annotation.NonNull;
 
-import net.bouzuya.blog.models.Entry;
+import net.bouzuya.blog.models.EntryList;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.parsers.EntryListParser;
 
@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
 public class EntryListRequest {
 
@@ -23,11 +22,11 @@ public class EntryListRequest {
         parser = new EntryListParser();
     }
 
-    public Result<List<Entry>> send() {
+    public Result<EntryList> send() {
         try {
             URL entryListJsonUrl = newEntryListJsonUrl();
             String jsonString = fetch(entryListJsonUrl);
-            List<Entry> entryList = parser.parse(jsonString);
+            EntryList entryList = parser.parse(jsonString);
             return Result.ok(entryList);
         } catch (Exception e) {
             return Result.ng(e);

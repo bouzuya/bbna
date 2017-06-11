@@ -8,21 +8,19 @@ import android.widget.TextView;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.models.Entry;
-
-import java.util.Collections;
-import java.util.List;
+import net.bouzuya.blog.models.EntryList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
-    private List<Entry> mEntryList;
+    private EntryList mEntryList;
 
     public EntryAdapter() {
-        mEntryList = Collections.emptyList();
+        mEntryList = EntryList.empty();
     }
 
-    public void changeDataSet(List<Entry> entryList) {
+    public void changeDataSet(EntryList entryList) {
         mEntryList = entryList;
     }
 

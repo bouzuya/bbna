@@ -17,14 +17,13 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.loaders.EntryListLoader;
 import net.bouzuya.blog.loaders.PresenterLoader;
 import net.bouzuya.blog.models.Entry;
+import net.bouzuya.blog.models.EntryList;
 import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.views.adapters.EntryAdapter;
 import net.bouzuya.blog.views.presenters.EntryListPresenter;
 import net.bouzuya.blog.views.presenters.EntryListPresenterFactory;
 import net.bouzuya.blog.views.views.EntryListView;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -142,11 +141,11 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         mListener = null;
     }
 
-    public void onLoadEntryListFinished(Result<List<Entry>> data) {
+    public void onLoadEntryListFinished(Result<EntryList> data) {
         Timber.d("onLoadEntryListFinished: ");
         if (data.isOk()) {
             Timber.d("onLoadEntryListFinished: isOk");
-            List<Entry> newEntryList = data.getValue();
+            EntryList newEntryList = data.getValue();
             mAdapter.changeDataSet(newEntryList);
             mAdapter.notifyDataSetChanged();
             String message = "load " + newEntryList.size() + " entries";
@@ -160,24 +159,24 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     }
 
     private void initEntryListLoader() {
-        LoaderManager.LoaderCallbacks<Result<List<Entry>>> callbacks =
-                new LoaderManager.LoaderCallbacks<Result<List<Entry>>>() {
+        LoaderManager.LoaderCallbacks<Result<EntryList>> callbacks =
+                new LoaderManager.LoaderCallbacks<Result<EntryList>>() {
                     @Override
-                    public Loader<Result<List<Entry>>> onCreateLoader(int id, Bundle args) {
+                    public Loader<Result<EntryList>> onCreateLoader(int id, Bundle args) {
                         if (id != ENTRY_LIST_LOADER_ID) throw new AssertionError();
                         return new EntryListLoader(EntryListFragment.this.getContext());
                     }
 
                     @Override
                     public void onLoadFinished(
-                            Loader<Result<List<Entry>>> loader,
-                            Result<List<Entry>> data
+                            Loader<Result<EntryList>> loader,
+                            Result<EntryList> data
                     ) {
                         EntryListFragment.this.onLoadEntryListFinished(data);
                     }
 
                     @Override
-                    public void onLoaderReset(Loader<Result<List<Entry>>> loader) {
+                    public void onLoaderReset(Loader<Result<EntryList>> loader) {
                         // do nothing
                     }
                 };

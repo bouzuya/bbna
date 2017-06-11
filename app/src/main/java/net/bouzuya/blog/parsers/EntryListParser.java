@@ -10,29 +10,18 @@ import com.google.gson.JsonParseException;
 
 import net.bouzuya.blog.models.Entry;
 import net.bouzuya.blog.models.EntryId;
+import net.bouzuya.blog.models.EntryList;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 public class EntryListParser {
-    public List<Entry> parse(String jsonString) {
+    public EntryList parse(String jsonString) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Entry.class, new EntryDeserializer())
                 .create();
         try {
             Entry[] entryArray = gson.fromJson(jsonString, Entry[].class);
-            List<Entry> entryList = Arrays.asList(entryArray);
-            // order by desc
-            Collections.sort(entryList, new Comparator<Entry>() {
-                @Override
-                public int compare(Entry e1, Entry e2) {
-                    return e2.getId().compareTo(e1.getId());
-                }
-            });
-            return entryList;
+            return EntryList.fromEntryArray(entryArray);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
