@@ -1,13 +1,14 @@
 package net.bouzuya.blog.views.presenters;
 
+import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.views.views.MainView;
 
 public class MainPresenter implements Presenter<MainView> {
     private MainView view;
-    private String selectedEntryDateOrNull;
+    private Optional<String> selectedEntryDateOptional;
 
     public MainPresenter() {
-        this.selectedEntryDateOrNull = null;
+        this.selectedEntryDateOptional = Optional.empty();
     }
 
     @Override
@@ -20,12 +21,13 @@ public class MainPresenter implements Presenter<MainView> {
     }
 
     public void onSelectEntry(String date) {
-        this.selectedEntryDateOrNull = date;
-        this.view.showDetail(selectedEntryDateOrNull);
+        this.selectedEntryDateOptional = Optional.of(date);
+        this.view.showDetail(date);
     }
 
     public void onSwitchDetail() {
-        this.view.showDetail(selectedEntryDateOrNull);
+        if (!selectedEntryDateOptional.isPresent()) return;
+        this.view.showDetail(selectedEntryDateOptional.get());
     }
 
     public void onSwitchList() {
