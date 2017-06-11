@@ -12,6 +12,10 @@ public class EntryList {
         this.list = list;
     }
 
+    public static EntryList empty() {
+        return new EntryList(Collections.<Entry>emptyList());
+    }
+
     public static EntryList fromEntryArray(Entry[] entryArray) {
         List<Entry> entryList = Arrays.asList(entryArray);
         // order by desc
@@ -24,16 +28,12 @@ public class EntryList {
         return new EntryList(entryList);
     }
 
-    public static EntryList empty() {
-        return new EntryList(Collections.<Entry>emptyList());
+    public Entry get(int position) {
+        return this.list.get(position);
     }
 
     public Optional<Entry> getLatestEntry() {
         return this.list.isEmpty() ? Optional.<Entry>empty() : Optional.of(this.list.get(0));
-    }
-
-    public Entry get(int position) {
-        return this.list.get(position);
     }
 
     public int size() {
