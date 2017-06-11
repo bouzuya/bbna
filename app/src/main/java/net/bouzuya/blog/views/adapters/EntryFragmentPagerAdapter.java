@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.views.fragments.EntryDetailFragment;
 import net.bouzuya.blog.views.fragments.EntryListFragment;
 
@@ -11,11 +12,11 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
 
-    private String mDate;
+    private Optional<String> mDateOptional;
 
     public EntryFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        mDate = null;
+        mDateOptional = Optional.empty();
     }
 
     @Override
@@ -29,7 +30,7 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
             case POSITION_LIST:
                 return EntryListFragment.newInstance();
             case POSITION_DETAIL:
-                return EntryDetailFragment.newInstance(mDate);
+                return EntryDetailFragment.newInstance(mDateOptional);
             default:
                 throw new AssertionError();
         }
@@ -41,9 +42,9 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             return 0;
         } else if (position == 1) {
-            return mDate == null
-                    ? 1
-                    : entryDateToItemId(mDate);
+            return mDateOptional.isPresent()
+                    ? entryDateToItemId(mDateOptional.get())
+                    : 1;
         } else {
             throw new AssertionError();
         }
@@ -53,7 +54,7 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
     public int getItemPosition(Object object) {
         if (object instanceof EntryDetailFragment) {
             EntryDetailFragment fragment = (EntryDetailFragment) object;
-            return mDate != null && mDate.equals(fragment.getDate())
+            return mDateOptional.isPresent() && mDateOptional.equals(fragment.getDateOptional())
                     ? POSITION_UNCHANGED
                     : POSITION_NONE;
         }
@@ -62,7 +63,7 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
 
 
     public void setDetailDate(String date) {
-        mDate = date;
+        mDateOptional = Optional.of(date);
     }
 
     private long entryDateToItemId(String date) {

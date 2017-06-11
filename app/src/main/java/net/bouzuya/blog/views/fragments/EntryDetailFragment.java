@@ -14,6 +14,7 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.loaders.EntryDetailLoader;
 import net.bouzuya.blog.loaders.PresenterLoader;
 import net.bouzuya.blog.models.EntryDetail;
+import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.views.presenters.EntryDetailPresenter;
 import net.bouzuya.blog.views.presenters.EntryDetailPresenterFactory;
@@ -30,24 +31,25 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     private static final String DATE = "param1";
     @BindView(R.id.entry_detail)
     WebView mWebView;
-    private String mDate;
+    private Optional<String> mDateOptional;
     private EntryDetailPresenter mPresenter;
     private Unbinder unbinder;
 
     public EntryDetailFragment() {
         // Required empty public constructor
+        this.mDateOptional = Optional.empty();
     }
 
-    public static EntryDetailFragment newInstance(String date) {
+    public static EntryDetailFragment newInstance(Optional<String> dateOptional) {
         EntryDetailFragment fragment = new EntryDetailFragment();
         Bundle arguments = new Bundle();
-        arguments.putString(DATE, date);
+        arguments.putString(DATE, dateOptional.isPresent() ? dateOptional.get() : null);
         fragment.setArguments(arguments);
         return fragment;
     }
 
-    public String getDate() {
-        return mDate;
+    public Optional<String> getDateOptional() {
+        return mDateOptional;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         if (arguments != null) {
-            mDate = arguments.getString(DATE);
+            mDateOptional = Optional.ofNullable(arguments.getString(DATE));
         }
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(
@@ -89,7 +91,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Timber.d("onCreateView: ");
-        initEntryDetailLoader(mDate);
+        initEntryDetailLoader(mDateOptional);
         View view = inflater.inflate(R.layout.fragment_entry_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -102,10 +104,10 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         unbinder.unbind();
     }
 
-    private void initEntryDetailLoader(String dateOrNull) {
+    private void initEntryDetailLoader(Optional<String> dateOptional) {
         LoaderManager loaderManager = getLoaderManager();
         Bundle bundle = new Bundle();
-        bundle.putString("date", dateOrNull);
+        bundle.putString("date", dateOptional.isPresent() ? dateOptional.get() : null); // TODO
         LoaderManager.LoaderCallbacks<Result<EntryDetail>> callbacks =
                 new LoaderManager.LoaderCallbacks<Result<EntryDetail>>() {
                     @Override
