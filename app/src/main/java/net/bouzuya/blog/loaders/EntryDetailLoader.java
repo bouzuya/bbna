@@ -4,26 +4,27 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import net.bouzuya.blog.models.EntryDetail;
+import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.requests.EntryDetailRequest;
 
 public class EntryDetailLoader extends AsyncTaskLoader<Result<EntryDetail>> {
-    private final String mDateOrNull;
+    private final Optional<String> mDateOptional;
 
-    public EntryDetailLoader(Context context, String dateOrNull) {
+    public EntryDetailLoader(Context context, Optional<String> dateOptional) {
         super(context);
-        mDateOrNull = dateOrNull;
+        mDateOptional = dateOptional;
     }
 
     @Override
     protected void onStartLoading() {
-        if (mDateOrNull == null) return;
+        if (!mDateOptional.isPresent()) return;
         forceLoad();
     }
 
     @Override
     public Result<EntryDetail> loadInBackground() {
-        if (mDateOrNull == null) throw new AssertionError();
-        return new EntryDetailRequest(mDateOrNull).send();
+        if (!mDateOptional.isPresent()) throw new AssertionError();
+        return new EntryDetailRequest(mDateOptional.get()).send();
     }
 }

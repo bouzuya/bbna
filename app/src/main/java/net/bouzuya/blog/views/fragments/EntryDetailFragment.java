@@ -113,9 +113,9 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                     @Override
                     public Loader<Result<EntryDetail>> onCreateLoader(int id, Bundle args) {
                         if (id != ENTRY_DETAIL_LOADER_ID) throw new AssertionError();
-                        String dateOrNull = args.getString("date");
                         return new EntryDetailLoader(
-                                EntryDetailFragment.this.getContext(), dateOrNull
+                                EntryDetailFragment.this.getContext(),
+                                Optional.ofNullable(args.getString("date"))
                         );
                     }
 
