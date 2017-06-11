@@ -3,6 +3,8 @@ package net.bouzuya.blog;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import net.bouzuya.blog.models.Optional;
+
 public class BlogPreferences {
     private static final String PREF_NAME = "blog.bouzuya.net";
     private static final String PREF_KEY_LATEST_DATE = "latest_date";
@@ -13,9 +15,9 @@ public class BlogPreferences {
         mContext = context;
     }
 
-    public String getLatestDate() {
+    public Optional<String> getLatestDate() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getString(PREF_KEY_LATEST_DATE, null);
+        return Optional.ofNullable(preferences.getString(PREF_KEY_LATEST_DATE, null));
     }
 
     public void setLatestDate(String latestDate) {

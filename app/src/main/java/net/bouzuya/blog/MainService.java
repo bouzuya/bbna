@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 
 import net.bouzuya.blog.models.Entry;
+import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.requests.EntryListRequest;
 import net.bouzuya.blog.views.activities.MainActivity;
@@ -43,10 +44,11 @@ public class MainService extends IntentService {
         String newLatestDate = latestEntry.getDate();
         Context context = this;
         BlogPreferences preferences = new BlogPreferences(context);
-        String oldLatestDate = preferences.getLatestDate();
+        Optional<String> oldLatestDateOptional = preferences.getLatestDate();
         preferences.setLatestDate(newLatestDate);
         if (newLatestDate != null &&
-                (oldLatestDate == null || !oldLatestDate.equals(newLatestDate))) {
+                (!oldLatestDateOptional.isPresent() ||
+                        !oldLatestDateOptional.get().equals(newLatestDate))) {
             sendNotification(context, latestEntry);
         }
     }

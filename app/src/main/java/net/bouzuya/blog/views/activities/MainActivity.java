@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import net.bouzuya.blog.BlogPreferences;
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.loaders.PresenterLoader;
+import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.views.adapters.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.views.fragments.EntryListFragment;
 import net.bouzuya.blog.views.presenters.MainPresenter;
@@ -117,8 +118,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        String latestDateOrNull = new BlogPreferences(this).getLatestDate();
-        Timber.d("onCreate: LatestDate: " + latestDateOrNull);
+        Optional<String> latestDateOptional = new BlogPreferences(this).getLatestDate();
+        Timber.d("onCreate: LatestDate: " + latestDateOptional);
     }
 
     @Override
