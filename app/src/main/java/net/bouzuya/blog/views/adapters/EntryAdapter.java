@@ -16,23 +16,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.entry)
-        public ViewGroup layoutView;
-        @BindView(R.id.entry_date)
-        public TextView dateTextView;
-        @BindView(R.id.entry_title)
-        public TextView titleTextView;
-
-        public ViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
     private final List<Entry> EMPTY_ENTRY_LIST = new ArrayList<>(); // null object
     private List<Entry> mEntryList;
-
     public EntryAdapter() {
         mEntryList = EMPTY_ENTRY_LIST;
     }
@@ -64,5 +49,19 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
                 .inflate(R.layout.entry, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.entry)
+        public ViewGroup layoutView;
+        @BindView(R.id.entry_date)
+        public TextView dateTextView;
+        @BindView(R.id.entry_title)
+        public TextView titleTextView;
+
+        public ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
     }
 }

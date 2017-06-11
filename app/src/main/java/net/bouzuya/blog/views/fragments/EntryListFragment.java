@@ -32,28 +32,22 @@ import timber.log.Timber;
 
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
 
-    public interface OnEntrySelectListener {
-        void onEntrySelect(String date);
-    }
-
     private static final int ENTRY_LIST_LOADER_ID = 0;
     private static final int PRESENTER_LOADER_ID = 2;
-
+    @BindView(R.id.entry_list)
+    RecyclerView mEntryListView;
     private OnEntrySelectListener mListener;
     private EntryAdapter mAdapter;
     private EntryListPresenter mPresenter;
     private Unbinder unbinder;
 
-    @BindView(R.id.entry_list)
-    RecyclerView mEntryListView;
+    public EntryListFragment() {
+        // Required empty public constructor
+    }
 
     public static EntryListFragment newInstance() {
         EntryListFragment fragment = new EntryListFragment();
         return fragment;
-    }
-
-    public EntryListFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -120,7 +114,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         mEntryListView.setAdapter(mAdapter);
         return view;
     }
-
 
     @Override
     public void onClick(View view) {
@@ -189,6 +182,10 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
                 };
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, callbacks);
+    }
+
+    public interface OnEntrySelectListener {
+        void onEntrySelect(String date);
     }
 
 }

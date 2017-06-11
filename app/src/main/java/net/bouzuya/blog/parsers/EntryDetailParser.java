@@ -8,7 +8,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
 
 import net.bouzuya.blog.models.EntryDetail;
 
@@ -17,6 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntryDetailParser {
+    public EntryDetail parse(String jsonString) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(EntryDetail.class, new EntryDetailDeserializer())
+                .create();
+        try {
+            return gson.fromJson(jsonString, EntryDetail.class);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     private static class EntryDetailDeserializer implements JsonDeserializer<EntryDetail> {
         @Override
         public EntryDetail deserialize(
@@ -53,16 +63,5 @@ public class EntryDetailParser {
             return tags;
         }
 
-    }
-
-    public EntryDetail parse(String jsonString) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(EntryDetail.class, new EntryDetailDeserializer())
-                .create();
-        try {
-            return gson.fromJson(jsonString, EntryDetail.class);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
     }
 }

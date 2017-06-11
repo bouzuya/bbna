@@ -1,14 +1,6 @@
 package net.bouzuya.blog.models;
 
 public class Result<T> {
-    public static <T> Result<T> ok(T value) {
-        return new Result<>(null, value);
-    }
-
-    public static <T> Result<T> ng(Exception exception) {
-        return new Result<>(exception, null);
-    }
-
     private final Exception exception;
     private final T value;
 
@@ -16,6 +8,14 @@ public class Result<T> {
         if (exception == null && value == null) throw new IllegalArgumentException();
         this.exception = exception;
         this.value = value;
+    }
+
+    public static <T> Result<T> ok(T value) {
+        return new Result<>(null, value);
+    }
+
+    public static <T> Result<T> ng(Exception exception) {
+        return new Result<>(exception, null);
     }
 
     public boolean isOk() {

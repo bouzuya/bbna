@@ -29,12 +29,10 @@ public class MainActivity extends AppCompatActivity
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
     private static final int PRESENTER_LOADER_ID = 1;
-
-    private EntryFragmentPagerAdapter mAdapter;
-    private MainPresenter mPresenter;
-
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
+    private EntryFragmentPagerAdapter mAdapter;
+    private MainPresenter mPresenter;
 
     @Override
     public void onEntrySelect(String date) {

@@ -3,6 +3,64 @@ package net.bouzuya.blog.models;
 import java.util.List;
 
 public final class EntryDetail {
+    private final String date;
+    private final String title;
+    private final String data; // markdown
+    private final String html;
+    private final int minutes;
+    private final String pubdate;
+    private final List<String> tags;
+    private EntryDetail(
+            String date,
+            String title,
+            String data,
+            String html,
+            int minutes,
+            String pubdate,
+            List<String> tags
+    ) {
+        // TODO: validation
+        this.date = date;
+        this.title = title;
+        this.data = data;
+        this.html = html;
+        this.minutes = minutes;
+        this.pubdate = pubdate;
+        this.tags = tags;
+    }
+
+    public static EntryDetailBuilder newBuilder() {
+        return new EntryDetailBuilder();
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public String getPubdate() {
+        return pubdate;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
     public static final class EntryDetailBuilder {
         private String date;
         private String title;
@@ -53,64 +111,5 @@ public final class EntryDetail {
         public EntryDetail build() {
             return new EntryDetail(date, title, data, html, minutes, pubdate, tags);
         }
-    }
-
-    private final String date;
-    private final String title;
-    private final String data; // markdown
-    private final String html;
-    private final int minutes;
-    private final String pubdate;
-    private final List<String> tags;
-
-    public static EntryDetailBuilder newBuilder() {
-        return new EntryDetailBuilder();
-    }
-
-    private EntryDetail(
-            String date,
-            String title,
-            String data,
-            String html,
-            int minutes,
-            String pubdate,
-            List<String> tags
-    ) {
-        // TODO: validation
-        this.date = date;
-        this.title = title;
-        this.data = data;
-        this.html = html;
-        this.minutes = minutes;
-        this.pubdate = pubdate;
-        this.tags = tags;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public String getHtml() {
-        return html;
-    }
-
-    public int getMinutes() {
-        return minutes;
-    }
-
-    public String getPubdate() {
-        return pubdate;
-    }
-
-    public List<String> getTags() {
-        return tags;
     }
 }

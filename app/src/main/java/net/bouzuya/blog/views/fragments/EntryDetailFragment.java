@@ -26,16 +26,13 @@ import timber.log.Timber;
 
 public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public static final int ENTRY_DETAIL_LOADER_ID = 1;
-
-    private static final String DATE = "param1";
     public static final int PRESENTER_LOADER_ID = 2;
-
+    private static final String DATE = "param1";
+    @BindView(R.id.entry_detail)
+    WebView mWebView;
     private String mDate;
     private EntryDetailPresenter mPresenter;
     private Unbinder unbinder;
-
-    @BindView(R.id.entry_detail)
-    WebView mWebView;
 
     public EntryDetailFragment() {
         // Required empty public constructor

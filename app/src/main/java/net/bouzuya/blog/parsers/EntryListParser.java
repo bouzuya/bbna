@@ -17,6 +17,26 @@ import java.util.Comparator;
 import java.util.List;
 
 public class EntryListParser {
+    public List<Entry> parse(String jsonString) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Entry.class, new EntryDeserializer())
+                .create();
+        try {
+            Entry[] entryArray = gson.fromJson(jsonString, Entry[].class);
+            List<Entry> entryList = Arrays.asList(entryArray);
+            // order by desc
+            Collections.sort(entryList, new Comparator<Entry>() {
+                @Override
+                public int compare(Entry e1, Entry e2) {
+                    return e2.getDate().compareTo(e1.getDate());
+                }
+            });
+            return entryList;
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     private static class EntryDeserializer implements JsonDeserializer<Entry> {
         @Override
         public Entry deserialize(
@@ -36,26 +56,6 @@ public class EntryListParser {
             String date = jsonEntry.get("date").getAsString();
             String title = jsonEntry.get("title").getAsString();
             return new Entry(date, title);
-        }
-    }
-
-    public List<Entry> parse(String jsonString) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Entry.class, new EntryDeserializer())
-                .create();
-        try {
-            Entry[] entryArray = gson.fromJson(jsonString, Entry[].class);
-            List<Entry> entryList = Arrays.asList(entryArray);
-            // order by desc
-            Collections.sort(entryList, new Comparator<Entry>() {
-                @Override
-                public int compare(Entry e1, Entry e2) {
-                    return e2.getDate().compareTo(e1.getDate());
-                }
-            });
-            return entryList;
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
         }
     }
 }
