@@ -32,7 +32,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     @BindView(R.id.entry_detail)
     WebView mWebView;
     private Optional<String> mDateOptional;
-    private EntryDetailPresenter mPresenter;
+    private Optional<EntryDetailPresenter> mPresenter;
     private Unbinder unbinder;
 
     public EntryDetailFragment() {
@@ -77,12 +77,12 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                     public void onLoadFinished(
                             Loader<EntryDetailPresenter> loader, EntryDetailPresenter data
                     ) {
-                        EntryDetailFragment.this.mPresenter = data;
+                        EntryDetailFragment.this.mPresenter = Optional.of(data);
                     }
 
                     @Override
                     public void onLoaderReset(Loader<EntryDetailPresenter> loader) {
-                        EntryDetailFragment.this.mPresenter = null;
+                        EntryDetailFragment.this.mPresenter = Optional.empty();
                     }
                 });
     }
@@ -141,7 +141,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         if (data.isOk()) {
             Timber.d("onLoadEntryDetailFinished: isOk");
 
-            initEntryDetailLoader(null);
+            initEntryDetailLoader(Optional.<String>empty());
 
             EntryDetail newEntryDetail = data.getValue();
             String message = "load " + newEntryDetail.getDate() + "";

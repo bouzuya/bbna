@@ -17,6 +17,7 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.loaders.EntryListLoader;
 import net.bouzuya.blog.loaders.PresenterLoader;
 import net.bouzuya.blog.models.Entry;
+import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.models.Result;
 import net.bouzuya.blog.views.adapters.EntryAdapter;
 import net.bouzuya.blog.views.presenters.EntryListPresenter;
@@ -38,7 +39,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     RecyclerView mEntryListView;
     private OnEntrySelectListener mListener;
     private EntryAdapter mAdapter;
-    private EntryListPresenter mPresenter;
+    private Optional<EntryListPresenter> mPresenter;
     private Unbinder unbinder;
 
     public EntryListFragment() {
@@ -84,12 +85,12 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
                     public void onLoadFinished(
                             Loader<EntryListPresenter> loader, EntryListPresenter data
                     ) {
-                        EntryListFragment.this.mPresenter = data;
+                        EntryListFragment.this.mPresenter = Optional.of(data);
                     }
 
                     @Override
                     public void onLoaderReset(Loader<EntryListPresenter> loader) {
-                        EntryListFragment.this.mPresenter = null;
+                        EntryListFragment.this.mPresenter = Optional.empty();
                     }
                 });
     }

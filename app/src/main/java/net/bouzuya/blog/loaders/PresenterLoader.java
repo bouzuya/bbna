@@ -3,12 +3,13 @@ package net.bouzuya.blog.loaders;
 import android.content.Context;
 import android.support.v4.content.Loader;
 
+import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.views.presenters.Presenter;
 import net.bouzuya.blog.views.presenters.PresenterFactory;
 
 public class PresenterLoader<T extends Presenter> extends Loader<T> {
     private final PresenterFactory<T> factory;
-    private T presenter;
+    private Optional<T> presenter;
 
     public PresenterLoader(Context context, PresenterFactory<T> factory) {
         super(context);
@@ -19,8 +20,8 @@ public class PresenterLoader<T extends Presenter> extends Loader<T> {
     protected void onStartLoading() {
         super.onStartLoading();
 
-        if (this.presenter != null) {
-            deliverResult(this.presenter);
+        if (this.presenter.isPresent()) {
+            deliverResult(this.presenter.get());
             return;
         }
 
@@ -29,13 +30,13 @@ public class PresenterLoader<T extends Presenter> extends Loader<T> {
 
     @Override
     protected void onForceLoad() {
-        this.presenter = factory.create();
-        deliverResult(this.presenter);
+        this.presenter = Optional.of(factory.create());
+        deliverResult(this.presenter.get());
     }
 
     @Override
     protected void onReset() {
-        this.presenter.onDestroy();
+        this.presenter.get().onDestroy();
         this.presenter = null;
     }
 }

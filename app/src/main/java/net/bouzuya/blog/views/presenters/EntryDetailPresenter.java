@@ -1,16 +1,17 @@
 package net.bouzuya.blog.views.presenters;
 
+import net.bouzuya.blog.models.Optional;
 import net.bouzuya.blog.views.views.EntryDetailView;
 
 public class EntryDetailPresenter implements Presenter<EntryDetailView> {
-    private EntryDetailView view;
+    private Optional<EntryDetailView> view;
 
     public EntryDetailPresenter() {
     }
 
     @Override
     public void onAttach(EntryDetailView view) {
-        this.view = view;
+        this.view = Optional.of(view);
     }
 
     @Override
@@ -20,6 +21,6 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
 
     @Override
     public void onDetach() {
-        this.view = null;
+        this.view = Optional.empty();
     }
 }

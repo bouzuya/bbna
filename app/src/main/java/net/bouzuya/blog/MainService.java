@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 
 import net.bouzuya.blog.models.Entry;
@@ -39,18 +38,16 @@ public class MainService extends IntentService {
     }
 
     private void handleActionFetchEntryList() {
-        Entry latestEntry = getLatestEntry();
-        if (latestEntry == null) return;
+        Optional<Entry> newEntryOptional = getLatestEntry();
+        if (!newEntryOptional.isPresent()) return;
+        Entry latestEntry = newEntryOptional.get();
         String newLatestDate = latestEntry.getDate();
         Context context = this;
         BlogPreferences preferences = new BlogPreferences(context);
-        Optional<String> oldLatestDateOptional = preferences.getLatestDate();
+        Optional<String> oldEntryOptional = preferences.getLatestDate();
         preferences.setLatestDate(newLatestDate);
-        if (newLatestDate != null &&
-                (!oldLatestDateOptional.isPresent() ||
-                        !oldLatestDateOptional.get().equals(newLatestDate))) {
-            sendNotification(context, latestEntry);
-        }
+        if (oldEntryOptional.isPresent() && oldEntryOptional.get().equals(newLatestDate)) return;
+        sendNotification(context, latestEntry);
     }
 
     private void sendNotification(Context context, Entry entry) {
@@ -78,11 +75,10 @@ public class MainService extends IntentService {
         notificationManager.notify(notificationId, notification);
     }
 
-    @Nullable
-    private Entry getLatestEntry() {
+    private Optional<Entry> getLatestEntry() {
         Result<List<Entry>> result = new EntryListRequest().send();
-        if (!result.isOk()) return null;
+        if (!result.isOk()) return Optional.empty();
         List<Entry> entryList = result.getValue();
-        return entryList.isEmpty() ? null : entryList.get(0);
+        return entryList.isEmpty() ? Optional.<Entry>empty() : Optional.of(entryList.get(0));
     }
 }

@@ -9,21 +9,21 @@ import android.widget.TextView;
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.models.Entry;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
-    private final List<Entry> EMPTY_ENTRY_LIST = new ArrayList<>(); // null object
     private List<Entry> mEntryList;
+
     public EntryAdapter() {
-        mEntryList = EMPTY_ENTRY_LIST;
+        mEntryList = Collections.emptyList();
     }
 
     public void changeDataSet(List<Entry> entryList) {
-        mEntryList = entryList == null ? EMPTY_ENTRY_LIST : entryList;
+        mEntryList = entryList;
     }
 
     public Entry getItem(int position) {

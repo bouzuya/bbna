@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (mViewPager != null && mViewPager.getCurrentItem() == POSITION_DETAIL) {
+        if (mViewPager.getCurrentItem() == POSITION_DETAIL) {
             mViewPager.setCurrentItem(POSITION_LIST);
         } else {
             super.onBackPressed();
