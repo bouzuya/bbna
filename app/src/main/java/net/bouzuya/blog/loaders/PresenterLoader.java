@@ -14,6 +14,7 @@ public class PresenterLoader<T extends Presenter> extends Loader<T> {
     public PresenterLoader(Context context, PresenterFactory<T> factory) {
         super(context);
         this.factory = factory;
+        this.presenter = Optional.empty();
     }
 
     @Override
