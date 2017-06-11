@@ -3,7 +3,6 @@ package net.bouzuya.blog.parsers;
 import junit.framework.Assert;
 
 import net.bouzuya.blog.models.Entry;
-import net.bouzuya.blog.models.EntryDetail;
 
 import org.junit.Test;
 
@@ -27,7 +26,7 @@ public class EntryListParserTest {
         EntryListParser parser = new EntryListParser();
         List<Entry> parsed = parser.parse(jsonString);
         assertThat(parsed.size(), is(1));
-        assertThat(parsed.get(0).getDate(), is("2017-01-01"));
+        assertThat(parsed.get(0).getId().toISO8601DateString(), is("2017-01-01"));
         // not supported yet
 //        assertThat(parsed.get(0).getMinutes(), is(45));
 //        assertThat(parsed.get(0).getPubdate(), is("2017-01-01T23:59:59+09:00"));

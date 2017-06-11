@@ -24,7 +24,7 @@ public class EntryDetailParserTest {
         EntryDetailParser parser = new EntryDetailParser();
         EntryDetail parsed = parser.parse(jsonString);
         assertThat(parsed.getData(), is("Hello\n"));
-        assertThat(parsed.getDate(), is("2017-01-01"));
+        assertThat(parsed.getId().toISO8601DateString(), is("2017-01-01"));
         assertThat(parsed.getMinutes(), is(45));
         assertThat(parsed.getHtml(), is("<p>Hello</p>\n"));
         assertThat(parsed.getPubdate(), is("2017-01-01T23:59:59+09:00"));

@@ -144,7 +144,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             initEntryDetailLoader(Optional.<String>empty());
 
             EntryDetail newEntryDetail = data.getValue();
-            String message = "load " + newEntryDetail.getDate() + "";
+            String message = "load " + newEntryDetail.getId().toISO8601DateString() + "";
             Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
             EntryDetail d = newEntryDetail;
 

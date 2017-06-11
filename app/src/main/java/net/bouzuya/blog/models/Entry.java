@@ -1,16 +1,16 @@
 package net.bouzuya.blog.models;
 
 public class Entry {
-    private final String date;
+    private final EntryId id;
     private final String title;
 
-    public Entry(String date, String title) {
-        this.date = date;
+    public Entry(EntryId id, String title) {
+        this.id = id;
         this.title = title;
     }
 
-    public String getDate() {
-        return date;
+    public EntryId getId() {
+        return id;
     }
 
     public String getTitle() {

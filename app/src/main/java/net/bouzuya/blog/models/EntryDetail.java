@@ -3,15 +3,16 @@ package net.bouzuya.blog.models;
 import java.util.List;
 
 public final class EntryDetail {
-    private final String date;
+    private final EntryId id;
     private final String title;
     private final String data; // markdown
     private final String html;
     private final int minutes;
     private final String pubdate;
     private final List<String> tags;
+
     private EntryDetail(
-            String date,
+            EntryId id,
             String title,
             String data,
             String html,
@@ -20,7 +21,7 @@ public final class EntryDetail {
             List<String> tags
     ) {
         // TODO: validation
-        this.date = date;
+        this.id = id;
         this.title = title;
         this.data = data;
         this.html = html;
@@ -33,8 +34,8 @@ public final class EntryDetail {
         return new EntryDetailBuilder();
     }
 
-    public String getDate() {
-        return date;
+    public EntryId getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -62,7 +63,7 @@ public final class EntryDetail {
     }
 
     public static final class EntryDetailBuilder {
-        private String date;
+        private EntryId id;
         private String title;
         private String data;
         private String html;
@@ -73,8 +74,8 @@ public final class EntryDetail {
         private EntryDetailBuilder() {
         }
 
-        public EntryDetailBuilder setDate(String date) {
-            this.date = date;
+        public EntryDetailBuilder setId(EntryId id) {
+            this.id = id;
             return this;
         }
 
@@ -109,7 +110,7 @@ public final class EntryDetail {
         }
 
         public EntryDetail build() {
-            return new EntryDetail(date, title, data, html, minutes, pubdate, tags);
+            return new EntryDetail(id, title, data, html, minutes, pubdate, tags);
         }
     }
 }

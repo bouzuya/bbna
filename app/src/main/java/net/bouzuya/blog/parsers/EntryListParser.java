@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import net.bouzuya.blog.models.Entry;
+import net.bouzuya.blog.models.EntryId;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class EntryListParser {
             Collections.sort(entryList, new Comparator<Entry>() {
                 @Override
                 public int compare(Entry e1, Entry e2) {
-                    return e2.getDate().compareTo(e1.getDate());
+                    return e2.getId().compareTo(e1.getId());
                 }
             });
             return entryList;
@@ -54,8 +55,9 @@ public class EntryListParser {
         private Entry parseEntryJson(JsonElement jsonElement) {
             JsonObject jsonEntry = jsonElement.getAsJsonObject();
             String date = jsonEntry.get("date").getAsString();
+            EntryId entryId = EntryId.fromISO8601DateString(date);
             String title = jsonEntry.get("title").getAsString();
-            return new Entry(date, title);
+            return new Entry(entryId, title);
         }
     }
 }

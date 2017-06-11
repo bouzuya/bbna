@@ -121,7 +121,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         if (mEntryListView == null) return;
         int position = mEntryListView.getChildAdapterPosition(view);
         Entry entry = mAdapter.getItem(position);
-        String date = entry.getDate();
+        String date = entry.getId().toISO8601DateString();
         Timber.d("onClick: " + date);
         if (mListener != null) {
             mListener.onEntrySelect(date);

@@ -41,7 +41,7 @@ public class MainService extends IntentService {
         Optional<Entry> newEntryOptional = getLatestEntry();
         if (!newEntryOptional.isPresent()) return;
         Entry latestEntry = newEntryOptional.get();
-        String newLatestDate = latestEntry.getDate();
+        String newLatestDate = latestEntry.getId().toISO8601DateString();
         Context context = this;
         BlogPreferences preferences = new BlogPreferences(context);
         Optional<String> oldEntryOptional = preferences.getLatestDate();
@@ -52,7 +52,7 @@ public class MainService extends IntentService {
 
     private void sendNotification(Context context, Entry entry) {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra("latest_date", entry.getDate());
+        intent.putExtra("latest_date", entry.getId().toISO8601DateString());
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
                 | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -64,7 +64,7 @@ public class MainService extends IntentService {
         Notification notification = new NotificationCompat.Builder(context)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
-                .setContentText(entry.getDate() + " " + entry.getTitle())
+                .setContentText(entry.getId().toISO8601DateString() + " " + entry.getTitle())
                 .setContentTitle("new entry: ")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .build();

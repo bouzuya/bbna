@@ -18,7 +18,7 @@ public class EntryDetailTest {
         tags.add("tag 2");
         EntryDetail detail = builder
                 .setData("Hello")
-                .setDate("2006-01-02")
+                .setId(EntryId.fromISO8601DateString("2006-01-02"))
                 .setHtml("<p>Hello</p>")
                 .setMinutes(5)
                 .setPubdate("2006-01-02T15:04:05-07:00")
@@ -26,7 +26,7 @@ public class EntryDetailTest {
                 .setTitle("title 1")
                 .build();
         assertThat(detail.getData(), is(equalTo("Hello")));
-        assertThat(detail.getDate(), is(equalTo("2006-01-02")));
+        assertThat(detail.getId().toISO8601DateString(), is(equalTo("2006-01-02")));
         assertThat(detail.getHtml(), is(equalTo("<p>Hello</p>")));
         assertThat(detail.getMinutes(), is(equalTo(5)));
         assertThat(detail.getPubdate(), is(equalTo("2006-01-02T15:04:05-07:00")));

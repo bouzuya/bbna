@@ -39,7 +39,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Entry entry = mEntryList.get(position);
-        holder.dateTextView.setText(entry.getDate());
+        holder.dateTextView.setText(entry.getId().toISO8601DateString());
         holder.titleTextView.setText(entry.getTitle());
     }
 

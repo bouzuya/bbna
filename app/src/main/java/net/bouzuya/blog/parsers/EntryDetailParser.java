@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import net.bouzuya.blog.models.EntryDetail;
+import net.bouzuya.blog.models.EntryId;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class EntryDetailParser {
         private EntryDetail parseEntryDetailJson(JsonElement jsonElement) {
             JsonObject jsonEntry = jsonElement.getAsJsonObject();
             return EntryDetail.newBuilder()
-                    .setDate(jsonEntry.get("date").getAsString())
+                    .setId(EntryId.fromISO8601DateString(jsonEntry.get("date").getAsString()))
                     .setTitle(jsonEntry.get("title").getAsString())
                     .setData(jsonEntry.get("data").getAsString())
                     .setHtml(jsonEntry.get("html").getAsString())
