@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import net.bouzuya.blog.model.Optional;
+import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.view.fragment.EntryDetailFragment;
 import net.bouzuya.blog.view.fragment.EntryListFragment;
 

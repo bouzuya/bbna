@@ -3,9 +3,9 @@ package net.bouzuya.blog.loader;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import net.bouzuya.blog.model.EntryDetail;
-import net.bouzuya.blog.model.Optional;
-import net.bouzuya.blog.model.Result;
+import net.bouzuya.blog.domain.model.EntryDetail;
+import net.bouzuya.blog.domain.model.Optional;
+import net.bouzuya.blog.domain.model.Result;
 import net.bouzuya.blog.request.EntryDetailRequest;
 
 public class EntryDetailLoader extends AsyncTaskLoader<Result<EntryDetail>> {

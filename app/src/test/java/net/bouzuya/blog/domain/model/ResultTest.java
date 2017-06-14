@@ -1,4 +1,4 @@
-package net.bouzuya.blog.model;
+package net.bouzuya.blog.domain.model;
 
 import org.junit.Assert;
 import org.junit.Test;

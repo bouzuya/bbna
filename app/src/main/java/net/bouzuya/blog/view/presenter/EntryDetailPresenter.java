@@ -1,6 +1,6 @@
 package net.bouzuya.blog.view.presenter;
 
-import net.bouzuya.blog.model.Optional;
+import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.view.view.EntryDetailView;
 
 public class EntryDetailPresenter implements Presenter<EntryDetailView> {

@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.bouzuya.blog.R;
-import net.bouzuya.blog.model.Entry;
-import net.bouzuya.blog.model.EntryList;
+import net.bouzuya.blog.domain.model.Entry;
+import net.bouzuya.blog.domain.model.EntryList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

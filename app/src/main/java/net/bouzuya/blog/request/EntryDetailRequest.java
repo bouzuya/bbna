@@ -2,8 +2,8 @@ package net.bouzuya.blog.request;
 
 import android.support.annotation.NonNull;
 
-import net.bouzuya.blog.model.EntryDetail;
-import net.bouzuya.blog.model.Result;
+import net.bouzuya.blog.domain.model.EntryDetail;
+import net.bouzuya.blog.domain.model.Result;
 import net.bouzuya.blog.parser.EntryDetailParser;
 
 import java.io.BufferedReader;

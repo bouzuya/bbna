@@ -9,8 +9,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import net.bouzuya.blog.model.EntryDetail;
-import net.bouzuya.blog.model.EntryId;
+import net.bouzuya.blog.domain.model.EntryDetail;
+import net.bouzuya.blog.domain.model.EntryId;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

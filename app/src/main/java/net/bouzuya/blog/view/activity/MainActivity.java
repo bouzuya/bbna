@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import net.bouzuya.blog.BlogPreferences;
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.loader.PresenterLoader;
-import net.bouzuya.blog.model.Optional;
+import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.view.adapter.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.view.fragment.EntryListFragment;
 import net.bouzuya.blog.view.presenter.MainPresenter;

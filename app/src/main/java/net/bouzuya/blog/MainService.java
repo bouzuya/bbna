@@ -8,10 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
-import net.bouzuya.blog.model.Entry;
-import net.bouzuya.blog.model.EntryList;
-import net.bouzuya.blog.model.Optional;
-import net.bouzuya.blog.model.Result;
+import net.bouzuya.blog.domain.model.Entry;
+import net.bouzuya.blog.domain.model.EntryList;
+import net.bouzuya.blog.domain.model.Optional;
+import net.bouzuya.blog.domain.model.Result;
 import net.bouzuya.blog.request.EntryListRequest;
 import net.bouzuya.blog.view.activity.MainActivity;
 

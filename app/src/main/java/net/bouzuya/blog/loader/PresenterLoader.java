@@ -3,7 +3,7 @@ package net.bouzuya.blog.loader;
 import android.content.Context;
 import android.support.v4.content.Loader;
 
-import net.bouzuya.blog.model.Optional;
+import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.view.presenter.Presenter;
 import net.bouzuya.blog.view.presenter.PresenterFactory;
 

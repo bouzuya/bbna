@@ -2,7 +2,7 @@ package net.bouzuya.blog.parser;
 
 import junit.framework.Assert;
 
-import net.bouzuya.blog.model.EntryList;
+import net.bouzuya.blog.domain.model.EntryList;
 
 import org.junit.Test;
 
