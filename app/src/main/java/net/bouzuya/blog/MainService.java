@@ -8,12 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
-import net.bouzuya.blog.models.Entry;
-import net.bouzuya.blog.models.EntryList;
-import net.bouzuya.blog.models.Optional;
-import net.bouzuya.blog.models.Result;
-import net.bouzuya.blog.requests.EntryListRequest;
-import net.bouzuya.blog.views.activities.MainActivity;
+import net.bouzuya.blog.model.Entry;
+import net.bouzuya.blog.model.EntryList;
+import net.bouzuya.blog.model.Optional;
+import net.bouzuya.blog.model.Result;
+import net.bouzuya.blog.request.EntryListRequest;
+import net.bouzuya.blog.view.activity.MainActivity;
 
 public class MainService extends IntentService {
     public static final String ACTION_FETCH_ENTRY_LIST =
