@@ -20,6 +20,7 @@ import net.bouzuya.blog.app.view.view.EntryDetailView;
 import net.bouzuya.blog.domain.model.EntryDetail;
 import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.domain.model.Result;
+import net.bouzuya.blog.domain.repository.EntryRepository;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,10 +36,14 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     private Optional<String> mDateOptional;
     private Optional<EntryDetailPresenter> mPresenter;
     private Unbinder unbinder;
+    // @Inject
+    private EntryRepository entryRepository;
 
     public EntryDetailFragment() {
         // Required empty public constructor
         this.mDateOptional = Optional.empty();
+
+        inject();
     }
 
     public static EntryDetailFragment newInstance(Optional<String> dateOptional) {
@@ -116,7 +121,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                         if (id != ENTRY_DETAIL_LOADER_ID) throw new AssertionError();
                         return new EntryDetailLoader(
                                 EntryDetailFragment.this.getContext(),
-                                new EntryRepositoryImpl(),
+                                entryRepository,
                                 Optional.ofNullable(args.getString("date"))
                         );
                     }
@@ -188,4 +193,13 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
 //                ? builder.toString()
 //                : builder.substring(delimiter.length()).toString();
 //    }
+
+    private void inject() {
+        this.entryRepository = provideEntryRepository();
+    }
+
+    // @Provide
+    private EntryRepository provideEntryRepository() {
+        return new EntryRepositoryImpl();
+    }
 }

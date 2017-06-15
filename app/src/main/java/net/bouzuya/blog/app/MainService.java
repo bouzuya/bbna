@@ -15,13 +15,17 @@ import net.bouzuya.blog.domain.model.Entry;
 import net.bouzuya.blog.domain.model.EntryList;
 import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.domain.model.Result;
+import net.bouzuya.blog.domain.repository.EntryRepository;
 
 public class MainService extends IntentService {
     public static final String ACTION_FETCH_ENTRY_LIST =
             "net.bouzuya.blog.action.FETCH_ENTRY_LIST";
+    // @Inject
+    private EntryRepository entryRepository;
 
     public MainService() {
         super("MainService");
+        inject();
     }
 
     @Override
@@ -76,9 +80,18 @@ public class MainService extends IntentService {
     }
 
     private Optional<Entry> getLatestEntry() {
-        Result<EntryList> result = new EntryRepositoryImpl().getAll();
+        Result<EntryList> result = entryRepository.getAll();
         if (!result.isOk()) return Optional.empty();
         EntryList entryList = result.getValue();
         return entryList.getLatestEntry();
+    }
+
+    private void inject() {
+        this.entryRepository = provideEntryRepository();
+    }
+
+    // @Provide
+    private EntryRepository provideEntryRepository() {
+        return new EntryRepositoryImpl();
     }
 }

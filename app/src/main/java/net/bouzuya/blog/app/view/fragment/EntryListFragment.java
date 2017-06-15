@@ -25,6 +25,7 @@ import net.bouzuya.blog.domain.model.Entry;
 import net.bouzuya.blog.domain.model.EntryList;
 import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.domain.model.Result;
+import net.bouzuya.blog.domain.repository.EntryRepository;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,9 +42,12 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     private EntryAdapter mAdapter;
     private Optional<EntryListPresenter> mPresenter;
     private Unbinder unbinder;
+    // @Inject
+    private EntryRepository entryRepository;
 
     public EntryListFragment() {
         // Required empty public constructor
+        inject();
     }
 
     public static EntryListFragment newInstance() {
@@ -167,7 +171,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
                         if (id != ENTRY_LIST_LOADER_ID) throw new AssertionError();
                         return new EntryListLoader(
                                 EntryListFragment.this.getContext(),
-                                new EntryRepositoryImpl());
+                                entryRepository);
                     }
 
                     @Override
@@ -187,8 +191,16 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, callbacks);
     }
 
+    private void inject() {
+        this.entryRepository = provideEntryRepository();
+    }
+
+    // @Provide
+    private EntryRepository provideEntryRepository() {
+        return new EntryRepositoryImpl();
+    }
+
     public interface OnEntrySelectListener {
         void onEntrySelect(String date);
     }
-
 }
