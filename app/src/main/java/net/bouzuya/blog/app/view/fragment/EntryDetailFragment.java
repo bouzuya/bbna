@@ -13,12 +13,13 @@ import android.webkit.WebView;
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.app.loader.EntryDetailLoader;
 import net.bouzuya.blog.app.loader.PresenterLoader;
-import net.bouzuya.blog.domain.model.EntryDetail;
-import net.bouzuya.blog.domain.model.Optional;
-import net.bouzuya.blog.domain.model.Result;
+import net.bouzuya.blog.app.repository.EntryRepositoryImpl;
 import net.bouzuya.blog.app.view.presenter.EntryDetailPresenter;
 import net.bouzuya.blog.app.view.presenter.EntryDetailPresenterFactory;
 import net.bouzuya.blog.app.view.view.EntryDetailView;
+import net.bouzuya.blog.domain.model.EntryDetail;
+import net.bouzuya.blog.domain.model.Optional;
+import net.bouzuya.blog.domain.model.Result;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -115,6 +116,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                         if (id != ENTRY_DETAIL_LOADER_ID) throw new AssertionError();
                         return new EntryDetailLoader(
                                 EntryDetailFragment.this.getContext(),
+                                new EntryRepositoryImpl(),
                                 Optional.ofNullable(args.getString("date"))
                         );
                     }
