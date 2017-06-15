@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
 import net.bouzuya.blog.R;
-import net.bouzuya.blog.app.request.EntryListRequest;
+import net.bouzuya.blog.app.repository.EntryRepositoryImpl;
 import net.bouzuya.blog.app.view.activity.MainActivity;
 import net.bouzuya.blog.domain.model.Entry;
 import net.bouzuya.blog.domain.model.EntryList;
@@ -76,7 +76,7 @@ public class MainService extends IntentService {
     }
 
     private Optional<Entry> getLatestEntry() {
-        Result<EntryList> result = new EntryListRequest().send();
+        Result<EntryList> result = new EntryRepositoryImpl().getAll();
         if (!result.isOk()) return Optional.empty();
         EntryList entryList = result.getValue();
         return entryList.getLatestEntry();

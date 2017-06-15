@@ -16,14 +16,15 @@ import android.view.ViewGroup;
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.app.loader.EntryListLoader;
 import net.bouzuya.blog.app.loader.PresenterLoader;
-import net.bouzuya.blog.domain.model.Entry;
-import net.bouzuya.blog.domain.model.EntryList;
-import net.bouzuya.blog.domain.model.Optional;
-import net.bouzuya.blog.domain.model.Result;
+import net.bouzuya.blog.app.repository.EntryRepositoryImpl;
 import net.bouzuya.blog.app.view.adapter.EntryAdapter;
 import net.bouzuya.blog.app.view.presenter.EntryListPresenter;
 import net.bouzuya.blog.app.view.presenter.EntryListPresenterFactory;
 import net.bouzuya.blog.app.view.view.EntryListView;
+import net.bouzuya.blog.domain.model.Entry;
+import net.bouzuya.blog.domain.model.EntryList;
+import net.bouzuya.blog.domain.model.Optional;
+import net.bouzuya.blog.domain.model.Result;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -164,7 +165,9 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
                     @Override
                     public Loader<Result<EntryList>> onCreateLoader(int id, Bundle args) {
                         if (id != ENTRY_LIST_LOADER_ID) throw new AssertionError();
-                        return new EntryListLoader(EntryListFragment.this.getContext());
+                        return new EntryListLoader(
+                                EntryListFragment.this.getContext(),
+                                new EntryRepositoryImpl());
                     }
 
                     @Override

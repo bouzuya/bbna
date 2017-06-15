@@ -5,11 +5,14 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import net.bouzuya.blog.domain.model.EntryList;
 import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.app.request.EntryListRequest;
+import net.bouzuya.blog.domain.repository.EntryRepository;
 
 public class EntryListLoader extends AsyncTaskLoader<Result<EntryList>> {
-    public EntryListLoader(Context context) {
+    private final EntryRepository entryRepository;
+
+    public EntryListLoader(Context context, EntryRepository entryRepository) {
         super(context);
+        this.entryRepository = entryRepository;
     }
 
     @Override
@@ -19,6 +22,6 @@ public class EntryListLoader extends AsyncTaskLoader<Result<EntryList>> {
 
     @Override
     public Result<EntryList> loadInBackground() {
-        return new EntryListRequest().send();
+        return this.entryRepository.getAll();
     }
 }
