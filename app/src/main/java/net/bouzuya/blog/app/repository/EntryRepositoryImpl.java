@@ -8,13 +8,7 @@ import net.bouzuya.blog.domain.repository.EntryRepository;
 
 public class EntryRepositoryImpl implements EntryRepository {
     @Override
-    public EntryList getAll() {
-        Result<EntryList> result = new EntryListRequest().send();
-        if (result.isOk()) {
-            return result.getValue();
-        } else {
-            // TODO
-            throw new RuntimeException(result.getException());
-        }
+    public Result<EntryList> getAll() {
+        return new EntryListRequest().send();
     }
 }
