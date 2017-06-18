@@ -38,6 +38,6 @@ public class PresenterLoader<T extends Presenter> extends Loader<T> {
     @Override
     protected void onReset() {
         this.presenter.get().onDestroy();
-        this.presenter = null;
+        this.presenter = Optional.empty();
     }
 }
