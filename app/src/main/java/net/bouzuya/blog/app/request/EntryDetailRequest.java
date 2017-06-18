@@ -27,8 +27,8 @@ public class EntryDetailRequest {
         try {
             URL entryJsonUrl = newEntryJsonUrl(date);
             String jsonString = fetch(entryJsonUrl);
-            EntryDetail mEntryDetail = parser.parse(jsonString);
-            return Result.ok(mEntryDetail);
+            EntryDetail entryDetail = parser.parse(jsonString);
+            return Result.ok(entryDetail);
         } catch (Exception e) {
             return Result.ng(e);
         }
