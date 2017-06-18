@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import net.bouzuya.blog.domain.model.EntryList;
 import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.app.parser.EntryListResponseParserImpl;
+import net.bouzuya.blog.domain.parser.EntryListResponseParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,11 +15,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class EntryListRequest {
+    private final EntryListResponseParser parser;
 
-    private final EntryListResponseParserImpl parser;
-
-    public EntryListRequest() {
-        parser = new EntryListResponseParserImpl();
+    public EntryListRequest(EntryListResponseParser parser) {
+        this.parser = parser;
     }
 
     public Result<EntryList> send() {
