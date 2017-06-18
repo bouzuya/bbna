@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import net.bouzuya.blog.domain.model.EntryList;
 import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.app.parser.EntryListParser;
+import net.bouzuya.blog.app.parser.EntryListResponseParserImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,10 +16,10 @@ import java.net.URL;
 
 public class EntryListRequest {
 
-    private final EntryListParser parser;
+    private final EntryListResponseParserImpl parser;
 
     public EntryListRequest() {
-        parser = new EntryListParser();
+        parser = new EntryListResponseParserImpl();
     }
 
     public Result<EntryList> send() {

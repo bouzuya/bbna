@@ -11,16 +11,18 @@ import com.google.gson.JsonParseException;
 import net.bouzuya.blog.domain.model.Entry;
 import net.bouzuya.blog.domain.model.EntryId;
 import net.bouzuya.blog.domain.model.EntryList;
+import net.bouzuya.blog.domain.parser.EntryListResponseParser;
 
 import java.lang.reflect.Type;
 
-public class EntryListParser {
-    public EntryList parse(String jsonString) {
+public class EntryListResponseParserImpl implements EntryListResponseParser {
+    @Override
+    public EntryList parse(String responseBody) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Entry.class, new EntryDeserializer())
                 .create();
         try {
-            Entry[] entryArray = gson.fromJson(jsonString, Entry[].class);
+            Entry[] entryArray = gson.fromJson(responseBody, Entry[].class);
             return EntryList.fromEntryArray(entryArray);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);

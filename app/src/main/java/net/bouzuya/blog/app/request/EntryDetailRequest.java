@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import net.bouzuya.blog.domain.model.EntryDetail;
 import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.app.parser.EntryDetailParser;
+import net.bouzuya.blog.app.parser.EntryDetailResponseParserImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,11 +16,11 @@ import java.net.URL;
 
 public class EntryDetailRequest {
     private final String date;
-    private final EntryDetailParser parser;
+    private final EntryDetailResponseParserImpl parser;
 
     public EntryDetailRequest(String date) {
         this.date = date;
-        this.parser = new EntryDetailParser();
+        this.parser = new EntryDetailResponseParserImpl();
     }
 
     public Result<EntryDetail> send() {

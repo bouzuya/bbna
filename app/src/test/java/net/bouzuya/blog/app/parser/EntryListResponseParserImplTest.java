@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class EntryListParserTest {
+public class EntryListResponseParserImplTest {
     @Test
     public void parse() throws Exception {
         String jsonString = "[" +
@@ -21,7 +21,7 @@ public class EntryListParserTest {
                 "\"title\": \"title1\"" +
                 "}" +
                 "]";
-        EntryListParser parser = new EntryListParser();
+        EntryListResponseParserImpl parser = new EntryListResponseParserImpl();
         EntryList parsed = parser.parse(jsonString);
         assertThat(parsed.size(), is(1));
         assertThat(parsed.get(0).getId().toISO8601DateString(), is("2017-01-01"));
@@ -37,7 +37,7 @@ public class EntryListParserTest {
     public void parse_error() throws Exception {
         try {
             String jsonString = "";
-            EntryListParser parser = new EntryListParser();
+            EntryListResponseParserImpl parser = new EntryListResponseParserImpl();
             parser.parse(jsonString);
             Assert.fail();
         } catch (IllegalArgumentException e) {
