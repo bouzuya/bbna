@@ -1,10 +1,10 @@
-package net.bouzuya.blog.app.request;
+package net.bouzuya.blog.app.repository.request;
 
 import android.support.annotation.NonNull;
 
 import net.bouzuya.blog.domain.model.EntryList;
 import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.domain.parser.EntryListResponseParser;
+import net.bouzuya.blog.app.repository.request.parser.EntryListResponseParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;

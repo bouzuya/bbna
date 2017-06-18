@@ -1,4 +1,4 @@
-package net.bouzuya.blog.app.parser;
+package net.bouzuya.blog.app.repository.request.parser;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,7 +11,6 @@ import com.google.gson.JsonParseException;
 
 import net.bouzuya.blog.domain.model.EntryDetail;
 import net.bouzuya.blog.domain.model.EntryId;
-import net.bouzuya.blog.domain.parser.EntryDetailResponseParser;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

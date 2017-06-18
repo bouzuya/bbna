@@ -1,14 +1,14 @@
 package net.bouzuya.blog.app.repository;
 
 
-import net.bouzuya.blog.app.request.EntryDetailRequest;
-import net.bouzuya.blog.app.request.EntryListRequest;
+import net.bouzuya.blog.app.repository.request.EntryDetailRequest;
+import net.bouzuya.blog.app.repository.request.EntryListRequest;
 import net.bouzuya.blog.domain.model.EntryDetail;
 import net.bouzuya.blog.domain.model.EntryId;
 import net.bouzuya.blog.domain.model.EntryList;
 import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.domain.parser.EntryDetailResponseParser;
-import net.bouzuya.blog.domain.parser.EntryListResponseParser;
+import net.bouzuya.blog.app.repository.request.parser.EntryDetailResponseParser;
+import net.bouzuya.blog.app.repository.request.parser.EntryListResponseParser;
 import net.bouzuya.blog.domain.repository.EntryRepository;
 
 public class EntryRepositoryImpl implements EntryRepository {

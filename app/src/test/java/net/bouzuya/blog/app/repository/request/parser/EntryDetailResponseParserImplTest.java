@@ -1,4 +1,4 @@
-package net.bouzuya.blog.app.parser;
+package net.bouzuya.blog.app.repository.request.parser;
 
 import junit.framework.Assert;
 
