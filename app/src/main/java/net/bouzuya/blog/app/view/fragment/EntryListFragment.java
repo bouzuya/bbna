@@ -14,9 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.bouzuya.blog.R;
+import net.bouzuya.blog.app.BlogApplication;
+import net.bouzuya.blog.app.BlogApplicationComponent;
 import net.bouzuya.blog.app.loader.EntryListLoader;
 import net.bouzuya.blog.app.loader.PresenterLoader;
-import net.bouzuya.blog.app.repository.EntryRepositoryImpl;
 import net.bouzuya.blog.app.view.adapter.EntryAdapter;
 import net.bouzuya.blog.app.view.presenter.EntryListPresenter;
 import net.bouzuya.blog.app.view.presenter.EntryListPresenterFactory;
@@ -26,6 +27,8 @@ import net.bouzuya.blog.domain.model.EntryList;
 import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.domain.model.Result;
 import net.bouzuya.blog.domain.repository.EntryRepository;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,16 +41,15 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     private static final int PRESENTER_LOADER_ID = 2;
     @BindView(R.id.entry_list)
     RecyclerView mEntryListView;
+    @Inject
+    EntryRepository entryRepository;
     private OnEntrySelectListener mListener;
     private EntryAdapter mAdapter;
     private Optional<EntryListPresenter> mPresenter;
     private Unbinder unbinder;
-    // @Inject
-    private EntryRepository entryRepository;
 
     public EntryListFragment() {
         // Required empty public constructor
-        inject();
     }
 
     public static EntryListFragment newInstance() {
@@ -59,6 +61,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     public void onAttach(Context context) {
         Timber.d("onAttach: ");
         super.onAttach(context);
+        ((BlogApplication) getActivity().getApplication()).getComponent().inject(this);
         if (context instanceof OnEntrySelectListener) {
             mListener = (OnEntrySelectListener) context;
         } else {
@@ -189,15 +192,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
                 };
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, callbacks);
-    }
-
-    private void inject() {
-        this.entryRepository = provideEntryRepository();
-    }
-
-    // @Provide
-    private EntryRepository provideEntryRepository() {
-        return new EntryRepositoryImpl();
     }
 
     public interface OnEntrySelectListener {

@@ -1,5 +1,6 @@
 package net.bouzuya.blog.app.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -11,9 +12,9 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import net.bouzuya.blog.R;
+import net.bouzuya.blog.app.BlogApplication;
 import net.bouzuya.blog.app.loader.EntryDetailLoader;
 import net.bouzuya.blog.app.loader.PresenterLoader;
-import net.bouzuya.blog.app.repository.EntryRepositoryImpl;
 import net.bouzuya.blog.app.view.presenter.EntryDetailPresenter;
 import net.bouzuya.blog.app.view.presenter.EntryDetailPresenterFactory;
 import net.bouzuya.blog.app.view.view.EntryDetailView;
@@ -21,6 +22,8 @@ import net.bouzuya.blog.domain.model.EntryDetail;
 import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.domain.model.Result;
 import net.bouzuya.blog.domain.repository.EntryRepository;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,17 +36,15 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     private static final String DATE = "param1";
     @BindView(R.id.entry_detail)
     WebView mWebView;
+    @Inject
+    EntryRepository entryRepository;
     private Optional<String> mDateOptional;
     private Optional<EntryDetailPresenter> mPresenter;
     private Unbinder unbinder;
-    // @Inject
-    private EntryRepository entryRepository;
 
     public EntryDetailFragment() {
         // Required empty public constructor
         this.mDateOptional = Optional.empty();
-
-        inject();
     }
 
     public static EntryDetailFragment newInstance(Optional<String> dateOptional) {
@@ -52,6 +53,12 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         arguments.putString(DATE, dateOptional.isPresent() ? dateOptional.get() : null);
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((BlogApplication) getActivity().getApplication()).getComponent().inject(this);
     }
 
     public Optional<String> getDateOptional() {
@@ -193,13 +200,4 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
 //                ? builder.toString()
 //                : builder.substring(delimiter.length()).toString();
 //    }
-
-    private void inject() {
-        this.entryRepository = provideEntryRepository();
-    }
-
-    // @Provide
-    private EntryRepository provideEntryRepository() {
-        return new EntryRepositoryImpl();
-    }
 }

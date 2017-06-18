@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
 import net.bouzuya.blog.R;
-import net.bouzuya.blog.app.repository.EntryRepositoryImpl;
 import net.bouzuya.blog.app.view.activity.MainActivity;
 import net.bouzuya.blog.domain.model.Entry;
 import net.bouzuya.blog.domain.model.EntryList;
@@ -17,15 +16,17 @@ import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.domain.model.Result;
 import net.bouzuya.blog.domain.repository.EntryRepository;
 
+import javax.inject.Inject;
+
 public class MainService extends IntentService {
     public static final String ACTION_FETCH_ENTRY_LIST =
             "net.bouzuya.blog.action.FETCH_ENTRY_LIST";
-    // @Inject
-    private EntryRepository entryRepository;
+    @Inject
+    EntryRepository entryRepository;
 
     public MainService() {
         super("MainService");
-        inject();
+        ((BlogApplication) getApplication()).getComponent().inject(this);
     }
 
     @Override
@@ -84,14 +85,5 @@ public class MainService extends IntentService {
         if (!result.isOk()) return Optional.empty();
         EntryList entryList = result.getValue();
         return entryList.getLatestEntry();
-    }
-
-    private void inject() {
-        this.entryRepository = provideEntryRepository();
-    }
-
-    // @Provide
-    private EntryRepository provideEntryRepository() {
-        return new EntryRepositoryImpl();
     }
 }
