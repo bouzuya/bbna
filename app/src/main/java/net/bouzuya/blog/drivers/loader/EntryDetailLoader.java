@@ -3,11 +3,11 @@ package net.bouzuya.blog.drivers.loader;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import net.bouzuya.blog.domain.model.EntryDetail;
-import net.bouzuya.blog.domain.model.EntryId;
-import net.bouzuya.blog.domain.model.Optional;
-import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.domain.repository.EntryRepository;
+import net.bouzuya.blog.app.repository.EntryRepository;
+import net.bouzuya.blog.entity.EntryDetail;
+import net.bouzuya.blog.entity.EntryId;
+import net.bouzuya.blog.entity.Optional;
+import net.bouzuya.blog.entity.Result;
 
 public class EntryDetailLoader extends AsyncTaskLoader<Result<EntryDetail>> {
     private final EntryRepository entryRepository;

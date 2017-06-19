@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.drivers.view.fragment.EntryDetailFragment;
 import net.bouzuya.blog.drivers.view.fragment.EntryListFragment;
+import net.bouzuya.blog.entity.Optional;
 
 public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int POSITION_LIST = 0;

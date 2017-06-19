@@ -1,15 +1,15 @@
 package net.bouzuya.blog.drivers.repository;
 
 
+import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.drivers.repository.request.EntryDetailRequest;
 import net.bouzuya.blog.drivers.repository.request.EntryListRequest;
 import net.bouzuya.blog.drivers.repository.request.parser.EntryDetailResponseParser;
 import net.bouzuya.blog.drivers.repository.request.parser.EntryListResponseParser;
-import net.bouzuya.blog.domain.model.EntryDetail;
-import net.bouzuya.blog.domain.model.EntryId;
-import net.bouzuya.blog.domain.model.EntryList;
-import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.domain.repository.EntryRepository;
+import net.bouzuya.blog.entity.EntryDetail;
+import net.bouzuya.blog.entity.EntryId;
+import net.bouzuya.blog.entity.EntryList;
+import net.bouzuya.blog.entity.Result;
 
 public class EntryRepositoryImpl implements EntryRepository {
     private final EntryDetailResponseParser entryDetailResponseParser;

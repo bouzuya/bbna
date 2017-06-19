@@ -2,9 +2,9 @@ package net.bouzuya.blog.drivers.repository.request;
 
 import android.support.annotation.NonNull;
 
-import net.bouzuya.blog.domain.model.EntryList;
-import net.bouzuya.blog.domain.model.Result;
 import net.bouzuya.blog.drivers.repository.request.parser.EntryListResponseParser;
+import net.bouzuya.blog.entity.EntryList;
+import net.bouzuya.blog.entity.Result;
 
 import java.io.BufferedReader;
 import java.io.IOException;

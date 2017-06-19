@@ -12,16 +12,16 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import net.bouzuya.blog.R;
+import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.drivers.BlogApplication;
 import net.bouzuya.blog.drivers.loader.EntryDetailLoader;
 import net.bouzuya.blog.drivers.loader.PresenterLoader;
 import net.bouzuya.blog.drivers.view.presenter.EntryDetailPresenter;
 import net.bouzuya.blog.drivers.view.presenter.EntryDetailPresenterFactory;
 import net.bouzuya.blog.drivers.view.view.EntryDetailView;
-import net.bouzuya.blog.domain.model.EntryDetail;
-import net.bouzuya.blog.domain.model.Optional;
-import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.domain.repository.EntryRepository;
+import net.bouzuya.blog.entity.EntryDetail;
+import net.bouzuya.blog.entity.Optional;
+import net.bouzuya.blog.entity.Result;
 
 import javax.inject.Inject;
 

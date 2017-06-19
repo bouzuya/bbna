@@ -1,7 +1,7 @@
 package net.bouzuya.blog.drivers.view.presenter;
 
-import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.drivers.view.view.MainView;
+import net.bouzuya.blog.entity.Optional;
 
 public class MainPresenter implements Presenter<MainView> {
     private Optional<MainView> view;

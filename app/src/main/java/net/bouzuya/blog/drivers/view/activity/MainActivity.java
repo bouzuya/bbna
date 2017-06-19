@@ -9,15 +9,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import net.bouzuya.blog.drivers.BlogPreferences;
 import net.bouzuya.blog.R;
+import net.bouzuya.blog.drivers.BlogPreferences;
 import net.bouzuya.blog.drivers.loader.PresenterLoader;
-import net.bouzuya.blog.domain.model.Optional;
 import net.bouzuya.blog.drivers.view.adapter.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.drivers.view.fragment.EntryListFragment;
 import net.bouzuya.blog.drivers.view.presenter.MainPresenter;
 import net.bouzuya.blog.drivers.view.presenter.MainPresenterFactory;
 import net.bouzuya.blog.drivers.view.view.MainView;
+import net.bouzuya.blog.entity.Optional;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

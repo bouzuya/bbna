@@ -1,4 +1,4 @@
-package net.bouzuya.blog.domain.model;
+package net.bouzuya.blog.entity;
 
 public final class Optional<T> {
     private final T valueOrNull;

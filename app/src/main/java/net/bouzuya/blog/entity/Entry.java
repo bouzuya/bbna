@@ -1,4 +1,4 @@
-package net.bouzuya.blog.domain.model;
+package net.bouzuya.blog.entity;
 
 public class Entry {
     private final EntryId id;

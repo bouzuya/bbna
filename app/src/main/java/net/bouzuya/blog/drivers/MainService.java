@@ -9,12 +9,12 @@ import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
 import net.bouzuya.blog.R;
+import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.drivers.view.activity.MainActivity;
-import net.bouzuya.blog.domain.model.Entry;
-import net.bouzuya.blog.domain.model.EntryList;
-import net.bouzuya.blog.domain.model.Optional;
-import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.domain.repository.EntryRepository;
+import net.bouzuya.blog.entity.Entry;
+import net.bouzuya.blog.entity.EntryList;
+import net.bouzuya.blog.entity.Optional;
+import net.bouzuya.blog.entity.Result;
 
 import javax.inject.Inject;
 

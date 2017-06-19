@@ -3,9 +3,9 @@ package net.bouzuya.blog.drivers.loader;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import net.bouzuya.blog.domain.model.EntryList;
-import net.bouzuya.blog.domain.model.Result;
-import net.bouzuya.blog.domain.repository.EntryRepository;
+import net.bouzuya.blog.app.repository.EntryRepository;
+import net.bouzuya.blog.entity.EntryList;
+import net.bouzuya.blog.entity.Result;
 
 public class EntryListLoader extends AsyncTaskLoader<Result<EntryList>> {
     private final EntryRepository entryRepository;

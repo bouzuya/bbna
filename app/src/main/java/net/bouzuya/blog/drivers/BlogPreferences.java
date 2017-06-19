@@ -3,7 +3,7 @@ package net.bouzuya.blog.drivers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import net.bouzuya.blog.domain.model.Optional;
+import net.bouzuya.blog.entity.Optional;
 
 public class BlogPreferences {
     private static final String PREF_NAME = "blog.bouzuya.net";

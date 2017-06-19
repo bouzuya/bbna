@@ -2,7 +2,7 @@ package net.bouzuya.blog.drivers.repository.request.parser;
 
 import junit.framework.Assert;
 
-import net.bouzuya.blog.domain.model.EntryDetail;
+import net.bouzuya.blog.entity.EntryDetail;
 
 import org.junit.Test;
 
