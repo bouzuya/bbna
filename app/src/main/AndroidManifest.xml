@@ -6,13 +6,13 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name=".drivers.BlogApplication"
+        android:name=".driver.BlogApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".drivers.view.activity.MainActivity">
+        <activity android:name=".driver.view.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,7 +20,7 @@
         </activity>
 
         <receiver
-            android:name=".drivers.MainReceiver"
+            android:name=".driver.MainReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
@@ -28,7 +28,7 @@
         </receiver>
 
         <service
-            android:name=".drivers.MainService"
+            android:name=".driver.MainService"
             android:exported="false" />
     </application>
 

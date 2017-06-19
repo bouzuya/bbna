@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".drivers.view.fragment.EntryListFragment">
+    tools:context=".driver.view.fragment.EntryListFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/entry_list"
