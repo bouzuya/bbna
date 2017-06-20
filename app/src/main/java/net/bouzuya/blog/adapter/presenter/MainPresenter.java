@@ -1,4 +1,4 @@
-package net.bouzuya.blog.driver.presenter;
+package net.bouzuya.blog.adapter.presenter;
 
 import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.Optional;

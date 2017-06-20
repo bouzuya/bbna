@@ -3,8 +3,8 @@ package net.bouzuya.blog.driver.loader;
 import android.content.Context;
 import android.support.v4.content.Loader;
 
-import net.bouzuya.blog.driver.presenter.Presenter;
-import net.bouzuya.blog.driver.presenter.PresenterFactory;
+import net.bouzuya.blog.adapter.presenter.Presenter;
+import net.bouzuya.blog.adapter.presenter.PresenterFactory;
 import net.bouzuya.blog.entity.Optional;
 
 public class PresenterLoader<T extends Presenter> extends Loader<T> {

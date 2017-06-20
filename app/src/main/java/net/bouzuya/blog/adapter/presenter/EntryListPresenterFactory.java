@@ -1,4 +1,4 @@
-package net.bouzuya.blog.driver.presenter;
+package net.bouzuya.blog.adapter.presenter;
 
 public class EntryListPresenterFactory implements PresenterFactory<EntryListPresenter> {
     @Override

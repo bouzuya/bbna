@@ -14,8 +14,8 @@ import net.bouzuya.blog.driver.BlogPreferences;
 import net.bouzuya.blog.driver.adapter.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.driver.loader.PresenterLoader;
-import net.bouzuya.blog.driver.presenter.MainPresenter;
-import net.bouzuya.blog.driver.presenter.MainPresenterFactory;
+import net.bouzuya.blog.adapter.presenter.MainPresenter;
+import net.bouzuya.blog.adapter.presenter.MainPresenterFactory;
 import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.Optional;
 
