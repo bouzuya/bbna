@@ -10,7 +10,7 @@ import android.support.v7.app.NotificationCompat;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.app.repository.EntryRepository;
-import net.bouzuya.blog.driver.view.activity.MainActivity;
+import net.bouzuya.blog.driver.activity.MainActivity;
 import net.bouzuya.blog.entity.Entry;
 import net.bouzuya.blog.entity.EntryList;
 import net.bouzuya.blog.entity.Optional;

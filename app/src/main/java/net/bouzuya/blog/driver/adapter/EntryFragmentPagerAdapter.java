@@ -1,11 +1,11 @@
-package net.bouzuya.blog.driver.view.adapter;
+package net.bouzuya.blog.driver.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import net.bouzuya.blog.driver.view.fragment.EntryDetailFragment;
-import net.bouzuya.blog.driver.view.fragment.EntryListFragment;
+import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
+import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.entity.Optional;
 
 public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {

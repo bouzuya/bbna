@@ -1,4 +1,4 @@
-package net.bouzuya.blog.driver.view.presenter;
+package net.bouzuya.blog.driver.presenter;
 
 public class MainPresenterFactory implements PresenterFactory<MainPresenter> {
     @Override

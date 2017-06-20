@@ -1,6 +1,6 @@
-package net.bouzuya.blog.driver.view.presenter;
+package net.bouzuya.blog.driver.presenter;
 
-import net.bouzuya.blog.driver.view.view.EntryListView;
+import net.bouzuya.blog.driver.view.EntryListView;
 
 public class EntryListPresenter implements Presenter<EntryListView> {
     private EntryListView view;

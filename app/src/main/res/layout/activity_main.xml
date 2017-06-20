@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".driver.view.activity.MainActivity">
+    tools:context=".driver.activity.MainActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"

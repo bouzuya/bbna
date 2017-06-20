@@ -1,4 +1,4 @@
-package net.bouzuya.blog.driver.view.fragment;
+package net.bouzuya.blog.driver.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,12 +16,12 @@ import android.view.ViewGroup;
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
+import net.bouzuya.blog.driver.adapter.EntryAdapter;
 import net.bouzuya.blog.driver.loader.EntryListLoader;
 import net.bouzuya.blog.driver.loader.PresenterLoader;
-import net.bouzuya.blog.driver.view.adapter.EntryAdapter;
-import net.bouzuya.blog.driver.view.presenter.EntryListPresenter;
-import net.bouzuya.blog.driver.view.presenter.EntryListPresenterFactory;
-import net.bouzuya.blog.driver.view.view.EntryListView;
+import net.bouzuya.blog.driver.presenter.EntryListPresenter;
+import net.bouzuya.blog.driver.presenter.EntryListPresenterFactory;
+import net.bouzuya.blog.driver.view.EntryListView;
 import net.bouzuya.blog.entity.Entry;
 import net.bouzuya.blog.entity.EntryList;
 import net.bouzuya.blog.entity.Optional;

@@ -1,4 +1,4 @@
-package net.bouzuya.blog.driver.view.activity;
+package net.bouzuya.blog.driver.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,12 +11,12 @@ import android.view.MenuItem;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.driver.BlogPreferences;
+import net.bouzuya.blog.driver.adapter.EntryFragmentPagerAdapter;
+import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.driver.loader.PresenterLoader;
-import net.bouzuya.blog.driver.view.adapter.EntryFragmentPagerAdapter;
-import net.bouzuya.blog.driver.view.fragment.EntryListFragment;
-import net.bouzuya.blog.driver.view.presenter.MainPresenter;
-import net.bouzuya.blog.driver.view.presenter.MainPresenterFactory;
-import net.bouzuya.blog.driver.view.view.MainView;
+import net.bouzuya.blog.driver.presenter.MainPresenter;
+import net.bouzuya.blog.driver.presenter.MainPresenterFactory;
+import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.Optional;
 
 import butterknife.BindView;

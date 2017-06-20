@@ -1,6 +1,6 @@
-package net.bouzuya.blog.driver.view.presenter;
+package net.bouzuya.blog.driver.presenter;
 
-import net.bouzuya.blog.driver.view.view.MainView;
+import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.Optional;
 
 public class MainPresenter implements Presenter<MainView> {

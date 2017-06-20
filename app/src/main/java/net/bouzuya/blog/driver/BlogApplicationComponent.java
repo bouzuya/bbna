@@ -1,7 +1,7 @@
 package net.bouzuya.blog.driver;
 
-import net.bouzuya.blog.driver.view.fragment.EntryDetailFragment;
-import net.bouzuya.blog.driver.view.fragment.EntryListFragment;
+import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
+import net.bouzuya.blog.driver.fragment.EntryListFragment;
 
 import javax.inject.Singleton;
 

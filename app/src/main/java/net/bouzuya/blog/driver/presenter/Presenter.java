@@ -1,4 +1,4 @@
-package net.bouzuya.blog.driver.view.presenter;
+package net.bouzuya.blog.driver.presenter;
 
 public interface Presenter<T> {
 
