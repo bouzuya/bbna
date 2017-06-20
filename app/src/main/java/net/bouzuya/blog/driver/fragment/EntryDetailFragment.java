@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import net.bouzuya.blog.R;
+import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
+import net.bouzuya.blog.adapter.presenter.EntryDetailPresenterFactory;
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.loader.EntryDetailLoader;
 import net.bouzuya.blog.driver.loader.PresenterLoader;
-import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
-import net.bouzuya.blog.adapter.presenter.EntryDetailPresenterFactory;
 import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
@@ -117,6 +117,11 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         unbinder.unbind();
     }
 
+    @Override
+    public void showEntryDetail(Result<EntryDetail> entryDetail) {
+        onLoadEntryDetailFinished(entryDetail);
+    }
+
     private void initEntryDetailLoader(Optional<String> dateOptional) {
         LoaderManager loaderManager = getLoaderManager();
         Bundle bundle = new Bundle();
@@ -148,7 +153,6 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                 };
         loaderManager.restartLoader(ENTRY_DETAIL_LOADER_ID, bundle, callbacks);
     }
-
 
     private void onLoadEntryDetailFinished(Result<EntryDetail> data) {
         Timber.d("onLoadEntryDetailFinished: ");
