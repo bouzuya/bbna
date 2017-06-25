@@ -7,9 +7,9 @@ import net.bouzuya.blog.entity.EntryDetail;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-public class EntryDetailResponseParserImplTest {
+public class EntryDetailResponseParserTest {
     @Test
     public void parse() throws Exception {
         String jsonString = "{" +
@@ -21,7 +21,7 @@ public class EntryDetailResponseParserImplTest {
                 "\"tags\": [\"tag1\"]," +
                 "\"title\": \"title1\"" +
                 "}";
-        EntryDetailResponseParserImpl parser = new EntryDetailResponseParserImpl();
+        EntryDetailResponseParser parser = new EntryDetailResponseParser();
         EntryDetail parsed = parser.parse(jsonString);
         assertThat(parsed.getData(), is("Hello\n"));
         assertThat(parsed.getId().toISO8601DateString(), is("2017-01-01"));
@@ -37,7 +37,7 @@ public class EntryDetailResponseParserImplTest {
     public void parse_error() throws Exception {
         try {
             String jsonString = "{}";
-            EntryDetailResponseParserImpl parser = new EntryDetailResponseParserImpl();
+            EntryDetailResponseParser parser = new EntryDetailResponseParser();
             parser.parse(jsonString);
             Assert.fail();
         } catch (IllegalArgumentException e) {
