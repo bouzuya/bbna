@@ -16,8 +16,13 @@ public class MainPresenter implements Presenter<MainView> {
         this.view = Optional.of(view);
     }
 
-    public void onStart() {
-        this.view.get().showList();
+    public void onStart(Optional<String> selectedDateOptional) {
+        if (!this.view.isPresent()) return; // do nothing
+        if (selectedDateOptional.isPresent()) {
+            this.view.get().showDetail(selectedDateOptional.get());
+        } else {
+            this.view.get().showList();
+        }
     }
 
     public void onSelectEntry(String date) {

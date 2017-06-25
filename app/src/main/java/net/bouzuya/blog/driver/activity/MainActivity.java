@@ -1,5 +1,6 @@
 package net.bouzuya.blog.driver.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -10,12 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import net.bouzuya.blog.R;
+import net.bouzuya.blog.adapter.presenter.MainPresenter;
+import net.bouzuya.blog.adapter.presenter.MainPresenterFactory;
 import net.bouzuya.blog.driver.BlogPreferences;
 import net.bouzuya.blog.driver.adapter.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.driver.loader.PresenterLoader;
-import net.bouzuya.blog.adapter.presenter.MainPresenter;
-import net.bouzuya.blog.adapter.presenter.MainPresenterFactory;
 import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.Optional;
 
@@ -127,8 +128,9 @@ public class MainActivity extends AppCompatActivity
         Timber.d("onStart: ");
         super.onStart();
 
+        Optional<String> selectedDateOptional = getSelectedDate();
         mPresenter.onAttach(this);
-        mPresenter.onStart();
+        mPresenter.onStart(selectedDateOptional);
     }
 
     @Override
@@ -137,5 +139,13 @@ public class MainActivity extends AppCompatActivity
         mPresenter.onDetach();
 
         super.onStop();
+    }
+
+    private Optional<String> getSelectedDate() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras == null) return Optional.empty();
+        String latestDate = extras.getString("latest_date", null);
+        return Optional.ofNullable(latestDate);
     }
 }
