@@ -18,6 +18,7 @@ public class MainPresenter implements Presenter<MainView> {
 
     public void onStart(Optional<String> selectedDateOptional) {
         if (!this.view.isPresent()) return; // do nothing
+        this.selectedEntryDateOptional = selectedDateOptional;
         if (selectedDateOptional.isPresent()) {
             this.view.get().showDetail(selectedDateOptional.get());
         } else {

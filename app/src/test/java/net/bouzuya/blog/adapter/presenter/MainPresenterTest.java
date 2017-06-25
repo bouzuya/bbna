@@ -18,6 +18,9 @@ public class MainPresenterTest {
         presenter.onStart(Optional.<String>empty());
         verify(view, times(0)).showDetail("2006-01-02");
         verify(view, times(1)).showList();
+        presenter.onSwitchList();
+        presenter.onSwitchDetail();
+        verify(view, times(0)).showDetail("2006-01-02");
     }
 
     @Test
@@ -28,5 +31,8 @@ public class MainPresenterTest {
         presenter.onStart(Optional.of("2006-01-02"));
         verify(view, times(1)).showDetail("2006-01-02");
         verify(view, times(0)).showList();
+        presenter.onSwitchList();
+        presenter.onSwitchDetail();
+        verify(view, times(2)).showDetail("2006-01-02");
     }
 }
