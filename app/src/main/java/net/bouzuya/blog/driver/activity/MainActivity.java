@@ -1,6 +1,7 @@
 package net.bouzuya.blog.driver.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -19,6 +20,9 @@ import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.driver.loader.PresenterLoader;
 import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.Optional;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -143,9 +147,25 @@ public class MainActivity extends AppCompatActivity
 
     private Optional<String> getSelectedDate() {
         Intent intent = getIntent();
+        Optional<String> urlOptional = getURL();
+        if (urlOptional.isPresent()) return urlOptional;
         Bundle extras = intent.getExtras();
         if (extras == null) return Optional.empty();
         String latestDate = extras.getString("latest_date", null);
         return Optional.ofNullable(latestDate);
+    }
+
+    private Optional<String> getURL() {
+        Intent intent = getIntent();
+        Uri data = intent.getData();
+        if (data == null) return Optional.empty();
+        if (data.getPath().equals("/")) return Optional.empty();
+        Pattern pattern = Pattern.compile("\\A/(\\d{4})/(\\d{2})/(\\d{2})/\\z");
+        Matcher matcher = pattern.matcher(data.getPath());
+        if (!matcher.matches()) return Optional.empty();
+        String yearString = matcher.group(1);
+        String monthString = matcher.group(2);
+        String dateString = matcher.group(3);
+        return Optional.of(yearString + "-" + monthString + "-" + dateString);
     }
 }
