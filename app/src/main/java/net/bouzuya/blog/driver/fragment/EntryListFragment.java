@@ -14,13 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.bouzuya.blog.R;
+import net.bouzuya.blog.adapter.presenter.EntryListPresenter;
+import net.bouzuya.blog.adapter.presenter.EntryListPresenterFactory;
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.adapter.EntryAdapter;
 import net.bouzuya.blog.driver.loader.EntryListLoader;
 import net.bouzuya.blog.driver.loader.PresenterLoader;
-import net.bouzuya.blog.adapter.presenter.EntryListPresenter;
-import net.bouzuya.blog.adapter.presenter.EntryListPresenterFactory;
 import net.bouzuya.blog.driver.view.EntryListView;
 import net.bouzuya.blog.entity.Entry;
 import net.bouzuya.blog.entity.EntryList;
@@ -52,8 +52,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     }
 
     public static EntryListFragment newInstance() {
-        EntryListFragment fragment = new EntryListFragment();
-        return fragment;
+        return new EntryListFragment();
     }
 
     @Override
@@ -150,18 +149,20 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
 
     public void onLoadEntryListFinished(Result<EntryList> data) {
         Timber.d("onLoadEntryListFinished: ");
+        View view = this.getView();
+        if (view == null) return;
         if (data.isOk()) {
             Timber.d("onLoadEntryListFinished: isOk");
             EntryList newEntryList = data.getValue();
             mAdapter.changeDataSet(newEntryList);
             mAdapter.notifyDataSetChanged();
             String message = "load " + newEntryList.size() + " entries";
-            Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         } else {
             Exception e = data.getException();
             Timber.e("onLoadEntryListFinished: ", e);
             String message = "load error";
-            Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         }
     }
 

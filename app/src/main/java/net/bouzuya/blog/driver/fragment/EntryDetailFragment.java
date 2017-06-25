@@ -31,8 +31,8 @@ import butterknife.Unbinder;
 import timber.log.Timber;
 
 public class EntryDetailFragment extends Fragment implements EntryDetailView {
-    public static final int ENTRY_DETAIL_LOADER_ID = 1;
-    public static final int PRESENTER_LOADER_ID = 2;
+    private static final int ENTRY_DETAIL_LOADER_ID = 1;
+    private static final int PRESENTER_LOADER_ID = 2;
     private static final String DATE = "param1";
     @BindView(R.id.entry_detail)
     WebView mWebView;
@@ -156,16 +156,16 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
 
     private void onLoadEntryDetailFinished(Result<EntryDetail> data) {
         Timber.d("onLoadEntryDetailFinished: ");
+        View view = this.getView();
+        if (view == null) return;
         if (data.isOk()) {
             Timber.d("onLoadEntryDetailFinished: isOk");
 
             initEntryDetailLoader(Optional.<String>empty());
 
-            EntryDetail newEntryDetail = data.getValue();
-            String message = "load " + newEntryDetail.getId().toISO8601DateString() + "";
-            Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
-            EntryDetail d = newEntryDetail;
-
+            EntryDetail d = data.getValue();
+            String message = "load " + d.getId().toISO8601DateString() + "";
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
             String html = new StringBuilder()
                     .append("<html>")
                     .append("<head></head>")
@@ -190,7 +190,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             Exception e = data.getException();
             Timber.e("onLoadEntryDetailFinished: ", e);
             String message = "load error";
-            Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         }
     }
 

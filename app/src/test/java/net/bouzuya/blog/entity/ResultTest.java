@@ -14,6 +14,7 @@ public class ResultTest {
         Result<String> result = Result.ok("foo");
         assertThat(result.isOk(), is(equalTo(true)));
         try {
+            //noinspection ThrowableResultOfMethodCallIgnored
             result.getException();
             Assert.fail();
         } catch (IllegalStateException e) {
@@ -26,6 +27,7 @@ public class ResultTest {
     public void simpleNg() throws Exception {
         Result<String> result = Result.ng(new IllegalArgumentException("bar"));
         assertThat(result.isOk(), is(equalTo(false)));
+        //noinspection ThrowableResultOfMethodCallIgnored
         assertThat(result.getException().getMessage(), is(equalTo("bar")));
         try {
             result.getValue();

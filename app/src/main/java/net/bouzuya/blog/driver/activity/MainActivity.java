@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         mAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(POSITION_DETAIL);
         ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(date);
     }
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     public void showList() {
         mViewPager.setCurrentItem(POSITION_LIST);
         ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle("blog.bouzuya.net");
     }
