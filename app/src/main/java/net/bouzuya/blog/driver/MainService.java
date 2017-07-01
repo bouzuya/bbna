@@ -26,6 +26,11 @@ public class MainService extends IntentService {
 
     public MainService() {
         super("MainService");
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
         ((BlogApplication) getApplication()).getComponent().inject(this);
     }
 
