@@ -14,11 +14,9 @@ import android.webkit.WebView;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
-import net.bouzuya.blog.adapter.presenter.EntryDetailPresenterFactory;
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.loader.EntryDetailLoader;
-import net.bouzuya.blog.driver.loader.PresenterLoader;
 import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
@@ -38,9 +36,10 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     @BindView(R.id.entry_detail)
     WebView webView;
     @Inject
+    EntryDetailPresenter presenter;
+    @Inject
     EntryRepository entryRepository;
     private Optional<String> dateOptional;
-    private Optional<EntryDetailPresenter> presenterOptional;
     private Unbinder unbinder;
     private OnEntryLoadListener listener;
 
@@ -60,13 +59,14 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        ((BlogApplication) getActivity().getApplication()).getComponent().inject(this);
         if (context instanceof EntryDetailFragment.OnEntryLoadListener) {
             listener = (EntryDetailFragment.OnEntryLoadListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnEntrySelectListener");
         }
-        ((BlogApplication) getActivity().getApplication()).getComponent().inject(this);
+        presenter.onAttach(this);
     }
 
     public Optional<String> getDateOptional() {
@@ -81,31 +81,6 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         if (arguments != null) {
             dateOptional = Optional.ofNullable(arguments.getString(DATE));
         }
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(
-                PRESENTER_LOADER_ID,
-                null,
-                new LoaderManager.LoaderCallbacks<EntryDetailPresenter>() {
-                    @Override
-                    public Loader<EntryDetailPresenter> onCreateLoader(int id, Bundle args) {
-                        return new PresenterLoader<>(
-                                EntryDetailFragment.this.getContext(),
-                                new EntryDetailPresenterFactory()
-                        );
-                    }
-
-                    @Override
-                    public void onLoadFinished(
-                            Loader<EntryDetailPresenter> loader, EntryDetailPresenter data
-                    ) {
-                        EntryDetailFragment.this.presenterOptional = Optional.of(data);
-                    }
-
-                    @Override
-                    public void onLoaderReset(Loader<EntryDetailPresenter> loader) {
-                        EntryDetailFragment.this.presenterOptional = Optional.empty();
-                    }
-                });
     }
 
     @Override
@@ -122,7 +97,14 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public void onDestroyView() {
         Timber.d("onDestroyView: ");
         super.onDestroyView();
+        presenter.onDestroy();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        presenter.onDetach();
     }
 
     @Override
