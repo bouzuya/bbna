@@ -38,4 +38,9 @@ public class Url {
     public String toUrlString() {
         return this.url.toString();
     }
+
+    @Override
+    public String toString() {
+        return "Url{" + url + '}';
+    }
 }
