@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,18 +12,19 @@ import android.view.MenuItem;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.MainPresenter;
-import net.bouzuya.blog.adapter.presenter.MainPresenterFactory;
+import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.BlogPreferences;
 import net.bouzuya.blog.driver.adapter.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
-import net.bouzuya.blog.driver.loader.PresenterLoader;
 import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,11 +37,11 @@ public class MainActivity extends AppCompatActivity
 
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
-    private static final int PRESENTER_LOADER_ID = 1;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+    @Inject
+    MainPresenter presenter;
     private EntryFragmentPagerAdapter adapter;
-    private MainPresenter presenter;
     private Intent shareIntent;
     private MenuItem shareMenuItem;
 
@@ -135,26 +134,7 @@ public class MainActivity extends AppCompatActivity
         Timber.d("onCreate: ");
         super.onCreate(savedInstanceState);
 
-        LoaderManager loaderManager = getSupportLoaderManager();
-        loaderManager.initLoader(
-                PRESENTER_LOADER_ID,
-                null,
-                new LoaderManager.LoaderCallbacks<MainPresenter>() {
-                    @Override
-                    public Loader<MainPresenter> onCreateLoader(int id, Bundle args) {
-                        return new PresenterLoader<>(MainActivity.this, new MainPresenterFactory());
-                    }
-
-                    @Override
-                    public void onLoadFinished(Loader<MainPresenter> loader, MainPresenter data) {
-                        MainActivity.this.presenter = data;
-                    }
-
-                    @Override
-                    public void onLoaderReset(Loader<MainPresenter> loader) {
-                        MainActivity.this.presenter = null;
-                    }
-                });
+        ((BlogApplication) getApplication()).getComponent().inject(this);
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

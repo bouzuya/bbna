@@ -4,10 +4,13 @@ import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
+import javax.inject.Inject;
+
 public class MainPresenter implements Presenter<MainView> {
     private Optional<MainView> view;
     private Optional<String> selectedEntryDateOptional;
 
+    @Inject
     public MainPresenter() {
         this.selectedEntryDateOptional = Optional.empty();
     }
@@ -20,6 +23,7 @@ public class MainPresenter implements Presenter<MainView> {
     public void onLoadEntry(EntryDetail entryDetail) {
         this.view.get().updateShareButton(entryDetail);
     }
+
     public void onStart(Optional<String> selectedDateOptional) {
         if (!this.view.isPresent()) return; // do nothing
         this.selectedEntryDateOptional = selectedDateOptional;
