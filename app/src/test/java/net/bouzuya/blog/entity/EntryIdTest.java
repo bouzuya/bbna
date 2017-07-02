@@ -45,4 +45,11 @@ public class EntryIdTest {
         EntryId entryId = EntryId.fromISO8601DateString("2006-01-02");
         assertThat(entryId.toISO8601DateString(), is("2006-01-02"));
     }
+
+    @Test
+    public void test_toUrl() throws Exception {
+        EntryId entryId = EntryId.fromISO8601DateString("2006-01-02");
+        Url url = Url.parse("https://blog.bouzuya.net/2006/01/02/").get();
+        assertThat(entryId.toUrl(), is(url));
+    }
 }

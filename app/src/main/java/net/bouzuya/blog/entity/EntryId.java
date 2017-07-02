@@ -37,4 +37,10 @@ public class EntryId implements Comparable<EntryId> {
     public String toISO8601DateString() {
         return this.date;
     }
+
+    public Url toUrl() {
+        String baseUrl = "https://blog.bouzuya.net";
+        String path = "/" + this.date.replaceAll("-", "/") + "/";
+        return Url.parse(baseUrl + path).get();
+    }
 }
