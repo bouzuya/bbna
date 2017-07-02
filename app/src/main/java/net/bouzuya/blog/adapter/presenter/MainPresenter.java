@@ -11,7 +11,7 @@ public class MainPresenter implements Presenter<MainView> {
     private Optional<String> selectedEntryDateOptional;
 
     @Inject
-    public MainPresenter() {
+    MainPresenter() {
         this.selectedEntryDateOptional = Optional.empty();
     }
 

@@ -9,7 +9,7 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
     private Optional<EntryDetailView> view;
 
     @Inject
-    public EntryDetailPresenter() {
+    EntryDetailPresenter() {
     }
 
     @Override

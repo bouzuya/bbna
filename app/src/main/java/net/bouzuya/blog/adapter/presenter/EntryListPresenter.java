@@ -8,7 +8,7 @@ public class EntryListPresenter implements Presenter<EntryListView> {
     private EntryListView view;
 
     @Inject
-    public EntryListPresenter() {
+    EntryListPresenter() {
     }
 
     @Override
