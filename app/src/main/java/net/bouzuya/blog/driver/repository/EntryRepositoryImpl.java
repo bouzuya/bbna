@@ -1,6 +1,5 @@
 package net.bouzuya.blog.driver.repository;
 
-
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.repository.request.EntryDetailRequest;
 import net.bouzuya.blog.driver.repository.request.EntryListRequest;
@@ -25,10 +24,7 @@ public class EntryRepositoryImpl implements EntryRepository {
 
     @Override
     public Result<EntryDetail> get(EntryId id) {
-        // TODO: String -> EntryId
-        EntryDetailRequest request = new EntryDetailRequest(
-                this.entryDetailResponseParser,
-                id.toISO8601DateString());
+        EntryDetailRequest request = new EntryDetailRequest(this.entryDetailResponseParser, id);
         return request.send();
     }
 

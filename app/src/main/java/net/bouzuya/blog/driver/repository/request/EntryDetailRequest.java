@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import net.bouzuya.blog.driver.repository.request.parser.EntryDetailResponseParser;
 import net.bouzuya.blog.entity.EntryDetail;
+import net.bouzuya.blog.entity.EntryId;
 import net.bouzuya.blog.entity.Result;
 
 import java.io.BufferedReader;
@@ -15,17 +16,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class EntryDetailRequest {
-    private final String date;
+    private final EntryId entryId;
     private final EntryDetailResponseParser parser;
 
-    public EntryDetailRequest(EntryDetailResponseParser parser, String date) {
+    public EntryDetailRequest(EntryDetailResponseParser parser, EntryId entryId) {
         this.parser = parser;
-        this.date = date;
+        this.entryId = entryId;
     }
 
     public Result<EntryDetail> send() {
         try {
-            URL entryJsonUrl = newEntryJsonUrl(date);
+            URL entryJsonUrl = newEntryJsonUrl(entryId);
             String jsonString = fetch(entryJsonUrl);
             EntryDetail entryDetail = parser.parse(jsonString);
             return Result.ok(entryDetail);
@@ -45,9 +46,9 @@ public class EntryDetailRequest {
     }
 
     @NonNull
-    private URL newEntryJsonUrl(String date) {
+    private URL newEntryJsonUrl(EntryId entryId) {
         try {
-            return new URL("https://blog.bouzuya.net/" + date.replace('-', '/') + ".json");
+            return new URL(entryId.toJsonUrl().toUrlString());
         } catch (MalformedURLException e) {
             throw new AssertionError(e);
         }
