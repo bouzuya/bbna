@@ -1,6 +1,7 @@
 package net.bouzuya.blog.adapter.presenter;
 
 import net.bouzuya.blog.driver.view.MainView;
+import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
 public class MainPresenter implements Presenter<MainView> {
@@ -16,6 +17,9 @@ public class MainPresenter implements Presenter<MainView> {
         this.view = Optional.of(view);
     }
 
+    public void onLoadEntry(EntryDetail entryDetail) {
+        this.view.get().updateShareButton(entryDetail);
+    }
     public void onStart(Optional<String> selectedDateOptional) {
         if (!this.view.isPresent()) return; // do nothing
         this.selectedEntryDateOptional = selectedDateOptional;

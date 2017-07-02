@@ -42,6 +42,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     private Optional<String> mDateOptional;
     private Optional<EntryDetailPresenter> mPresenter;
     private Unbinder unbinder;
+    private OnEntryLoadListener mListener;
 
     public EntryDetailFragment() {
         // Required empty public constructor
@@ -59,6 +60,12 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof EntryDetailFragment.OnEntryLoadListener) {
+            mListener = (EntryDetailFragment.OnEntryLoadListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnEntrySelectListener");
+        }
         ((BlogApplication) getActivity().getApplication()).getComponent().inject(this);
     }
 
@@ -163,6 +170,9 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                     ) {
                         EntryDetailView entryDetailView = EntryDetailFragment.this;
                         entryDetailView.showEntryDetail(data);
+                        if (mListener != null && data.isOk()) {
+                            mListener.onEntryLoad(data.getValue());
+                        }
                     }
 
                     @Override
@@ -193,7 +203,10 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                 .append("</body>")
                 .append("</html>")
                 .toString();
+    }
 
+    public interface OnEntryLoadListener {
+        void onEntryLoad(EntryDetail entryDetail);
     }
 
 //    private String join(String delimiter, List<String> list) {

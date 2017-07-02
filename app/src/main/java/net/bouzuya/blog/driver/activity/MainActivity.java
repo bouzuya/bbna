@@ -9,7 +9,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,9 +17,11 @@ import net.bouzuya.blog.adapter.presenter.MainPresenter;
 import net.bouzuya.blog.adapter.presenter.MainPresenterFactory;
 import net.bouzuya.blog.driver.BlogPreferences;
 import net.bouzuya.blog.driver.adapter.EntryFragmentPagerAdapter;
+import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.driver.loader.PresenterLoader;
 import net.bouzuya.blog.driver.view.MainView;
+import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
 import java.util.regex.Matcher;
@@ -32,6 +33,7 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements EntryListFragment.OnEntrySelectListener,
+        EntryDetailFragment.OnEntryLoadListener,
         MainView {
 
     private static final int POSITION_LIST = 0;
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity
     ViewPager mViewPager;
     private EntryFragmentPagerAdapter mAdapter;
     private MainPresenter mPresenter;
-    private ShareActionProvider shareActionProvider;
     private Intent shareIntent;
     private MenuItem shareMenuItem;
 
@@ -67,6 +68,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onEntryLoad(EntryDetail entryDetail) {
+        mPresenter.onLoadEntry(entryDetail);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -81,6 +87,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     public void showDetail(String date) {
         mAdapter.setDetailDate(date);
         mAdapter.notifyDataSetChanged();
@@ -89,7 +96,7 @@ public class MainActivity extends AppCompatActivity
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(date);
-        // TODO: 2017/07/02 update share button
+        // reset share button
         this.shareIntent = null;
         if (shareMenuItem != null) {
             shareMenuItem.setVisible(false);
@@ -106,6 +113,18 @@ public class MainActivity extends AppCompatActivity
         String title = "blog.bouzuya.net";
         String url = "https://blog.bouzuya.net/";
         this.shareIntent = newShareIntent(title, url);
+        if (shareMenuItem != null) {
+            shareMenuItem.setVisible(true);
+        }
+    }
+
+    @Override
+    public void updateShareButton(EntryDetail entryDetail) {
+        String url = entryDetail.getId().toUrl().toUrlString();
+        String date = entryDetail.getId().toISO8601DateString();
+        String title = entryDetail.getTitle();
+        String dateAndTitle = String.format("%s %s", date, title);
+        this.shareIntent = newShareIntent(dateAndTitle, url);
         if (shareMenuItem != null) {
             shareMenuItem.setVisible(true);
         }
