@@ -15,16 +15,13 @@ import android.view.ViewGroup;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.EntryListPresenter;
-import net.bouzuya.blog.adapter.presenter.EntryListPresenterFactory;
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.adapter.EntryAdapter;
 import net.bouzuya.blog.driver.loader.EntryListLoader;
-import net.bouzuya.blog.driver.loader.PresenterLoader;
 import net.bouzuya.blog.driver.view.EntryListView;
 import net.bouzuya.blog.entity.Entry;
 import net.bouzuya.blog.entity.EntryList;
-import net.bouzuya.blog.entity.Optional;
 import net.bouzuya.blog.entity.Result;
 
 import javax.inject.Inject;
@@ -37,14 +34,14 @@ import timber.log.Timber;
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
 
     private static final int ENTRY_LIST_LOADER_ID = 0;
-    private static final int PRESENTER_LOADER_ID = 2;
     @BindView(R.id.entry_list)
     RecyclerView entryListView;
+    @Inject
+    EntryListPresenter presenter;
     @Inject
     EntryRepository entryRepository;
     private OnEntrySelectListener listener;
     private EntryAdapter adapter;
-    private Optional<EntryListPresenter> presenterOptional;
     private Unbinder unbinder;
 
     public EntryListFragment() {
@@ -66,38 +63,15 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
             throw new RuntimeException(context.toString()
                     + " must implement OnEntrySelectListener");
         }
+        presenter.onAttach(this);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Timber.d("onCreate: EntryListFragment");
         super.onCreate(savedInstanceState);
+
         initEntryListLoader();
-
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(
-                PRESENTER_LOADER_ID,
-                null,
-                new LoaderManager.LoaderCallbacks<EntryListPresenter>() {
-                    @Override
-                    public Loader<EntryListPresenter> onCreateLoader(int id, Bundle args) {
-                        return new PresenterLoader<>(
-                                EntryListFragment.this.getContext(), new EntryListPresenterFactory()
-                        );
-                    }
-
-                    @Override
-                    public void onLoadFinished(
-                            Loader<EntryListPresenter> loader, EntryListPresenter data
-                    ) {
-                        EntryListFragment.this.presenterOptional = Optional.of(data);
-                    }
-
-                    @Override
-                    public void onLoaderReset(Loader<EntryListPresenter> loader) {
-                        EntryListFragment.this.presenterOptional = Optional.empty();
-                    }
-                });
     }
 
     @Override
@@ -137,6 +111,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     public void onDestroyView() {
         Timber.d("onDestroyView: ");
         super.onDestroyView();
+        presenter.onDestroy();
         unbinder.unbind();
     }
 
@@ -145,6 +120,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         Timber.d("onDetach: ");
         super.onDetach();
         listener = null;
+        presenter.onDetach();
     }
 
     public void onLoadEntryListFinished(Result<EntryList> data) {
