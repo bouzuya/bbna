@@ -9,6 +9,8 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import net.bouzuya.blog.R;
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity
     ViewPager mViewPager;
     private EntryFragmentPagerAdapter mAdapter;
     private MainPresenter mPresenter;
+    private ShareActionProvider shareActionProvider;
+    private Intent shareIntent;
+    private MenuItem shareMenuItem;
 
     @Override
     public void onEntrySelect(String date) {
@@ -55,10 +60,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_menu, menu);
+        shareMenuItem = menu.findItem(R.id.menu_item_share);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 showList();
+                return true;
+            case R.id.menu_item_share:
+                if (shareIntent != null) {
+                    startActivity(shareIntent);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -72,6 +89,11 @@ public class MainActivity extends AppCompatActivity
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(date);
+        // TODO: 2017/07/02 update share button
+        this.shareIntent = null;
+        if (shareMenuItem != null) {
+            shareMenuItem.setVisible(false);
+        }
     }
 
     public void showList() {
@@ -80,6 +102,13 @@ public class MainActivity extends AppCompatActivity
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle("blog.bouzuya.net");
+
+        String title = "blog.bouzuya.net";
+        String url = "https://blog.bouzuya.net/";
+        this.shareIntent = newShareIntent(title, url);
+        if (shareMenuItem != null) {
+            shareMenuItem.setVisible(true);
+        }
     }
 
     @Override
@@ -169,5 +198,13 @@ public class MainActivity extends AppCompatActivity
         String monthString = matcher.group(2);
         String dateString = matcher.group(3);
         return Optional.of(yearString + "-" + monthString + "-" + dateString);
+    }
+
+    private Intent newShareIntent(String title, String url) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.putExtra(Intent.EXTRA_TEXT, url);
+        return Intent.createChooser(intent, String.format("share '%s'", url));
     }
 }
