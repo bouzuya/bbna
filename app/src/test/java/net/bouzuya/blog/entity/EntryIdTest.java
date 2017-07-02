@@ -47,6 +47,24 @@ public class EntryIdTest {
     }
 
     @Test
+    public void test_parse() throws Exception {
+        Url url1 = Url.parse("http://blog.bouzuya.net/2006/01/02/").get();
+        Url url2 = Url.parse("https://example.com/2006/01/02/").get();
+        Url url3 = Url.parse("https://blog.bouzuya.net/").get();
+        Url url4 = Url.parse("https://blog.bouzuya.net/2006/01/02/").get();
+        Optional<EntryId> id1 = EntryId.parse(url1);
+        Optional<EntryId> id2 = EntryId.parse(url2);
+        Optional<EntryId> id3 = EntryId.parse(url3);
+        Optional<EntryId> id4 = EntryId.parse(url4);
+        assertThat(id1.isPresent(), is(false));
+        assertThat(id2.isPresent(), is(false));
+        assertThat(id3.isPresent(), is(false));
+        assertThat(id4.isPresent(), is(true));
+        EntryId entryId = id4.get();
+        assertThat(entryId.toUrl(), is(url4));
+    }
+
+    @Test
     public void test_toJsonUrl() throws Exception {
         EntryId entryId = EntryId.fromISO8601DateString("2006-01-02");
         Url url = Url.parse("https://blog.bouzuya.net/2006/01/02/index.json").get();
