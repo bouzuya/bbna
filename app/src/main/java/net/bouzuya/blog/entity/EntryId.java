@@ -38,6 +38,12 @@ public class EntryId implements Comparable<EntryId> {
         return this.date;
     }
 
+    public Url toJsonUrl() {
+        String baseUrl = "https://blog.bouzuya.net";
+        String path = "/" + this.date.replaceAll("-", "/") + "/index.json";
+        return Url.parse(baseUrl + path).get();
+    }
+
     public Url toUrl() {
         String baseUrl = "https://blog.bouzuya.net";
         String path = "/" + this.date.replaceAll("-", "/") + "/";

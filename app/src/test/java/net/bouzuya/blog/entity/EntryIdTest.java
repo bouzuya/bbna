@@ -47,6 +47,13 @@ public class EntryIdTest {
     }
 
     @Test
+    public void test_toJsonUrl() throws Exception {
+        EntryId entryId = EntryId.fromISO8601DateString("2006-01-02");
+        Url url = Url.parse("https://blog.bouzuya.net/2006/01/02/index.json").get();
+        assertThat(entryId.toJsonUrl(), is(url));
+    }
+
+    @Test
     public void test_toUrl() throws Exception {
         EntryId entryId = EntryId.fromISO8601DateString("2006-01-02");
         Url url = Url.parse("https://blog.bouzuya.net/2006/01/02/").get();
