@@ -2,6 +2,7 @@ package net.bouzuya.blog.driver.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -119,7 +120,24 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
 
     @Override
     public void showEntryDetail(Result<EntryDetail> entryDetail) {
-        onLoadEntryDetailFinished(entryDetail);
+        Timber.d("onLoadEntryDetailFinished: ");
+        View view = this.getView();
+        if (view == null) return;
+        if (entryDetail.isOk()) {
+            Timber.d("onLoadEntryDetailFinished: isOk");
+
+            initEntryDetailLoader(Optional.<String>empty());
+
+            EntryDetail d = entryDetail.getValue();
+            mWebView.loadData(toHtmlString(d), "text/html; charset=UTF-8", "UTF-8");
+            String message = "load " + d.getId().toISO8601DateString();
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+        } else {
+            Exception e = entryDetail.getException();
+            Timber.e("onLoadEntryDetailFinished: ", e);
+            String message = "load error";
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void initEntryDetailLoader(Optional<String> dateOptional) {
@@ -143,7 +161,8 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                             Loader<Result<EntryDetail>> loader,
                             Result<EntryDetail> data
                     ) {
-                        onLoadEntryDetailFinished(data);
+                        EntryDetailView entryDetailView = EntryDetailFragment.this;
+                        entryDetailView.showEntryDetail(data);
                     }
 
                     @Override
@@ -154,44 +173,27 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         loaderManager.restartLoader(ENTRY_DETAIL_LOADER_ID, bundle, callbacks);
     }
 
-    private void onLoadEntryDetailFinished(Result<EntryDetail> data) {
-        Timber.d("onLoadEntryDetailFinished: ");
-        View view = this.getView();
-        if (view == null) return;
-        if (data.isOk()) {
-            Timber.d("onLoadEntryDetailFinished: isOk");
+    @NonNull
+    private String toHtmlString(EntryDetail d) {
+        return new StringBuilder()
+                .append("<html>")
+                .append("<head></head>")
+                .append("<body>")
+                .append("<article>")
+                .append("<header>")
+                .append("<h1 class=\"title\">").append(d.getTitle()).append("</h1>")
+                // .append("<p class=\"pubdate\">").append(d.getPubdate()).append("</p>")
+                // .append("<p class=\"minutes\">").append(d.getMinutes()).append("</p>")
+                // .append(d.getTags().isEmpty() ? "" : "<ul class=\"tags\"><li>")
+                // .append(this.join("</li><li>", d.getTags()))
+                // .append(d.getTags().isEmpty() ? "" : "</li></ul>")
+                .append("</header>")
+                .append("<div class=\"body\">").append(d.getHtml()).append("</div>")
+                .append("</article>")
+                .append("</body>")
+                .append("</html>")
+                .toString();
 
-            initEntryDetailLoader(Optional.<String>empty());
-
-            EntryDetail d = data.getValue();
-            String message = "load " + d.getId().toISO8601DateString() + "";
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-            String html = new StringBuilder()
-                    .append("<html>")
-                    .append("<head></head>")
-                    .append("<body>")
-                    .append("<article>")
-                    .append("<header>")
-                    .append("<h1 class=\"title\">").append(d.getTitle()).append("</h1>")
-//                    .append("<p class=\"pubdate\">").append(d.getPubdate()).append("</p>")
-//                    .append("<p class=\"minutes\">").append(d.getMinutes()).append("</p>")
-//                    .append(d.getTags().isEmpty() ? "" : "<ul class=\"tags\"><li>")
-//                    .append(this.join("</li><li>", d.getTags()))
-//                    .append(d.getTags().isEmpty() ? "" : "</li></ul>")
-                    .append("</header>")
-                    .append("<div class=\"body\">").append(d.getHtml()).append("</div>")
-                    .append("</article>")
-                    .append("</body>")
-                    .append("</html>")
-                    .toString();
-
-            mWebView.loadData(html, "text/html; charset=UTF-8", "UTF-8");
-        } else {
-            Exception e = data.getException();
-            Timber.e("onLoadEntryDetailFinished: ", e);
-            String message = "load error";
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-        }
     }
 
 //    private String join(String delimiter, List<String> list) {
