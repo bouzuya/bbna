@@ -40,21 +40,21 @@ public class MainActivity extends AppCompatActivity
     private static final int POSITION_DETAIL = 1;
     private static final int PRESENTER_LOADER_ID = 1;
     @BindView(R.id.view_pager)
-    ViewPager mViewPager;
-    private EntryFragmentPagerAdapter mAdapter;
-    private MainPresenter mPresenter;
+    ViewPager viewPager;
+    private EntryFragmentPagerAdapter adapter;
+    private MainPresenter presenter;
     private Intent shareIntent;
     private MenuItem shareMenuItem;
 
     @Override
     public void onEntrySelect(String date) {
-        mPresenter.onSelectEntry(date);
+        presenter.onSelectEntry(date);
     }
 
     @Override
     public void onBackPressed() {
-        if (mViewPager.getCurrentItem() == POSITION_DETAIL) {
-            mViewPager.setCurrentItem(POSITION_LIST);
+        if (viewPager.getCurrentItem() == POSITION_DETAIL) {
+            viewPager.setCurrentItem(POSITION_LIST);
         } else {
             super.onBackPressed();
         }
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onEntryLoad(EntryDetail entryDetail) {
-        mPresenter.onLoadEntry(entryDetail);
+        presenter.onLoadEntry(entryDetail);
     }
 
     @Override
@@ -89,9 +89,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showDetail(String date) {
-        mAdapter.setDetailDate(date);
-        mAdapter.notifyDataSetChanged();
-        mViewPager.setCurrentItem(POSITION_DETAIL);
+        adapter.setDetailDate(date);
+        adapter.notifyDataSetChanged();
+        viewPager.setCurrentItem(POSITION_DETAIL);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void showList() {
-        mViewPager.setCurrentItem(POSITION_LIST);
+        viewPager.setCurrentItem(POSITION_LIST);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(false);
@@ -147,27 +147,27 @@ public class MainActivity extends AppCompatActivity
 
                     @Override
                     public void onLoadFinished(Loader<MainPresenter> loader, MainPresenter data) {
-                        MainActivity.this.mPresenter = data;
+                        MainActivity.this.presenter = data;
                     }
 
                     @Override
                     public void onLoaderReset(Loader<MainPresenter> loader) {
-                        MainActivity.this.mPresenter = null;
+                        MainActivity.this.presenter = null;
                     }
                 });
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mAdapter = new EntryFragmentPagerAdapter(fragmentManager);
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        adapter = new EntryFragmentPagerAdapter(fragmentManager);
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
-                    mPresenter.onSwitchList();
+                    presenter.onSwitchList();
                 } else if (position == 1) {
-                    mPresenter.onSwitchDetail();
+                    presenter.onSwitchDetail();
                 } else {
                     throw new AssertionError();
                 }
@@ -183,14 +183,14 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
 
         Optional<String> selectedDateOptional = getSelectedDate();
-        mPresenter.onAttach(this);
-        mPresenter.onStart(selectedDateOptional);
+        presenter.onAttach(this);
+        presenter.onStart(selectedDateOptional);
     }
 
     @Override
     protected void onStop() {
         Timber.d("onStop: ");
-        mPresenter.onDetach();
+        presenter.onDetach();
 
         super.onStop();
     }

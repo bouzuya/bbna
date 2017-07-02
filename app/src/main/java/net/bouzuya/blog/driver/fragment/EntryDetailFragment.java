@@ -36,17 +36,17 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     private static final int PRESENTER_LOADER_ID = 2;
     private static final String DATE = "param1";
     @BindView(R.id.entry_detail)
-    WebView mWebView;
+    WebView webView;
     @Inject
     EntryRepository entryRepository;
-    private Optional<String> mDateOptional;
-    private Optional<EntryDetailPresenter> mPresenter;
+    private Optional<String> dateOptional;
+    private Optional<EntryDetailPresenter> presenterOptional;
     private Unbinder unbinder;
-    private OnEntryLoadListener mListener;
+    private OnEntryLoadListener listener;
 
     public EntryDetailFragment() {
         // Required empty public constructor
-        this.mDateOptional = Optional.empty();
+        this.dateOptional = Optional.empty();
     }
 
     public static EntryDetailFragment newInstance(Optional<String> dateOptional) {
@@ -61,7 +61,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof EntryDetailFragment.OnEntryLoadListener) {
-            mListener = (EntryDetailFragment.OnEntryLoadListener) context;
+            listener = (EntryDetailFragment.OnEntryLoadListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnEntrySelectListener");
@@ -70,7 +70,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     }
 
     public Optional<String> getDateOptional() {
-        return mDateOptional;
+        return dateOptional;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         if (arguments != null) {
-            mDateOptional = Optional.ofNullable(arguments.getString(DATE));
+            dateOptional = Optional.ofNullable(arguments.getString(DATE));
         }
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(
@@ -98,12 +98,12 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                     public void onLoadFinished(
                             Loader<EntryDetailPresenter> loader, EntryDetailPresenter data
                     ) {
-                        EntryDetailFragment.this.mPresenter = Optional.of(data);
+                        EntryDetailFragment.this.presenterOptional = Optional.of(data);
                     }
 
                     @Override
                     public void onLoaderReset(Loader<EntryDetailPresenter> loader) {
-                        EntryDetailFragment.this.mPresenter = Optional.empty();
+                        EntryDetailFragment.this.presenterOptional = Optional.empty();
                     }
                 });
     }
@@ -112,7 +112,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Timber.d("onCreateView: ");
-        initEntryDetailLoader(mDateOptional);
+        initEntryDetailLoader(dateOptional);
         View view = inflater.inflate(R.layout.fragment_entry_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -136,7 +136,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             initEntryDetailLoader(Optional.<String>empty());
 
             EntryDetail d = entryDetail.getValue();
-            mWebView.loadData(toHtmlString(d), "text/html; charset=UTF-8", "UTF-8");
+            webView.loadData(toHtmlString(d), "text/html; charset=UTF-8", "UTF-8");
             String message = "load " + d.getId().toISO8601DateString();
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         } else {
@@ -170,8 +170,8 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                     ) {
                         EntryDetailView entryDetailView = EntryDetailFragment.this;
                         entryDetailView.showEntryDetail(data);
-                        if (mListener != null && data.isOk()) {
-                            mListener.onEntryLoad(data.getValue());
+                        if (listener != null && data.isOk()) {
+                            listener.onEntryLoad(data.getValue());
                         }
                     }
 

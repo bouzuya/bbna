@@ -12,11 +12,11 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
 
-    private Optional<String> mDateOptional;
+    private Optional<String> dateOptional;
 
     public EntryFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        mDateOptional = Optional.empty();
+        dateOptional = Optional.empty();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
             case POSITION_LIST:
                 return EntryListFragment.newInstance();
             case POSITION_DETAIL:
-                return EntryDetailFragment.newInstance(mDateOptional);
+                return EntryDetailFragment.newInstance(dateOptional);
             default:
                 throw new AssertionError();
         }
@@ -42,8 +42,8 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             return 0;
         } else if (position == 1) {
-            return mDateOptional.isPresent()
-                    ? entryDateToItemId(mDateOptional.get())
+            return dateOptional.isPresent()
+                    ? entryDateToItemId(dateOptional.get())
                     : 1;
         } else {
             throw new AssertionError();
@@ -54,7 +54,7 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
     public int getItemPosition(Object object) {
         if (object instanceof EntryDetailFragment) {
             EntryDetailFragment fragment = (EntryDetailFragment) object;
-            return mDateOptional.isPresent() && mDateOptional.equals(fragment.getDateOptional())
+            return dateOptional.isPresent() && dateOptional.equals(fragment.getDateOptional())
                     ? POSITION_UNCHANGED
                     : POSITION_NONE;
         }
@@ -63,7 +63,7 @@ public class EntryFragmentPagerAdapter extends FragmentPagerAdapter {
 
 
     public void setDetailDate(String date) {
-        mDateOptional = Optional.of(date);
+        dateOptional = Optional.of(date);
     }
 
     private long entryDateToItemId(String date) {

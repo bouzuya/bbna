@@ -14,29 +14,29 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
-    private EntryList mEntryList;
+    private EntryList entryList;
 
     public EntryAdapter() {
-        mEntryList = EntryList.empty();
+        entryList = EntryList.empty();
     }
 
     public void changeDataSet(EntryList entryList) {
-        mEntryList = entryList;
+        this.entryList = entryList;
     }
 
     public Entry getItem(int position) {
         if (position < 0 || getItemCount() <= position) throw new IllegalArgumentException();
-        return mEntryList.get(position);
+        return entryList.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return mEntryList.size();
+        return entryList.size();
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Entry entry = mEntryList.get(position);
+        Entry entry = entryList.get(position);
         holder.dateTextView.setText(entry.getId().toISO8601DateString());
         holder.titleTextView.setText(entry.getTitle());
     }

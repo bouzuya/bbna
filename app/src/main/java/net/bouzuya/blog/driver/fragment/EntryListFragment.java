@@ -39,12 +39,12 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     private static final int ENTRY_LIST_LOADER_ID = 0;
     private static final int PRESENTER_LOADER_ID = 2;
     @BindView(R.id.entry_list)
-    RecyclerView mEntryListView;
+    RecyclerView entryListView;
     @Inject
     EntryRepository entryRepository;
-    private OnEntrySelectListener mListener;
-    private EntryAdapter mAdapter;
-    private Optional<EntryListPresenter> mPresenter;
+    private OnEntrySelectListener listener;
+    private EntryAdapter adapter;
+    private Optional<EntryListPresenter> presenterOptional;
     private Unbinder unbinder;
 
     public EntryListFragment() {
@@ -61,7 +61,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         super.onAttach(context);
         ((BlogApplication) getActivity().getApplication()).getComponent().inject(this);
         if (context instanceof OnEntrySelectListener) {
-            mListener = (OnEntrySelectListener) context;
+            listener = (OnEntrySelectListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnEntrySelectListener");
@@ -90,12 +90,12 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
                     public void onLoadFinished(
                             Loader<EntryListPresenter> loader, EntryListPresenter data
                     ) {
-                        EntryListFragment.this.mPresenter = Optional.of(data);
+                        EntryListFragment.this.presenterOptional = Optional.of(data);
                     }
 
                     @Override
                     public void onLoaderReset(Loader<EntryListPresenter> loader) {
-                        EntryListFragment.this.mPresenter = Optional.empty();
+                        EntryListFragment.this.presenterOptional = Optional.empty();
                     }
                 });
     }
@@ -106,10 +106,10 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         Timber.d("onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_entry_list, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mEntryListView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mEntryListView.getContext());
-        mEntryListView.setLayoutManager(layoutManager);
-        mAdapter = new EntryAdapter() {
+        entryListView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(entryListView.getContext());
+        entryListView.setLayoutManager(layoutManager);
+        adapter = new EntryAdapter() {
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 ViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
@@ -117,19 +117,19 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
                 return viewHolder;
             }
         };
-        mEntryListView.setAdapter(mAdapter);
+        entryListView.setAdapter(adapter);
         return view;
     }
 
     @Override
     public void onClick(View view) {
-        if (mEntryListView == null) return;
-        int position = mEntryListView.getChildAdapterPosition(view);
-        Entry entry = mAdapter.getItem(position);
+        if (entryListView == null) return;
+        int position = entryListView.getChildAdapterPosition(view);
+        Entry entry = adapter.getItem(position);
         String date = entry.getId().toISO8601DateString();
         Timber.d("onClick: " + date);
-        if (mListener != null) {
-            mListener.onEntrySelect(date);
+        if (listener != null) {
+            listener.onEntrySelect(date);
         }
     }
 
@@ -144,7 +144,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     public void onDetach() {
         Timber.d("onDetach: ");
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     public void onLoadEntryListFinished(Result<EntryList> data) {
@@ -154,8 +154,8 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         if (data.isOk()) {
             Timber.d("onLoadEntryListFinished: isOk");
             EntryList newEntryList = data.getValue();
-            mAdapter.changeDataSet(newEntryList);
-            mAdapter.notifyDataSetChanged();
+            adapter.changeDataSet(newEntryList);
+            adapter.notifyDataSetChanged();
             String message = "load " + newEntryList.size() + " entries";
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         } else {

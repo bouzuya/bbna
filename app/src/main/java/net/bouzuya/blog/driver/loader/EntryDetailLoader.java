@@ -11,7 +11,7 @@ import net.bouzuya.blog.entity.Result;
 
 public class EntryDetailLoader extends AsyncTaskLoader<Result<EntryDetail>> {
     private final EntryRepository entryRepository;
-    private final Optional<String> mDateOptional;
+    private final Optional<String> dateOptional;
 
     public EntryDetailLoader(
             Context context,
@@ -20,19 +20,19 @@ public class EntryDetailLoader extends AsyncTaskLoader<Result<EntryDetail>> {
     ) {
         super(context);
         this.entryRepository = entryRepository;
-        mDateOptional = dateOptional;
+        this.dateOptional = dateOptional;
     }
 
     @Override
     protected void onStartLoading() {
-        if (!mDateOptional.isPresent()) return;
+        if (!dateOptional.isPresent()) return;
         forceLoad();
     }
 
     @Override
     public Result<EntryDetail> loadInBackground() {
-        if (!mDateOptional.isPresent()) throw new AssertionError();
-        EntryId entryId = EntryId.fromISO8601DateString(mDateOptional.get());
+        if (!dateOptional.isPresent()) throw new AssertionError();
+        EntryId entryId = EntryId.fromISO8601DateString(dateOptional.get());
         return this.entryRepository.get(entryId);
     }
 }

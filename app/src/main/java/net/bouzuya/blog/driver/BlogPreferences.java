@@ -9,10 +9,10 @@ public class BlogPreferences {
     private static final String PREF_NAME = "blog.bouzuya.net";
     private static final String PREF_KEY_LATEST_DATE = "latest_date";
 
-    private final Context mContext;
+    private final Context context;
 
     public BlogPreferences(Context context) {
-        mContext = context;
+        this.context = context;
     }
 
     public Optional<String> getLatestDate() {
@@ -30,6 +30,6 @@ public class BlogPreferences {
     }
 
     private SharedPreferences getPreferences() {
-        return mContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 }
