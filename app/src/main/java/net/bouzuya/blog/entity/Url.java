@@ -10,6 +10,15 @@ public class Url {
         this.url = url;
     }
 
+    public static Optional<Url> parse(String s) {
+        try {
+            Url url = new Url(new URL(s));
+            return Optional.of(url);
+        } catch (MalformedURLException e) {
+            return Optional.empty();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,14 +37,5 @@ public class Url {
 
     public String toUrlString() {
         return this.url.toString();
-    }
-
-    public static Optional<Url> parse(String s) {
-        try {
-            Url url = new Url(new URL(s));
-            return Optional.of(url);
-        } catch (MalformedURLException e) {
-            return Optional.empty();
-        }
     }
 }
