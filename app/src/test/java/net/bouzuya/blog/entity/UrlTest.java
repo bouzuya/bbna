@@ -27,4 +27,12 @@ public class UrlTest {
         assertThat(url, is(url2));
         assertThat(url, is(not(url3)));
     }
+
+    @Test
+    public void test_getters() {
+        Url url = Url.parse("https://blog.bouzuya.net/2006/01/02/").get();
+        assertThat(url.getProtocol(), is("https:"));
+        assertThat(url.getHost(), is("blog.bouzuya.net"));
+        assertThat(url.getPathname(), is("/2006/01/02/"));
+    }
 }

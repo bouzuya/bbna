@@ -30,6 +30,18 @@ public class Url {
 
     }
 
+    public String getHost() {
+        return url.getHost();
+    }
+
+    public String getPathname() {
+        return url.getPath();
+    }
+
+    public String getProtocol() {
+        return url.getProtocol() + ":";
+    }
+
     @Override
     public int hashCode() {
         return url.hashCode();
