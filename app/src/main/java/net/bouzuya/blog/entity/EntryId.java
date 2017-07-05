@@ -16,7 +16,6 @@ public class EntryId implements Comparable<EntryId> {
     }
 
     public static Optional<EntryId> parse(Url url) {
-        String s = url.toUrlString();
         if (!url.getProtocol().equals("https:")) return Optional.empty();
         if (!url.getHost().equals("blog.bouzuya.net")) return Optional.empty();
         Pattern pattern = Pattern.compile("\\A/([0-9]{4})/([01][0-9])/([0-3][0-9])/\\z");

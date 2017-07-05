@@ -31,12 +31,14 @@ import timber.log.Timber;
 
 public class EntryDetailFragment extends Fragment implements EntryDetailView {
     private static final int ENTRY_DETAIL_LOADER_ID = 1;
-    private static final int PRESENTER_LOADER_ID = 2;
     private static final String DATE = "param1";
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.entry_detail)
     WebView webView;
+    @SuppressWarnings("WeakerAccess")
     @Inject
     EntryDetailPresenter presenter;
+    @SuppressWarnings("WeakerAccess")
     @Inject
     EntryRepository entryRepository;
     private Optional<String> dateOptional;
@@ -51,7 +53,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public static EntryDetailFragment newInstance(Optional<String> dateOptional) {
         EntryDetailFragment fragment = new EntryDetailFragment();
         Bundle arguments = new Bundle();
-        arguments.putString(DATE, dateOptional.isPresent() ? dateOptional.get() : null);
+        arguments.putString(DATE, dateOptional.orElse(null));
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -132,7 +134,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     private void initEntryDetailLoader(Optional<String> dateOptional) {
         LoaderManager loaderManager = getLoaderManager();
         Bundle bundle = new Bundle();
-        bundle.putString("date", dateOptional.isPresent() ? dateOptional.get() : null); // TODO
+        bundle.putString("date", dateOptional.orElse(null)); // TODO
         LoaderManager.LoaderCallbacks<Result<EntryDetail>> callbacks =
                 new LoaderManager.LoaderCallbacks<Result<EntryDetail>>() {
                     @Override

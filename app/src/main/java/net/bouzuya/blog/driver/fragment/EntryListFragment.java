@@ -34,10 +34,13 @@ import timber.log.Timber;
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
 
     private static final int ENTRY_LIST_LOADER_ID = 0;
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.entry_list)
     RecyclerView entryListView;
+    @SuppressWarnings("WeakerAccess")
     @Inject
     EntryListPresenter presenter;
+    @SuppressWarnings("WeakerAccess")
     @Inject
     EntryRepository entryRepository;
     private OnEntrySelectListener listener;
@@ -123,25 +126,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         presenter.onDetach();
     }
 
-    public void onLoadEntryListFinished(Result<EntryList> data) {
-        Timber.d("onLoadEntryListFinished: ");
-        View view = this.getView();
-        if (view == null) return;
-        if (data.isOk()) {
-            Timber.d("onLoadEntryListFinished: isOk");
-            EntryList newEntryList = data.getValue();
-            adapter.changeDataSet(newEntryList);
-            adapter.notifyDataSetChanged();
-            String message = "load " + newEntryList.size() + " entries";
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-        } else {
-            Exception e = data.getException();
-            Timber.e("onLoadEntryListFinished: ", e);
-            String message = "load error";
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-        }
-    }
-
     private void initEntryListLoader() {
         LoaderManager.LoaderCallbacks<Result<EntryList>> callbacks =
                 new LoaderManager.LoaderCallbacks<Result<EntryList>>() {
@@ -168,6 +152,26 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
                 };
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, callbacks);
+    }
+
+
+    private void onLoadEntryListFinished(Result<EntryList> data) {
+        Timber.d("onLoadEntryListFinished: ");
+        View view = this.getView();
+        if (view == null) return;
+        if (data.isOk()) {
+            Timber.d("onLoadEntryListFinished: isOk");
+            EntryList newEntryList = data.getValue();
+            adapter.changeDataSet(newEntryList);
+            adapter.notifyDataSetChanged();
+            String message = "load " + newEntryList.size() + " entries";
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+        } else {
+            Exception e = data.getException();
+            Timber.e("onLoadEntryListFinished: ", e);
+            String message = "load error";
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     public interface OnEntrySelectListener {

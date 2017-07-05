@@ -1,6 +1,6 @@
 package net.bouzuya.blog.adapter.presenter;
 
-public interface Presenter<T> {
+interface Presenter<T> {
 
     void onAttach(T view);
 

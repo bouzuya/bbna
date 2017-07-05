@@ -21,6 +21,7 @@ import javax.inject.Inject;
 public class MainService extends IntentService {
     public static final String ACTION_FETCH_ENTRY_LIST =
             "net.bouzuya.blog.action.FETCH_ENTRY_LIST";
+    @SuppressWarnings("WeakerAccess")
     @Inject
     EntryRepository entryRepository;
 

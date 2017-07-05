@@ -38,8 +38,10 @@ public class MainActivity extends AppCompatActivity
 
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
+    @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+    @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     @Inject
     MainPresenter presenter;
     private EntryFragmentPagerAdapter adapter;
