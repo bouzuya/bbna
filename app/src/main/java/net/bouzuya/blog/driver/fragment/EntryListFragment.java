@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.EntryListPresenter;
@@ -37,6 +38,8 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.entry_list)
     RecyclerView entryListView;
+    @BindView(R.id.indeterminate_bar)
+    ProgressBar progressBar;
     @SuppressWarnings("WeakerAccess")
     @Inject
     EntryListPresenter presenter;
@@ -95,6 +98,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
             }
         };
         entryListView.setAdapter(adapter);
+        progressBar.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -159,6 +163,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         Timber.d("onLoadEntryListFinished: ");
         View view = this.getView();
         if (view == null) return;
+        if (progressBar != null) progressBar.setVisibility(View.GONE);
         if (data.isOk()) {
             Timber.d("onLoadEntryListFinished: isOk");
             EntryList newEntryList = data.getValue();
