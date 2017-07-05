@@ -21,6 +21,7 @@ public class AlarmUtils {
         calendar.set(Calendar.HOUR_OF_DAY, 7);
         calendar.set(Calendar.MINUTE, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
         alarmManager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
