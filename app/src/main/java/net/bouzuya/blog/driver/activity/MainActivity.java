@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.MainPresenter;
+import net.bouzuya.blog.driver.AlarmUtils;
 import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.BlogPreferences;
 import net.bouzuya.blog.driver.adapter.EntryFragmentPagerAdapter;
@@ -135,6 +136,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         ((BlogApplication) getApplication()).getComponent().inject(this);
+
+        AlarmUtils.setAlarm(this.getApplicationContext());
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
