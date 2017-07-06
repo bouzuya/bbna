@@ -1,6 +1,10 @@
 package net.bouzuya.blog.driver.fragment;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -10,7 +14,10 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
@@ -32,6 +39,9 @@ import timber.log.Timber;
 public class EntryDetailFragment extends Fragment implements EntryDetailView {
     private static final int ENTRY_DETAIL_LOADER_ID = 1;
     private static final String DATE = "param1";
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.indeterminate_bar)
+    ProgressBar progressBar;
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.entry_detail)
     WebView webView;
@@ -92,6 +102,31 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         initEntryDetailLoader(dateOptional);
         View view = inflater.inflate(R.layout.fragment_entry_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
+        webView.setWebViewClient(new WebViewClient() {
+            // https://stackoverflow.com/questions/36484074/
+            @SuppressWarnings("deprecation")
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                view.getContext().startActivity(intent);
+                return true;
+            }
+
+            @TargetApi(Build.VERSION_CODES.N)
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, request.getUrl());
+                view.getContext().startActivity(intent);
+                return true;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+            }
+        });
+        progressBar.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -124,6 +159,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             String message = "load " + d.getId().toISO8601DateString();
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         } else {
+            if (progressBar != null) progressBar.setVisibility(View.GONE);
             Exception e = entryDetail.getException();
             Timber.e("onLoadEntryDetailFinished: ", e);
             String message = "load error";
