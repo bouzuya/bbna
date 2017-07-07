@@ -32,6 +32,12 @@ class BlogApplicationModule {
 
     @Provides
     @Singleton
+    SelectedDateListener providesSelectedDateListener(BlogPreferences preferences) {
+        return new SelectedDateListener(preferences);
+    }
+
+    @Provides
+    @Singleton
     EntryRepository providesEntryRepository(
             EntryDetailResponseParser entryDetailResponseParser,
             EntryListResponseParser entryListResponseParser
