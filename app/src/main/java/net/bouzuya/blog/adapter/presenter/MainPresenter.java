@@ -33,7 +33,7 @@ public class MainPresenter implements Presenter<MainView> {
                     public void onChange(Optional<EntryDetail> value) {
                         if (value.isPresent()) {
                             MainPresenter.this.entryDetailOptional = value;
-                            MainPresenter.this.view.get().updateShareButton(value.get());
+                            updateShareButton(value.get());
                         }
                     }
                 };
@@ -58,6 +58,9 @@ public class MainPresenter implements Presenter<MainView> {
             this.view.get().showDetail(selectedDateOptional.get());
         } else {
             this.view.get().showList();
+            String title = "blog.bouzuya.net";
+            String url = "https://blog.bouzuya.net/";
+            this.view.get().updateShareButton(Optional.of(title), Optional.of(url));
         }
     }
 
@@ -65,12 +68,14 @@ public class MainPresenter implements Presenter<MainView> {
         if (!selectedEntryDateOptional.isPresent()) return;
         this.view.get().showDetail(selectedEntryDateOptional.get());
         if (!entryDetailOptional.isPresent()) return;
-        this.view.get().updateShareButton(entryDetailOptional.get());
+        updateShareButton(entryDetailOptional.get());
     }
 
     public void onSwitchList() {
         this.view.get().showList();
-        // TODO: update share button
+        String title = "blog.bouzuya.net";
+        String url = "https://blog.bouzuya.net/";
+        this.view.get().updateShareButton(Optional.of(title), Optional.of(url));
     }
 
     @Override
@@ -83,5 +88,13 @@ public class MainPresenter implements Presenter<MainView> {
         this.view = Optional.empty();
         this.entryDetailListener.unsubscribe(this.onEntryDetailChangeListener);
         this.selectedDateListener.unsubscribe(this.onSelectedDateChangeListener);
+    }
+
+    private void updateShareButton(EntryDetail entryDetail) {
+        String url = entryDetail.getId().toUrl().toUrlString();
+        String date = entryDetail.getId().toISO8601DateString();
+        String title = entryDetail.getTitle();
+        String dateAndTitle = String.format("%s %s", date, title);
+        MainPresenter.this.view.get().updateShareButton(Optional.of(dateAndTitle), Optional.of(url));
     }
 }

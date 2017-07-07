@@ -20,7 +20,6 @@ import net.bouzuya.blog.driver.SelectedDateListener;
 import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.driver.view.MainView;
-import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
 import java.util.regex.Matcher;
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     MainPresenter presenter;
     @Inject
     SelectedDateListener selectedDateListener;
-    private Intent shareIntent;
+    private Optional<Intent> shareIntent;
     private MenuItem shareMenuItem;
 
     @Override
@@ -72,8 +71,8 @@ public class MainActivity extends AppCompatActivity
                 showList();
                 return true;
             case R.id.menu_item_share:
-                if (shareIntent != null) {
-                    startActivity(shareIntent);
+                if (shareIntent.isPresent()) {
+                    startActivity(shareIntent.get());
                 }
                 return true;
         }
@@ -88,10 +87,7 @@ public class MainActivity extends AppCompatActivity
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(date);
         // reset share button
-        this.shareIntent = null;
-        if (shareMenuItem != null) {
-            shareMenuItem.setVisible(false);
-        }
+        this.updateShareButton(Optional.<String>empty(), Optional.<String>empty());
     }
 
     public void showList() {
@@ -100,24 +96,15 @@ public class MainActivity extends AppCompatActivity
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle("blog.bouzuya.net");
-
-        String title = "blog.bouzuya.net";
-        String url = "https://blog.bouzuya.net/";
-        this.shareIntent = newShareIntent(title, url);
-        if (shareMenuItem != null) {
-            shareMenuItem.setVisible(true);
-        }
     }
 
     @Override
-    public void updateShareButton(EntryDetail entryDetail) {
-        String url = entryDetail.getId().toUrl().toUrlString();
-        String date = entryDetail.getId().toISO8601DateString();
-        String title = entryDetail.getTitle();
-        String dateAndTitle = String.format("%s %s", date, title);
-        this.shareIntent = newShareIntent(dateAndTitle, url);
+    public void updateShareButton(Optional<String> titleOptional, Optional<String> urlOptional) {
+        this.shareIntent = titleOptional.isPresent() && urlOptional.isPresent()
+                ? Optional.of(newShareIntent(titleOptional.get(), urlOptional.get()))
+                : Optional.<Intent>empty();
         if (shareMenuItem != null) {
-            shareMenuItem.setVisible(true);
+            shareMenuItem.setVisible(this.shareIntent.isPresent());
         }
     }
 
