@@ -10,6 +10,7 @@ public class MainPresenter implements Presenter<MainView> {
     private final EntryDetailListener entryDetailListener;
     private final SelectedDateListener selectedDateListener;
     private Optional<MainView> view;
+    private Optional<EntryDetail> entryDetailOptional;
     private Optional<String> selectedEntryDateOptional;
     private SelectedDateListener.OnChangeListener<Optional<String>> onSelectedDateChangeListener;
     private EntryDetailListener.OnChangeListener<Optional<EntryDetail>> onEntryDetailChangeListener;
@@ -31,6 +32,7 @@ public class MainPresenter implements Presenter<MainView> {
                     @Override
                     public void onChange(Optional<EntryDetail> value) {
                         if (value.isPresent()) {
+                            MainPresenter.this.entryDetailOptional = value;
                             MainPresenter.this.view.get().updateShareButton(value.get());
                         }
                     }
@@ -41,6 +43,7 @@ public class MainPresenter implements Presenter<MainView> {
                     @Override
                     public void onChange(Optional<String> value) {
                         if (value.isPresent()) {
+                            MainPresenter.this.selectedEntryDateOptional = value;
                             MainPresenter.this.view.get().showDetail(value.get());
                         }
                     }
@@ -61,10 +64,13 @@ public class MainPresenter implements Presenter<MainView> {
     public void onSwitchDetail() {
         if (!selectedEntryDateOptional.isPresent()) return;
         this.view.get().showDetail(selectedEntryDateOptional.get());
+        if (!entryDetailOptional.isPresent()) return;
+        this.view.get().updateShareButton(entryDetailOptional.get());
     }
 
     public void onSwitchList() {
         this.view.get().showList();
+        // TODO: update share button
     }
 
     @Override
