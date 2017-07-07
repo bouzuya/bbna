@@ -24,7 +24,6 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
-import net.bouzuya.blog.driver.SelectedDateListener;
 import net.bouzuya.blog.driver.loader.EntryDetailLoader;
 import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.entity.EntryDetail;
@@ -53,10 +52,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     @Inject
     EntryRepository entryRepository;
     @SuppressWarnings("WeakerAccess")
-    @Inject
-    SelectedDateListener selectedDateListener;
     private Unbinder unbinder;
-    private SelectedDateListener.OnChangeListener<Optional<String>> onChangeListener;
 
     public EntryDetailFragment() {
         // Required empty public constructor
@@ -111,21 +107,10 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                 if (webView != null) webView.setVisibility(View.VISIBLE);
             }
         });
-        // do nothing
-        onChangeListener = new SelectedDateListener.OnChangeListener<Optional<String>>() {
-            @Override
-            public void onChange(Optional<String> selectedDate) {
-                Timber.d("onChange: %s", selectedDate);
-                if (!selectedDate.isPresent()) return; // do nothing
-                EntryDetailView entryDetailView = EntryDetailFragment.this;
-                entryDetailView.showLoading();
-                entryDetailView.loadEntryDetail(selectedDate);
-            }
-        };
-        selectedDateListener.subscribe(onChangeListener);
         EntryDetailView entryDetailView = this;
         entryDetailView.showLoading();
-        entryDetailView.loadEntryDetail(selectedDateListener.get());
+
+        presenter.onStart();
         return view;
     }
 
@@ -134,8 +119,6 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         Timber.d("onDestroyView: ");
         super.onDestroyView();
         presenter.onDestroy();
-        if (onChangeListener != null)
-            selectedDateListener.unsubscribe(onChangeListener);
         unbinder.unbind();
     }
 
