@@ -167,9 +167,8 @@ public class MainActivity extends AppCompatActivity
         Timber.d("onStart: ");
         super.onStart();
 
-        Optional<String> selectedDateOptional = getSelectedDate();
         presenter.onAttach(this);
-        presenter.onStart(selectedDateOptional);
+        presenter.onStart(getSelectedDateFromIntentDataOrExtra());
     }
 
     @Override
@@ -180,18 +179,13 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
     }
 
-    private Optional<String> getSelectedDate() {
+    private Optional<String> getSelectedDateFromIntentDataOrExtra() {
         Intent intent = getIntent();
-        Optional<String> urlOptional = getURL();
-        if (urlOptional.isPresent()) return urlOptional;
-        Bundle extras = intent.getExtras();
-        if (extras == null) return Optional.empty();
-        String latestDate = extras.getString("latest_date", null);
-        return Optional.ofNullable(latestDate);
+        Optional<String> dateOptional = getSelectedDateFromIntentData(intent);
+        return dateOptional.isPresent() ? dateOptional : getSelectedDateFromIntentExtra(intent);
     }
 
-    private Optional<String> getURL() {
-        Intent intent = getIntent();
+    private Optional<String> getSelectedDateFromIntentData(Intent intent) {
         Uri data = intent.getData();
         if (data == null) return Optional.empty();
         if (data.getPath().equals("/")) return Optional.empty();
@@ -202,6 +196,13 @@ public class MainActivity extends AppCompatActivity
         String monthString = matcher.group(2);
         String dateString = matcher.group(3);
         return Optional.of(yearString + "-" + monthString + "-" + dateString);
+    }
+
+    private Optional<String> getSelectedDateFromIntentExtra(Intent intent) {
+        Bundle extras = intent.getExtras();
+        if (extras == null) return Optional.empty();
+        String latestDate = extras.getString("latest_date", null);
+        return Optional.ofNullable(latestDate);
     }
 
     private Intent newShareIntent(String title, String url) {
