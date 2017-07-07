@@ -56,7 +56,6 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     @Inject
     SelectedDateListener selectedDateListener;
     private Unbinder unbinder;
-    private OnEntryLoadListener listener;
     private SelectedDateListener.OnChangeListener<Optional<String>> onChangeListener;
 
     public EntryDetailFragment() {
@@ -71,12 +70,6 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public void onAttach(Context context) {
         super.onAttach(context);
         ((BlogApplication) getActivity().getApplication()).getComponent().inject(this);
-        if (context instanceof EntryDetailFragment.OnEntryLoadListener) {
-            listener = (EntryDetailFragment.OnEntryLoadListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnEntrySelectListener");
-        }
         presenter.onAttach(this);
     }
 
@@ -192,8 +185,10 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                     ) {
                         EntryDetailView entryDetailView = EntryDetailFragment.this;
                         entryDetailView.showEntryDetail(data);
-                        if (listener != null && data.isOk()) {
-                            listener.onEntryLoad(data.getValue());
+                        if (data.isOk()) {
+                            presenter.onLoadFinished(Optional.of(data.getValue()));
+                        } else {
+                            presenter.onLoadFinished(Optional.<EntryDetail>empty());
                         }
                     }
 
@@ -225,10 +220,6 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                 .append("</body>")
                 .append("</html>")
                 .toString();
-    }
-
-    public interface OnEntryLoadListener {
-        void onEntryLoad(EntryDetail entryDetail);
     }
 
 //    private String join(String delimiter, List<String> list) {

@@ -1,15 +1,16 @@
 package net.bouzuya.blog.adapter.presenter;
 
+import net.bouzuya.blog.driver.EntryDetailListener;
 import net.bouzuya.blog.driver.view.EntryDetailView;
+import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
-import javax.inject.Inject;
-
 public class EntryDetailPresenter implements Presenter<EntryDetailView> {
+    private final EntryDetailListener entryDetailListener;
     private Optional<EntryDetailView> view;
 
-    @Inject
-    EntryDetailPresenter() {
+    public EntryDetailPresenter(EntryDetailListener entryDetailListener) {
+        this.entryDetailListener = entryDetailListener;
     }
 
     @Override
@@ -25,5 +26,9 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
     @Override
     public void onDetach() {
         this.view = Optional.empty();
+    }
+
+    public void onLoadFinished(Optional<EntryDetail> entryDetailOptional) {
+        this.entryDetailListener.set(entryDetailOptional);
     }
 }

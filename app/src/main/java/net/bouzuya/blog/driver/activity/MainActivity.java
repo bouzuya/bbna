@@ -33,8 +33,7 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
-        implements EntryDetailFragment.OnEntryLoadListener,
-        MainView {
+        implements MainView {
 
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
@@ -64,11 +63,6 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.share_menu, menu);
         shareMenuItem = menu.findItem(R.id.menu_item_share);
         return true;
-    }
-
-    @Override
-    public void onEntryLoad(EntryDetail entryDetail) {
-        presenter.onLoadEntry(entryDetail);
     }
 
     @Override
