@@ -2,6 +2,7 @@ package net.bouzuya.blog.adapter.presenter;
 
 import net.bouzuya.blog.driver.SelectedDateListener;
 import net.bouzuya.blog.driver.view.EntryListView;
+import net.bouzuya.blog.entity.Entry;
 import net.bouzuya.blog.entity.Optional;
 
 public class EntryListPresenter implements Presenter<EntryListView> {
@@ -27,7 +28,8 @@ public class EntryListPresenter implements Presenter<EntryListView> {
         this.view = null;
     }
 
-    public void onSelectEntry(String date) {
+    public void onSelectEntry(Entry entry) {
+        String date = entry.getId().toISO8601DateString();
         selectedDateListener.set(Optional.of(date));
     }
 }

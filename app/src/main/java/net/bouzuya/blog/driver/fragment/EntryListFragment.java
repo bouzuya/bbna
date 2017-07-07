@@ -66,16 +66,13 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Timber.d("onCreate: EntryListFragment");
         super.onCreate(savedInstanceState);
-
         initEntryListLoader();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Timber.d("onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_entry_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         entryListView.setHasFixedSize(true);
@@ -98,15 +95,12 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     public void onClick(View view) {
         if (entryListView == null) return;
         int position = entryListView.getChildAdapterPosition(view);
-        Entry entry = adapter.getItem(position);
-        String date = entry.getId().toISO8601DateString();
-        Timber.d("onClick: " + date);
-        presenter.onSelectEntry(date);
+        Entry item = adapter.getItem(position);
+        presenter.onSelectEntry(item);
     }
 
     @Override
     public void onDestroyView() {
-        Timber.d("onDestroyView: ");
         super.onDestroyView();
         presenter.onDestroy();
         unbinder.unbind();
@@ -114,7 +108,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onDetach() {
-        Timber.d("onDetach: ");
         super.onDetach();
         presenter.onDetach();
     }
@@ -135,7 +128,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
                             Loader<Result<EntryList>> loader,
                             Result<EntryList> data
                     ) {
-                        EntryListFragment.this.onLoadEntryListFinished(data);
+                        EntryListFragment.this.showEntryList(data);
                     }
 
                     @Override
@@ -148,21 +141,20 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     }
 
 
-    private void onLoadEntryListFinished(Result<EntryList> data) {
-        Timber.d("onLoadEntryListFinished: ");
+    private void showEntryList(Result<EntryList> result) {
+        Timber.d("showEntryList: ");
         View view = this.getView();
         if (view == null) return;
         if (progressBar != null) progressBar.setVisibility(View.GONE);
-        if (data.isOk()) {
-            Timber.d("onLoadEntryListFinished: isOk");
-            EntryList newEntryList = data.getValue();
+        if (result.isOk()) {
+            EntryList newEntryList = result.getValue();
             adapter.changeDataSet(newEntryList);
             adapter.notifyDataSetChanged();
             String message = "load " + newEntryList.size() + " entries";
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         } else {
-            Exception e = data.getException();
-            Timber.e("onLoadEntryListFinished: ", e);
+            Exception e = result.getException();
+            Timber.e("showEntryList: ", e);
             String message = "load error";
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         }
