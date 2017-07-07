@@ -119,14 +119,13 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                 if (!selectedDate.isPresent()) return; // do nothing
                 EntryDetailView entryDetailView = EntryDetailFragment.this;
                 entryDetailView.showLoading();
-                webView.setVisibility(View.INVISIBLE);
-                initEntryDetailLoader(selectedDate);
+                entryDetailView.loadEntryDetail(selectedDate);
             }
         };
         selectedDateListener.subscribe(onChangeListener);
         EntryDetailView entryDetailView = this;
         entryDetailView.showLoading();
-        initEntryDetailLoader(selectedDateListener.get());
+        entryDetailView.loadEntryDetail(selectedDateListener.get());
         return view;
     }
 
@@ -150,6 +149,13 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     public void hideLoading() {
         if (this.progressBar == null) return;
         this.progressBar.setVisibility(View.GONE);
+    }
+
+    // FIXME: move to presenter
+    @Override
+    public void loadEntryDetail(Optional<String> selectedDateOptional) {
+        webView.setVisibility(View.INVISIBLE);
+        initEntryDetailLoader(selectedDateOptional);
     }
 
     @Override
