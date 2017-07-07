@@ -21,6 +21,10 @@ import javax.inject.Inject;
 public class MainService extends IntentService {
     public static final String ACTION_FETCH_ENTRY_LIST =
             "net.bouzuya.blog.action.FETCH_ENTRY_LIST";
+
+    @SuppressWarnings("WeakerAccess")
+    @Inject
+    BlogPreferences preferences;
     @SuppressWarnings("WeakerAccess")
     @Inject
     EntryRepository entryRepository;
@@ -54,10 +58,9 @@ public class MainService extends IntentService {
         Entry latestEntry = newEntryOptional.get();
         String newLatestDate = latestEntry.getId().toISO8601DateString();
         Context context = this;
-        BlogPreferences preferences = new BlogPreferences(context);
-        Optional<String> oldEntryOptional = preferences.getLatestDate();
+        Optional<String> oldLatestDate = preferences.getLatestDate();
         preferences.setLatestDate(newLatestDate);
-        if (oldEntryOptional.isPresent() && oldEntryOptional.get().equals(newLatestDate)) return;
+        if (oldLatestDate.isPresent() && oldLatestDate.get().equals(newLatestDate)) return;
         sendNotification(context, latestEntry);
     }
 

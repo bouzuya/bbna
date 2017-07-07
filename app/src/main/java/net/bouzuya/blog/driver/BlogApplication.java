@@ -14,7 +14,10 @@ public class BlogApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        component = DaggerBlogApplicationComponent.builder().build();
+        component = DaggerBlogApplicationComponent
+                .builder()
+                .blogApplicationModule(new BlogApplicationModule(this.getApplicationContext()))
+                .build();
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

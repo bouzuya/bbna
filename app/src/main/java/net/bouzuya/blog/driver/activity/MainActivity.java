@@ -14,7 +14,6 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.MainPresenter;
 import net.bouzuya.blog.driver.AlarmUtils;
 import net.bouzuya.blog.driver.BlogApplication;
-import net.bouzuya.blog.driver.BlogPreferences;
 import net.bouzuya.blog.driver.adapter.EntryFragmentPagerAdapter;
 import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
@@ -158,8 +157,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        Optional<String> latestDateOptional = new BlogPreferences(this).getLatestDate();
-        Timber.d("onCreate: LatestDate: " + latestDateOptional);
     }
 
     @Override
