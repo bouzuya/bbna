@@ -57,6 +57,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     SelectedDateListener selectedDateListener;
     private Unbinder unbinder;
     private OnEntryLoadListener listener;
+    private SelectedDateListener.OnChangeListener<Optional<String>> onChangeListener;
 
     public EntryDetailFragment() {
         // Required empty public constructor
@@ -115,17 +116,18 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                 if (webView != null) webView.setVisibility(View.VISIBLE);
             }
         });
-        selectedDateListener.subscribe(
-                new SelectedDateListener.OnChangeListener<Optional<String>>() {
-                    @Override
-                    public void onChange(Optional<String> selectedDate) {
-                        Timber.d("onChange: %s", selectedDate);
-                        if (!selectedDate.isPresent()) return; // do nothing
-                        progressBar.setVisibility(View.VISIBLE);
-                        webView.setVisibility(View.INVISIBLE);
-                        initEntryDetailLoader(selectedDate);
-                    }
-                });
+        // do nothing
+        onChangeListener = new SelectedDateListener.OnChangeListener<Optional<String>>() {
+            @Override
+            public void onChange(Optional<String> selectedDate) {
+                Timber.d("onChange: %s", selectedDate);
+                if (!selectedDate.isPresent()) return; // do nothing
+                progressBar.setVisibility(View.VISIBLE);
+                webView.setVisibility(View.INVISIBLE);
+                initEntryDetailLoader(selectedDate);
+            }
+        };
+        selectedDateListener.subscribe(onChangeListener);
         progressBar.setVisibility(View.VISIBLE);
         initEntryDetailLoader(selectedDateListener.get());
         return view;
@@ -136,7 +138,8 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         Timber.d("onDestroyView: ");
         super.onDestroyView();
         presenter.onDestroy();
-        selectedDateListener.unsubscribe();
+        if (onChangeListener != null)
+            selectedDateListener.unsubscribe(onChangeListener);
         unbinder.unbind();
     }
 
