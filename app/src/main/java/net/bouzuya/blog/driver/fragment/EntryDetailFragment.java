@@ -99,13 +99,15 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+                EntryDetailView entryDetailView = EntryDetailFragment.this;
+                entryDetailView.showLoading();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                EntryDetailView entryDetailView = EntryDetailFragment.this;
+                entryDetailView.hideLoading();
                 if (webView != null) webView.setVisibility(View.VISIBLE);
             }
         });
@@ -115,13 +117,15 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             public void onChange(Optional<String> selectedDate) {
                 Timber.d("onChange: %s", selectedDate);
                 if (!selectedDate.isPresent()) return; // do nothing
-                progressBar.setVisibility(View.VISIBLE);
+                EntryDetailView entryDetailView = EntryDetailFragment.this;
+                entryDetailView.showLoading();
                 webView.setVisibility(View.INVISIBLE);
                 initEntryDetailLoader(selectedDate);
             }
         };
         selectedDateListener.subscribe(onChangeListener);
-        progressBar.setVisibility(View.VISIBLE);
+        EntryDetailView entryDetailView = this;
+        entryDetailView.showLoading();
         initEntryDetailLoader(selectedDateListener.get());
         return view;
     }
@@ -143,6 +147,12 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     }
 
     @Override
+    public void hideLoading() {
+        if (this.progressBar == null) return;
+        this.progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showEntryDetail(Result<EntryDetail> entryDetail) {
         Timber.d("onLoadEntryDetailFinished: ");
         View view = this.getView();
@@ -154,12 +164,19 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             String message = "load " + d.getId().toISO8601DateString();
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         } else {
-            if (progressBar != null) progressBar.setVisibility(View.GONE);
+            EntryDetailView entryDetailView = this;
+            entryDetailView.hideLoading();
             Exception e = entryDetail.getException();
             Timber.e("onLoadEntryDetailFinished: ", e);
             String message = "load error";
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void showLoading() {
+        if (this.progressBar == null) return;
+        this.progressBar.setVisibility(View.VISIBLE);
     }
 
     private void initEntryDetailLoader(Optional<String> dateOptional) {
