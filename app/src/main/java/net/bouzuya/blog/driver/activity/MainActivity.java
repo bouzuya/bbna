@@ -33,8 +33,7 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
-        implements EntryListFragment.OnEntrySelectListener,
-        EntryDetailFragment.OnEntryLoadListener,
+        implements EntryDetailFragment.OnEntryLoadListener,
         MainView {
 
     private static final int POSITION_LIST = 0;
@@ -50,11 +49,6 @@ public class MainActivity extends AppCompatActivity
     SelectedDateListener selectedDateListener;
     private Intent shareIntent;
     private MenuItem shareMenuItem;
-
-    @Override
-    public void onEntrySelect(String date) {
-        presenter.onSelectEntry(date);
-    }
 
     @Override
     public void onBackPressed() {
@@ -94,7 +88,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showDetail(String date) {
-        selectedDateListener.set(Optional.of(date));
         viewPager.setCurrentItem(POSITION_DETAIL);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) throw new IllegalStateException();
@@ -136,9 +129,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Timber.d("onCreate: ");
         super.onCreate(savedInstanceState);
-
         ((BlogApplication) getApplication()).getComponent().inject(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

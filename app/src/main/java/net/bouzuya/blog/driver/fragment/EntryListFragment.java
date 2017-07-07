@@ -46,7 +46,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     @SuppressWarnings("WeakerAccess")
     @Inject
     EntryRepository entryRepository;
-    private OnEntrySelectListener listener;
     private EntryAdapter adapter;
     private Unbinder unbinder;
 
@@ -60,15 +59,8 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onAttach(Context context) {
-        Timber.d("onAttach: ");
         super.onAttach(context);
         ((BlogApplication) getActivity().getApplication()).getComponent().inject(this);
-        if (context instanceof OnEntrySelectListener) {
-            listener = (OnEntrySelectListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnEntrySelectListener");
-        }
         presenter.onAttach(this);
     }
 
@@ -109,9 +101,7 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         Entry entry = adapter.getItem(position);
         String date = entry.getId().toISO8601DateString();
         Timber.d("onClick: " + date);
-        if (listener != null) {
-            listener.onEntrySelect(date);
-        }
+        presenter.onSelectEntry(date);
     }
 
     @Override
@@ -126,7 +116,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     public void onDetach() {
         Timber.d("onDetach: ");
         super.onDetach();
-        listener = null;
         presenter.onDetach();
     }
 
@@ -177,9 +166,5 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
             String message = "load error";
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         }
-    }
-
-    public interface OnEntrySelectListener {
-        void onEntrySelect(String date);
     }
 }

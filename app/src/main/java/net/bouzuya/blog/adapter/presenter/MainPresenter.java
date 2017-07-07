@@ -1,23 +1,33 @@
 package net.bouzuya.blog.adapter.presenter;
 
+import net.bouzuya.blog.driver.SelectedDateListener;
 import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
-import javax.inject.Inject;
-
 public class MainPresenter implements Presenter<MainView> {
+    private final SelectedDateListener selectedDateListener;
     private Optional<MainView> view;
     private Optional<String> selectedEntryDateOptional;
+    private SelectedDateListener.OnChangeListener<Optional<String>> listener;
 
-    @Inject
-    MainPresenter() {
+    public MainPresenter(SelectedDateListener selectedDateListener) {
+        this.selectedDateListener = selectedDateListener;
         this.selectedEntryDateOptional = Optional.empty();
     }
 
     @Override
     public void onAttach(MainView view) {
         this.view = Optional.of(view);
+        this.listener = new SelectedDateListener.OnChangeListener<Optional<String>>() {
+            @Override
+            public void onChange(Optional<String> value) {
+                if (value.isPresent()) {
+                    MainPresenter.this.view.get().showDetail(value.get());
+                }
+            }
+        };
+        this.selectedDateListener.subscribe(this.listener);
     }
 
     public void onLoadEntry(EntryDetail entryDetail) {
@@ -32,11 +42,6 @@ public class MainPresenter implements Presenter<MainView> {
         } else {
             this.view.get().showList();
         }
-    }
-
-    public void onSelectEntry(String date) {
-        this.selectedEntryDateOptional = Optional.of(date);
-        this.view.get().showDetail(date);
     }
 
     public void onSwitchDetail() {
@@ -56,5 +61,6 @@ public class MainPresenter implements Presenter<MainView> {
     @Override
     public void onDetach() {
         this.view = Optional.empty();
+        this.selectedDateListener.unsubscribe(this.listener);
     }
 }

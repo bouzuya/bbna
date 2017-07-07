@@ -1,14 +1,15 @@
 package net.bouzuya.blog.adapter.presenter;
 
+import net.bouzuya.blog.driver.SelectedDateListener;
 import net.bouzuya.blog.driver.view.EntryListView;
-
-import javax.inject.Inject;
+import net.bouzuya.blog.entity.Optional;
 
 public class EntryListPresenter implements Presenter<EntryListView> {
+    private final SelectedDateListener selectedDateListener;
     private EntryListView view;
 
-    @Inject
-    EntryListPresenter() {
+    public EntryListPresenter(SelectedDateListener selectedDateListener) {
+        this.selectedDateListener = selectedDateListener;
     }
 
     @Override
@@ -24,5 +25,9 @@ public class EntryListPresenter implements Presenter<EntryListView> {
     @Override
     public void onDetach() {
         this.view = null;
+    }
+
+    public void onSelectEntry(String date) {
+        selectedDateListener.set(Optional.of(date));
     }
 }
