@@ -2,8 +2,6 @@ package net.bouzuya.blog.driver;
 
 import net.bouzuya.blog.entity.Optional;
 
-import timber.log.Timber;
-
 public class SelectedDateListener {
     private final BlogPreferences preferences;
     private Optional<OnChangeListener<Optional<String>>> listener;
@@ -14,20 +12,18 @@ public class SelectedDateListener {
     }
 
     public Optional<String> get() {
-        Optional<String> selectedDate = this.preferences.getSelectedDate();
-        Timber.d("get: %s", selectedDate);
-        return selectedDate;
+        return this.preferences.getSelectedDate();
     }
 
     public void set(Optional<String> selectedDate) {
-        Timber.d("set: %s, listener=%b", selectedDate, this.listener.isPresent());
+        Optional<String> oldSelectedDate = this.preferences.getSelectedDate();
+        if (oldSelectedDate.equals(selectedDate)) return; // not changed
         this.preferences.setSelectedDate(selectedDate.orElse(null));
         if (this.listener.isPresent())
             this.listener.get().onChange(selectedDate);
     }
 
     public void subscribe(OnChangeListener<Optional<String>> listener) {
-        Timber.d("subscribe: ");
         this.listener = Optional.of(listener);
     }
 
