@@ -23,6 +23,7 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
+import net.bouzuya.blog.driver.SelectedDateListener;
 import net.bouzuya.blog.driver.loader.EntryDetailLoader;
 import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.entity.EntryDetail;
@@ -38,7 +39,6 @@ import timber.log.Timber;
 
 public class EntryDetailFragment extends Fragment implements EntryDetailView {
     private static final int ENTRY_DETAIL_LOADER_ID = 1;
-    private static final String DATE = "param1";
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.indeterminate_bar)
     ProgressBar progressBar;
@@ -51,21 +51,18 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     @SuppressWarnings("WeakerAccess")
     @Inject
     EntryRepository entryRepository;
-    private Optional<String> dateOptional;
+    @SuppressWarnings("WeakerAccess")
+    @Inject
+    SelectedDateListener selectedDateListener;
     private Unbinder unbinder;
     private OnEntryLoadListener listener;
 
     public EntryDetailFragment() {
         // Required empty public constructor
-        this.dateOptional = Optional.empty();
     }
 
-    public static EntryDetailFragment newInstance(Optional<String> dateOptional) {
-        EntryDetailFragment fragment = new EntryDetailFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(DATE, dateOptional.orElse(null));
-        fragment.setArguments(arguments);
-        return fragment;
+    public static EntryDetailFragment newInstance() {
+        return new EntryDetailFragment();
     }
 
     @Override
@@ -81,25 +78,9 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         presenter.onAttach(this);
     }
 
-    public Optional<String> getDateOptional() {
-        return dateOptional;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Timber.d("onCreate: ");
-        super.onCreate(savedInstanceState);
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            dateOptional = Optional.ofNullable(arguments.getString(DATE));
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Timber.d("onCreateView: ");
-        initEntryDetailLoader(dateOptional);
         View view = inflater.inflate(R.layout.fragment_entry_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         webView.setWebViewClient(new WebViewClient() {
@@ -127,6 +108,18 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             }
         });
         progressBar.setVisibility(View.VISIBLE);
+        selectedDateListener.subscribe(
+                new SelectedDateListener.OnChangeListener<Optional<String>>() {
+                    @Override
+                    public void onChange(Optional<String> selectedDate) {
+                        Timber.d("onChange: %s", selectedDate);
+                        if (!selectedDate.isPresent()) return; // do nothing
+                        progressBar.setVisibility(View.VISIBLE);
+                        webView.loadData("", "text/html; charset=UTF-8", "UTF-8");
+                        initEntryDetailLoader(selectedDate);
+                    }
+                });
+        initEntryDetailLoader(selectedDateListener.get());
         return view;
     }
 
@@ -135,6 +128,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         Timber.d("onDestroyView: ");
         super.onDestroyView();
         presenter.onDestroy();
+        selectedDateListener.unsubscribe();
         unbinder.unbind();
     }
 

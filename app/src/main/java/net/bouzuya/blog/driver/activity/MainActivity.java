@@ -3,7 +3,9 @@ package net.bouzuya.blog.driver.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +16,7 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.MainPresenter;
 import net.bouzuya.blog.driver.AlarmUtils;
 import net.bouzuya.blog.driver.BlogApplication;
-import net.bouzuya.blog.driver.adapter.EntryFragmentPagerAdapter;
+import net.bouzuya.blog.driver.SelectedDateListener;
 import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.driver.view.MainView;
@@ -37,13 +39,15 @@ public class MainActivity extends AppCompatActivity
 
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
+
     @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     @Inject
     MainPresenter presenter;
-    private EntryFragmentPagerAdapter adapter;
+    @Inject
+    SelectedDateListener selectedDateListener;
     private Intent shareIntent;
     private MenuItem shareMenuItem;
 
@@ -90,8 +94,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showDetail(String date) {
-        adapter.setDetailDate(date);
-        adapter.notifyDataSetChanged();
+        selectedDateListener.set(Optional.of(date));
         viewPager.setCurrentItem(POSITION_DETAIL);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) throw new IllegalStateException();
@@ -137,14 +140,27 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         ((BlogApplication) getApplication()).getComponent().inject(this);
-
-        AlarmUtils.setAlarm(this.getApplicationContext());
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        adapter = new EntryFragmentPagerAdapter(fragmentManager);
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
+            @Override
+            public Fragment getItem(int position) {
+                switch (position) {
+                    case 0:
+                        return EntryListFragment.newInstance();
+                    case 1:
+                        return EntryDetailFragment.newInstance();
+                    default:
+                        throw new AssertionError();
+                }
+            }
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        });
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -157,6 +173,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        AlarmUtils.setAlarm(this.getApplicationContext());
     }
 
     @Override
