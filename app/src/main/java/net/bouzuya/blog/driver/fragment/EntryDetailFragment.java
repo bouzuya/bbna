@@ -3,6 +3,7 @@ package net.bouzuya.blog.driver.fragment;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -102,12 +103,18 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
             }
 
             @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (webView != null) webView.setVisibility(View.VISIBLE);
             }
         });
-        progressBar.setVisibility(View.VISIBLE);
         selectedDateListener.subscribe(
                 new SelectedDateListener.OnChangeListener<Optional<String>>() {
                     @Override
@@ -115,10 +122,11 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
                         Timber.d("onChange: %s", selectedDate);
                         if (!selectedDate.isPresent()) return; // do nothing
                         progressBar.setVisibility(View.VISIBLE);
-                        webView.loadData("", "text/html; charset=UTF-8", "UTF-8");
+                        webView.setVisibility(View.INVISIBLE);
                         initEntryDetailLoader(selectedDate);
                     }
                 });
+        progressBar.setVisibility(View.VISIBLE);
         initEntryDetailLoader(selectedDateListener.get());
         return view;
     }
@@ -145,9 +153,6 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         if (view == null) return;
         if (entryDetail.isOk()) {
             Timber.d("onLoadEntryDetailFinished: isOk");
-
-            initEntryDetailLoader(Optional.<String>empty());
-
             EntryDetail d = entryDetail.getValue();
             webView.loadData(toHtmlString(d), "text/html; charset=UTF-8", "UTF-8");
             String message = "load " + d.getId().toISO8601DateString();
