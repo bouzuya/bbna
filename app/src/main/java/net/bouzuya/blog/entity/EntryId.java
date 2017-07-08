@@ -64,6 +64,11 @@ public class EntryId implements Comparable<EntryId> {
         return Url.parse(baseUrl + path).get();
     }
 
+    @Override
+    public String toString() {
+        return "EntryId{" + date + '}';
+    }
+
     public Url toUrl() {
         String baseUrl = "https://blog.bouzuya.net";
         String path = "/" + this.date.replaceAll("-", "/") + "/";
