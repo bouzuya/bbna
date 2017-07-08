@@ -21,7 +21,7 @@ import timber.log.Timber;
 public class EntryListPresenter implements Presenter<EntryListView> {
     private final EntryRepository entryRepository;
     private final EntryListViewModel entryListViewModel;
-    private EntryListView view;
+    private Optional<EntryListView> view;
 
     public EntryListPresenter(
             EntryRepository entryRepository,
@@ -29,11 +29,12 @@ public class EntryListPresenter implements Presenter<EntryListView> {
     ) {
         this.entryRepository = entryRepository;
         this.entryListViewModel = entryListViewModel;
+        this.view = Optional.empty();
     }
 
     @Override
     public void onAttach(EntryListView view) {
-        this.view = view;
+        this.view = Optional.of(view);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class EntryListPresenter implements Presenter<EntryListView> {
 
     @Override
     public void onDetach() {
-        this.view = null;
+        this.view = Optional.empty();
     }
 
     public void onSelectEntry(Entry entry) {
@@ -73,23 +74,23 @@ public class EntryListPresenter implements Presenter<EntryListView> {
                 .subscribe(new SingleObserver<EntryList>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-                        view.showLoading();
+                        view.get().showLoading();
                     }
 
                     @Override
                     public void onSuccess(@NonNull EntryList entryList) {
-                        if (view == null) return;
-                        view.hideLoading();
-                        view.showMessage("load " + entryList.size() + " entries");
-                        view.showEntryList(entryList);
+                        if (!view.isPresent()) return;
+                        view.get().hideLoading();
+                        view.get().showMessage("load " + entryList.size() + " entries");
+                        view.get().showEntryList(entryList);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        if (view == null) return;
+                        if (!view.isPresent()) return;
                         Timber.e("showEntryList: ", e);
-                        view.hideLoading();
-                        view.showMessage("load error");
+                        view.get().hideLoading();
+                        view.get().showMessage("load error");
                     }
                 });
     }
