@@ -33,11 +33,12 @@ import butterknife.Unbinder;
 import timber.log.Timber;
 
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
-
     private static final int ENTRY_LIST_LOADER_ID = 0;
+
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.entry_list)
     RecyclerView entryListView;
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.indeterminate_bar)
     ProgressBar progressBar;
     @SuppressWarnings("WeakerAccess")
@@ -139,7 +140,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, callbacks);
     }
-
 
     private void showEntryList(Result<EntryList> result) {
         Timber.d("showEntryList: ");
