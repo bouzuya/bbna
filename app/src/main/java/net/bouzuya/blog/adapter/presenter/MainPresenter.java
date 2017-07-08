@@ -20,6 +20,7 @@ public class MainPresenter implements Presenter<MainView> {
             SelectedDateListener selectedDateListener
     ) {
         this.entryDetailListener = entryDetailListener;
+        this.entryDetailOptional = Optional.empty();
         this.selectedDateListener = selectedDateListener;
         this.selectedEntryDateOptional = Optional.empty();
     }
@@ -67,6 +68,7 @@ public class MainPresenter implements Presenter<MainView> {
     public void onSwitchDetail() {
         if (!selectedEntryDateOptional.isPresent()) return;
         this.view.get().showDetail(selectedEntryDateOptional.get());
+        if (!entryDetailOptional.isPresent()) return;
         updateShareButtonForDetail(entryDetailOptional);
     }
 
