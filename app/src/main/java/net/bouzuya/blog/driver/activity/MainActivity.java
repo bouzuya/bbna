@@ -39,8 +39,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     @Inject
     MainPresenter presenter;
-    private Optional<Intent> shareIntent;
     private MenuItem shareMenuItem;
+
+    @Override
+    public void hideShareButton() {
+        if (shareMenuItem == null) return;
+        shareMenuItem.setVisible(false);
+    }
 
     @Override
     public void onBackPressed() {
@@ -65,12 +70,26 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 presenter.onSwitchList();
                 return true;
             case R.id.menu_item_share:
-                if (shareIntent.isPresent()) {
-                    startActivity(shareIntent.get());
-                }
+                presenter.onClickShare();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void share(String title, String url) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.putExtra(Intent.EXTRA_TEXT, url);
+        Intent shareIntent = Intent.createChooser(intent, String.format("share '%s'", url));
+        startActivity(shareIntent);
+    }
+
+    @Override
+    public void showShareButton() {
+        if (shareMenuItem == null) return;
+        shareMenuItem.setVisible(true);
     }
 
     @Override
@@ -91,16 +110,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle(title);
-    }
-
-    @Override
-    public void updateShareButton(Optional<String> titleOptional, Optional<String> urlOptional) {
-        this.shareIntent = titleOptional.isPresent() && urlOptional.isPresent()
-                ? Optional.of(newShareIntent(titleOptional.get(), urlOptional.get()))
-                : Optional.<Intent>empty();
-        if (shareMenuItem != null) {
-            shareMenuItem.setVisible(this.shareIntent.isPresent());
-        }
     }
 
     @Override
@@ -181,13 +190,5 @@ public class MainActivity extends AppCompatActivity implements MainView {
         if (extras == null) return Optional.empty();
         String latestDate = extras.getString("latest_date", null);
         return Optional.ofNullable(latestDate);
-    }
-
-    private Intent newShareIntent(String title, String url) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, title);
-        intent.putExtra(Intent.EXTRA_TEXT, url);
-        return Intent.createChooser(intent, String.format("share '%s'", url));
     }
 }

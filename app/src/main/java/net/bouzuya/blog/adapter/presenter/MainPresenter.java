@@ -15,6 +15,8 @@ public class MainPresenter implements Presenter<MainView> {
     private final EntryListViewModel entryListViewModel;
     private Optional<MainView> view;
     private CompositeDisposable subscriptions;
+    private Optional<String> shareTitle;
+    private Optional<String> shareUrl;
 
     public MainPresenter(
             EntryDetailViewModel entryDetailViewModel,
@@ -49,12 +51,18 @@ public class MainPresenter implements Presenter<MainView> {
         );
     }
 
+    public void onClickShare() {
+        this.view.get().share(shareTitle.get(), shareUrl.get());
+    }
+
     public void onStart(Optional<String> selectedDateOptional) {
         if (!this.view.isPresent()) return; // do nothing
         if (selectedDateOptional.isPresent()) {
             this.entryListViewModel.set(selectedDateOptional);
             this.view.get().switchDetail(selectedDateOptional.get());
-            this.view.get().updateShareButton(Optional.<String>empty(), Optional.<String>empty());
+            this.shareTitle = Optional.empty();
+            this.shareUrl = Optional.empty();
+            this.view.get().hideShareButton();
         } else {
             this.view.get().switchList("blog.bouzuya.net");
             updateShareButtonForList();
@@ -91,15 +99,19 @@ public class MainPresenter implements Presenter<MainView> {
             String date = entryDetail.getId().toISO8601DateString();
             String title = entryDetail.getTitle();
             String dateAndTitle = String.format("%s %s", date, title);
-            this.view.get().updateShareButton(Optional.of(dateAndTitle), Optional.of(url));
+            this.shareTitle = Optional.of(dateAndTitle);
+            this.shareUrl = Optional.of(url);
+            this.view.get().showShareButton();
         } else {
-            this.view.get().updateShareButton(Optional.<String>empty(), Optional.<String>empty());
+            this.shareTitle = Optional.empty();
+            this.shareUrl = Optional.empty();
+            this.view.get().hideShareButton();
         }
     }
 
     private void updateShareButtonForList() {
-        String title = "blog.bouzuya.net";
-        String url = "https://blog.bouzuya.net/";
-        this.view.get().updateShareButton(Optional.of(title), Optional.of(url));
+        this.shareTitle = Optional.of("blog.bouzuya.net");
+        this.shareUrl = Optional.of("https://blog.bouzuya.net/");
+        this.view.get().showShareButton();
     }
 }
