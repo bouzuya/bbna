@@ -1,4 +1,4 @@
-package net.bouzuya.blog.driver;
+package net.bouzuya.blog.driver.data;
 
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;

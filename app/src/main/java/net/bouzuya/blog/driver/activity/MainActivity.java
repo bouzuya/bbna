@@ -16,7 +16,7 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.MainPresenter;
 import net.bouzuya.blog.driver.AlarmUtils;
 import net.bouzuya.blog.driver.BlogApplication;
-import net.bouzuya.blog.driver.SelectedDateListener;
+import net.bouzuya.blog.driver.data.SelectedDateListener;
 import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.driver.view.MainView;

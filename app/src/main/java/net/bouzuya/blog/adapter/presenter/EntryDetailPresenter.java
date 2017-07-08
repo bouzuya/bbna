@@ -1,8 +1,8 @@
 package net.bouzuya.blog.adapter.presenter;
 
 import net.bouzuya.blog.app.repository.EntryRepository;
-import net.bouzuya.blog.driver.EntryDetailListener;
-import net.bouzuya.blog.driver.SelectedDateListener;
+import net.bouzuya.blog.driver.data.EntryDetailListener;
+import net.bouzuya.blog.driver.data.SelectedDateListener;
 import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.EntryId;

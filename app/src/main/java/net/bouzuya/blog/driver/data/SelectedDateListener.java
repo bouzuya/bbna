@@ -1,5 +1,6 @@
-package net.bouzuya.blog.driver;
+package net.bouzuya.blog.driver.data;
 
+import net.bouzuya.blog.driver.BlogPreferences;
 import net.bouzuya.blog.entity.Optional;
 
 import io.reactivex.Observable;
