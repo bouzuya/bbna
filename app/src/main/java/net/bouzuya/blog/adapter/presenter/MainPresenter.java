@@ -33,7 +33,7 @@ public class MainPresenter implements Presenter<MainView> {
                     public void onChange(Optional<EntryDetail> value) {
                         if (value.isPresent()) {
                             MainPresenter.this.entryDetailOptional = value;
-                            updateShareButton(value.get());
+                            updateShareButtonForDetail(value);
                         }
                     }
                 };
@@ -45,6 +45,7 @@ public class MainPresenter implements Presenter<MainView> {
                         if (value.isPresent()) {
                             MainPresenter.this.selectedEntryDateOptional = value;
                             MainPresenter.this.view.get().showDetail(value.get());
+                            updateShareButtonForDetail(Optional.<EntryDetail>empty());
                         }
                     }
                 };
@@ -56,26 +57,22 @@ public class MainPresenter implements Presenter<MainView> {
         this.selectedEntryDateOptional = selectedDateOptional;
         if (selectedDateOptional.isPresent()) {
             this.view.get().showDetail(selectedDateOptional.get());
+            this.view.get().updateShareButton(Optional.<String>empty(), Optional.<String>empty());
         } else {
             this.view.get().showList();
-            String title = "blog.bouzuya.net";
-            String url = "https://blog.bouzuya.net/";
-            this.view.get().updateShareButton(Optional.of(title), Optional.of(url));
+            updateShareButtonForList();
         }
     }
 
     public void onSwitchDetail() {
         if (!selectedEntryDateOptional.isPresent()) return;
         this.view.get().showDetail(selectedEntryDateOptional.get());
-        if (!entryDetailOptional.isPresent()) return;
-        updateShareButton(entryDetailOptional.get());
+        updateShareButtonForDetail(entryDetailOptional);
     }
 
     public void onSwitchList() {
         this.view.get().showList();
-        String title = "blog.bouzuya.net";
-        String url = "https://blog.bouzuya.net/";
-        this.view.get().updateShareButton(Optional.of(title), Optional.of(url));
+        updateShareButtonForList();
     }
 
     @Override
@@ -90,11 +87,22 @@ public class MainPresenter implements Presenter<MainView> {
         this.selectedDateListener.unsubscribe(this.onSelectedDateChangeListener);
     }
 
-    private void updateShareButton(EntryDetail entryDetail) {
-        String url = entryDetail.getId().toUrl().toUrlString();
-        String date = entryDetail.getId().toISO8601DateString();
-        String title = entryDetail.getTitle();
-        String dateAndTitle = String.format("%s %s", date, title);
-        MainPresenter.this.view.get().updateShareButton(Optional.of(dateAndTitle), Optional.of(url));
+    private void updateShareButtonForDetail(Optional<EntryDetail> entryDetailOptional) {
+        if (entryDetailOptional.isPresent()) {
+            EntryDetail entryDetail = entryDetailOptional.get();
+            String url = entryDetail.getId().toUrl().toUrlString();
+            String date = entryDetail.getId().toISO8601DateString();
+            String title = entryDetail.getTitle();
+            String dateAndTitle = String.format("%s %s", date, title);
+            this.view.get().updateShareButton(Optional.of(dateAndTitle), Optional.of(url));
+        } else {
+            this.view.get().updateShareButton(Optional.<String>empty(), Optional.<String>empty());
+        }
+    }
+
+    private void updateShareButtonForList() {
+        String title = "blog.bouzuya.net";
+        String url = "https://blog.bouzuya.net/";
+        this.view.get().updateShareButton(Optional.of(title), Optional.of(url));
     }
 }
