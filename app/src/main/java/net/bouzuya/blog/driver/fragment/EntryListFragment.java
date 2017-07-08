@@ -24,9 +24,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.SingleObserver;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
@@ -48,6 +45,12 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
 
     public static EntryListFragment newInstance() {
         return new EntryListFragment();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (progressBar != null)
+            progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -74,36 +77,28 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
             }
         };
         entryListView.setAdapter(adapter);
-        presenter
-                .loadEntryList()
-                .subscribe(new SingleObserver<EntryList>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull EntryList entryList) {
-                        View view = EntryListFragment.this.getView();
-                        if (view == null) return;
-                        if (progressBar != null) progressBar.setVisibility(View.GONE);
-                        adapter.changeDataSet(entryList);
-                        adapter.notifyDataSetChanged();
-                        String message = "load " + entryList.size() + " entries";
-                        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        View view = EntryListFragment.this.getView();
-                        if (view == null) return;
-                        if (progressBar != null) progressBar.setVisibility(View.GONE);
-                        Timber.e("showEntryList: ", e);
-                        String message = "load error";
-                        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-                    }
-                });
+        showLoading();
+        presenter.onStart();
         return view;
+    }
+
+    @Override
+    public void showEntryList(EntryList entryList) {
+        View view = EntryListFragment.this.getView();
+        if (view == null) return;
+        adapter.changeDataSet(entryList);
+        adapter.notifyDataSetChanged();
+        String message = "load " + entryList.size() + " entries";
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showError(Throwable e) {
+        View view = EntryListFragment.this.getView();
+        if (view == null) return;
+        Timber.e("showEntryList: ", e);
+        String message = "load error";
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -125,5 +120,11 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     public void onDetach() {
         super.onDetach();
         presenter.onDetach();
+    }
+
+    @Override
+    public void showLoading() {
+        if (progressBar != null)
+            progressBar.setVisibility(View.VISIBLE);
     }
 }
