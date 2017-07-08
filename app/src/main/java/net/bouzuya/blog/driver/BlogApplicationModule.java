@@ -48,8 +48,11 @@ class BlogApplicationModule {
     }
 
     @Provides
-    EntryListPresenter providesEntryListPresenter(SelectedDateListener selectedDateListener) {
-        return new EntryListPresenter(selectedDateListener);
+    EntryListPresenter providesEntryListPresenter(
+            EntryRepository entryRepository,
+            SelectedDateListener selectedDateListener
+    ) {
+        return new EntryListPresenter(entryRepository, selectedDateListener);
     }
 
     @Provides

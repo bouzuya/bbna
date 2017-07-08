@@ -2,11 +2,8 @@ package net.bouzuya.blog.driver.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,17 +16,18 @@ import net.bouzuya.blog.adapter.presenter.EntryListPresenter;
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.adapter.EntryAdapter;
-import net.bouzuya.blog.driver.loader.EntryListLoader;
 import net.bouzuya.blog.driver.view.EntryListView;
 import net.bouzuya.blog.entity.Entry;
 import net.bouzuya.blog.entity.EntryList;
-import net.bouzuya.blog.entity.Result;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.SingleObserver;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
@@ -66,12 +64,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initEntryListLoader();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_entry_list, container, false);
@@ -88,7 +80,35 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
             }
         };
         entryListView.setAdapter(adapter);
-        progressBar.setVisibility(View.VISIBLE);
+        presenter
+                .loadEntryList()
+                .subscribe(new SingleObserver<EntryList>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull EntryList entryList) {
+                        View view = EntryListFragment.this.getView();
+                        if (view == null) return;
+                        if (progressBar != null) progressBar.setVisibility(View.GONE);
+                        adapter.changeDataSet(entryList);
+                        adapter.notifyDataSetChanged();
+                        String message = "load " + entryList.size() + " entries";
+                        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        View view = EntryListFragment.this.getView();
+                        if (view == null) return;
+                        if (progressBar != null) progressBar.setVisibility(View.GONE);
+                        Timber.e("showEntryList: ", e);
+                        String message = "load error";
+                        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+                    }
+                });
         return view;
     }
 
@@ -111,52 +131,5 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     public void onDetach() {
         super.onDetach();
         presenter.onDetach();
-    }
-
-    private void initEntryListLoader() {
-        LoaderManager.LoaderCallbacks<Result<EntryList>> callbacks =
-                new LoaderManager.LoaderCallbacks<Result<EntryList>>() {
-                    @Override
-                    public Loader<Result<EntryList>> onCreateLoader(int id, Bundle args) {
-                        if (id != ENTRY_LIST_LOADER_ID) throw new AssertionError();
-                        return new EntryListLoader(
-                                EntryListFragment.this.getContext(),
-                                entryRepository);
-                    }
-
-                    @Override
-                    public void onLoadFinished(
-                            Loader<Result<EntryList>> loader,
-                            Result<EntryList> data
-                    ) {
-                        EntryListFragment.this.showEntryList(data);
-                    }
-
-                    @Override
-                    public void onLoaderReset(Loader<Result<EntryList>> loader) {
-                        // do nothing
-                    }
-                };
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(ENTRY_LIST_LOADER_ID, null, callbacks);
-    }
-
-    private void showEntryList(Result<EntryList> result) {
-        Timber.d("showEntryList: ");
-        View view = this.getView();
-        if (view == null) return;
-        if (progressBar != null) progressBar.setVisibility(View.GONE);
-        if (result.isOk()) {
-            EntryList newEntryList = result.getValue();
-            adapter.changeDataSet(newEntryList);
-            adapter.notifyDataSetChanged();
-            String message = "load " + newEntryList.size() + " entries";
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-        } else {
-            Exception e = result.getException();
-            Timber.e("showEntryList: ", e);
-            String message = "load error";
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-        }
     }
 }
