@@ -3,9 +3,9 @@ package net.bouzuya.blog.driver.view;
 import net.bouzuya.blog.entity.Optional;
 
 public interface MainView {
-    void showDetail(String date);
+    void switchDetail(String title);
 
-    void showList();
+    void switchList(String title);
 
     void updateShareButton(Optional<String> titleOptional, Optional<String> urlOptional);
 }

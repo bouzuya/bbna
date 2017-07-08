@@ -16,7 +16,6 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.MainPresenter;
 import net.bouzuya.blog.driver.AlarmUtils;
 import net.bouzuya.blog.driver.BlogApplication;
-import net.bouzuya.blog.driver.view_model.EntryListViewModel;
 import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
 import net.bouzuya.blog.driver.view.MainView;
@@ -42,8 +41,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     @Inject
     MainPresenter presenter;
-    @Inject
-    EntryListViewModel entryListViewModel;
     private Optional<Intent> shareIntent;
     private MenuItem shareMenuItem;
 
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                showList();
+                presenter.onSwitchList();
                 return true;
             case R.id.menu_item_share:
                 if (shareIntent.isPresent()) {
@@ -79,21 +76,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void showDetail(String date) {
+    public void switchDetail(String title) {
         viewPager.setCurrentItem(POSITION_DETAIL);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(date);
+        actionBar.setTitle(title);
     }
 
     @Override
-    public void showList() {
+    public void switchList(String title) {
         viewPager.setCurrentItem(POSITION_LIST);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setTitle("blog.bouzuya.net");
+        actionBar.setTitle(title);
     }
 
     @Override

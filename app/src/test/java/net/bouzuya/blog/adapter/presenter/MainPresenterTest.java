@@ -16,11 +16,11 @@ public class MainPresenterTest {
         MainView view = mock(MainView.class);
         presenter.onAttach(view);
         presenter.onStart(Optional.<String>empty());
-        verify(view, times(0)).showDetail("2006-01-02");
-        verify(view, times(1)).showList();
+        verify(view, times(0)).switchDetail("2006-01-02");
+        verify(view, times(1)).switchList();
         presenter.onSwitchList();
         presenter.onSwitchDetail();
-        verify(view, times(0)).showDetail("2006-01-02");
+        verify(view, times(0)).switchDetail("2006-01-02");
     }
 
     @Test
@@ -29,10 +29,10 @@ public class MainPresenterTest {
         MainView view = mock(MainView.class);
         presenter.onAttach(view);
         presenter.onStart(Optional.of("2006-01-02"));
-        verify(view, times(1)).showDetail("2006-01-02");
-        verify(view, times(0)).showList();
+        verify(view, times(1)).switchDetail("2006-01-02");
+        verify(view, times(0)).switchList();
         presenter.onSwitchList();
         presenter.onSwitchDetail();
-        verify(view, times(2)).showDetail("2006-01-02");
+        verify(view, times(2)).switchDetail("2006-01-02");
     }
 }

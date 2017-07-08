@@ -49,7 +49,7 @@ public class MainPresenter implements Presenter<MainView> {
                     public void accept(@NonNull Optional<String> value) throws Exception {
                         if (value.isPresent()) {
                             MainPresenter.this.selectedEntryDateOptional = value;
-                            MainPresenter.this.view.get().showDetail(value.get());
+                            MainPresenter.this.view.get().switchDetail(value.get());
                             updateShareButtonForDetail(Optional.<EntryDetail>empty());
                         }
                     }
@@ -61,23 +61,23 @@ public class MainPresenter implements Presenter<MainView> {
         if (!this.view.isPresent()) return; // do nothing
         this.selectedEntryDateOptional = selectedDateOptional;
         if (selectedDateOptional.isPresent()) {
-            this.view.get().showDetail(selectedDateOptional.get());
+            this.view.get().switchDetail(selectedDateOptional.get());
             this.view.get().updateShareButton(Optional.<String>empty(), Optional.<String>empty());
         } else {
-            this.view.get().showList();
+            this.view.get().switchList("blog.bouzuya.net");
             updateShareButtonForList();
         }
     }
 
     public void onSwitchDetail() {
         if (!selectedEntryDateOptional.isPresent()) return;
-        this.view.get().showDetail(selectedEntryDateOptional.get());
+        this.view.get().switchDetail(selectedEntryDateOptional.get());
         if (!entryDetailOptional.isPresent()) return;
         updateShareButtonForDetail(entryDetailOptional);
     }
 
     public void onSwitchList() {
-        this.view.get().showList();
+        this.view.get().switchList("blog.bouzuya.net");
         updateShareButtonForList();
     }
 
