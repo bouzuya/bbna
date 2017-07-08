@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import timber.log.Timber;
 
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
     @SuppressWarnings("WeakerAccess")
@@ -77,28 +76,8 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
             }
         };
         entryListView.setAdapter(adapter);
-        showLoading();
         presenter.onStart();
         return view;
-    }
-
-    @Override
-    public void showEntryList(EntryList entryList) {
-        View view = EntryListFragment.this.getView();
-        if (view == null) return;
-        adapter.changeDataSet(entryList);
-        adapter.notifyDataSetChanged();
-        String message = "load " + entryList.size() + " entries";
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void showError(Throwable e) {
-        View view = EntryListFragment.this.getView();
-        if (view == null) return;
-        Timber.e("showEntryList: ", e);
-        String message = "load error";
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -123,8 +102,21 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
+    public void showEntryList(EntryList entryList) {
+        adapter.changeDataSet(entryList);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void showLoading() {
         if (progressBar != null)
             progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showMessage(String s) {
+        View view = EntryListFragment.this.getView();
+        if (view == null) return;
+        Snackbar.make(view, s, Snackbar.LENGTH_LONG).show();
     }
 }

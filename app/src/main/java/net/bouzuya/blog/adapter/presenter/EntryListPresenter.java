@@ -16,6 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class EntryListPresenter implements Presenter<EntryListView> {
     private final EntryRepository entryRepository;
@@ -72,18 +73,23 @@ public class EntryListPresenter implements Presenter<EntryListView> {
                 .subscribe(new SingleObserver<EntryList>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
+                        view.showLoading();
                     }
 
                     @Override
                     public void onSuccess(@NonNull EntryList entryList) {
+                        if (view == null) return;
                         view.hideLoading();
+                        view.showMessage("load " + entryList.size() + " entries");
                         view.showEntryList(entryList);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        if (view == null) return;
+                        Timber.e("showEntryList: ", e);
                         view.hideLoading();
-                        view.showError(e);
+                        view.showMessage("load error");
                     }
                 });
     }
