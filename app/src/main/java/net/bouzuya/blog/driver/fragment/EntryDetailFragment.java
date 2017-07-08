@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +22,17 @@ import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
-import net.bouzuya.blog.driver.loader.EntryDetailLoader;
 import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
-import net.bouzuya.blog.entity.Result;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class EntryDetailFragment extends Fragment implements EntryDetailView {
@@ -138,72 +136,39 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     @Override
     public void loadEntryDetail(Optional<String> selectedDateOptional) {
         webView.setVisibility(View.INVISIBLE);
-        initEntryDetailLoader(selectedDateOptional);
-    }
+        presenter.loadEntryDetail(selectedDateOptional)
+                .subscribe(new SingleObserver<EntryDetail>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                    }
 
-    @Override
-    public void showEntryDetail(Result<EntryDetail> entryDetail) {
-        Timber.d("onLoadEntryDetailFinished: ");
-        View view = this.getView();
-        if (view == null) return;
-        if (entryDetail.isOk()) {
-            Timber.d("onLoadEntryDetailFinished: isOk");
-            EntryDetail d = entryDetail.getValue();
-            webView.loadData(toHtmlString(d), "text/html; charset=UTF-8", "UTF-8");
-            String message = "load " + d.getId().toISO8601DateString();
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-        } else {
-            EntryDetailView entryDetailView = this;
-            entryDetailView.hideLoading();
-            Exception e = entryDetail.getException();
-            Timber.e("onLoadEntryDetailFinished: ", e);
-            String message = "load error";
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-        }
+                    @Override
+                    public void onSuccess(@io.reactivex.annotations.NonNull EntryDetail entryDetail) {
+                        View view = EntryDetailFragment.this.getView();
+                        if (view == null) return;
+                        EntryDetail d = entryDetail;
+                        webView.loadData(toHtmlString(d), "text/html; charset=UTF-8", "UTF-8");
+                        String message = "load " + d.getId().toISO8601DateString();
+                        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                        View view = EntryDetailFragment.this.getView();
+                        if (view == null) return;
+                        EntryDetailView entryDetailView = EntryDetailFragment.this;
+                        entryDetailView.hideLoading();
+                        Timber.e("onLoadEntryDetailFinished: ", e);
+                        String message = "load error";
+                        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+                    }
+                });
     }
 
     @Override
     public void showLoading() {
         if (this.progressBar == null) return;
         this.progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void initEntryDetailLoader(Optional<String> dateOptional) {
-        LoaderManager loaderManager = getLoaderManager();
-        Bundle bundle = new Bundle();
-        bundle.putString("date", dateOptional.orElse(null)); // TODO
-        LoaderManager.LoaderCallbacks<Result<EntryDetail>> callbacks =
-                new LoaderManager.LoaderCallbacks<Result<EntryDetail>>() {
-                    @Override
-                    public Loader<Result<EntryDetail>> onCreateLoader(int id, Bundle args) {
-                        if (id != ENTRY_DETAIL_LOADER_ID) throw new AssertionError();
-                        return new EntryDetailLoader(
-                                EntryDetailFragment.this.getContext(),
-                                entryRepository,
-                                Optional.ofNullable(args.getString("date"))
-                        );
-                    }
-
-                    @Override
-                    public void onLoadFinished(
-                            Loader<Result<EntryDetail>> loader,
-                            Result<EntryDetail> data
-                    ) {
-                        EntryDetailView entryDetailView = EntryDetailFragment.this;
-                        entryDetailView.showEntryDetail(data);
-                        if (data.isOk()) {
-                            presenter.onLoadFinished(Optional.of(data.getValue()));
-                        } else {
-                            presenter.onLoadFinished(Optional.<EntryDetail>empty());
-                        }
-                    }
-
-                    @Override
-                    public void onLoaderReset(Loader<Result<EntryDetail>> loader) {
-                        // do nothing
-                    }
-                };
-        loaderManager.restartLoader(ENTRY_DETAIL_LOADER_ID, bundle, callbacks);
     }
 
     @NonNull

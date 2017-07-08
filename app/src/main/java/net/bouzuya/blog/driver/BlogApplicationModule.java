@@ -42,9 +42,10 @@ class BlogApplicationModule {
     @Provides
     EntryDetailPresenter providesEntryDetailPresenter(
             EntryDetailListener entryDetailListener,
+            EntryRepository entryRepository,
             SelectedDateListener selectedDateListener
     ) {
-        return new EntryDetailPresenter(entryDetailListener, selectedDateListener);
+        return new EntryDetailPresenter(entryDetailListener, entryRepository, selectedDateListener);
     }
 
     @Provides
