@@ -7,13 +7,13 @@ import static org.junit.Assert.assertThat;
 
 public class EntryListTest {
     @Test
-    public void empty() throws Exception {
+    public void testEmpty() throws Exception {
         EntryList empty = EntryList.empty();
         assertThat(empty.size(), is(0));
     }
 
     @Test
-    public void fromEntryArray() throws Exception {
+    public void testFromEntryArray() throws Exception {
         Entry entry1 = Entry.of(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
         Entry entry2 = Entry.of(EntryId.fromISO8601DateString("2006-01-03"), "title 2");
         Entry[] entryArray = new Entry[]{entry1, entry2};
@@ -24,7 +24,7 @@ public class EntryListTest {
     }
 
     @Test
-    public void get() throws Exception {
+    public void testGet() throws Exception {
         Entry entry1 = Entry.of(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
         Entry[] entryArray = new Entry[]{entry1};
         EntryList entryList = EntryList.fromEntryArray(entryArray);
@@ -33,7 +33,7 @@ public class EntryListTest {
     }
 
     @Test
-    public void getLatestEntry() throws Exception {
+    public void testGetLatestEntry() throws Exception {
         Entry entry1 = Entry.of(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
         Entry entry2 = Entry.of(EntryId.fromISO8601DateString("2006-01-03"), "title 2");
         Entry[] entryArray = new Entry[]{entry1, entry2};
@@ -42,7 +42,7 @@ public class EntryListTest {
     }
 
     @Test
-    public void size() throws Exception {
+    public void testSize() throws Exception {
         Entry entry1 = Entry.of(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
         Entry entry2 = Entry.of(EntryId.fromISO8601DateString("2006-01-03"), "title 2");
         Entry[] entryArray = new Entry[]{entry1, entry2};
