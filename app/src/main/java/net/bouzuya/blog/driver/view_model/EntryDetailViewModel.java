@@ -1,4 +1,4 @@
-package net.bouzuya.blog.driver.data;
+package net.bouzuya.blog.driver.view_model;
 
 import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.entity.EntryDetail;
@@ -15,11 +15,11 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class EntryDetailListener {
+public class EntryDetailViewModel {
     private final EntryRepository entryRepository;
     private final BehaviorSubject<Optional<EntryDetail>> subject; // mutable
 
-    public EntryDetailListener(EntryRepository entryRepository) {
+    public EntryDetailViewModel(EntryRepository entryRepository) {
         this.entryRepository = entryRepository;
         this.subject = BehaviorSubject.createDefault(Optional.<EntryDetail>empty());
     }

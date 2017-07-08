@@ -1,7 +1,7 @@
 package net.bouzuya.blog.adapter.presenter;
 
 import net.bouzuya.blog.app.repository.EntryRepository;
-import net.bouzuya.blog.driver.data.SelectedDateListener;
+import net.bouzuya.blog.driver.view_model.EntryListViewModel;
 import net.bouzuya.blog.driver.view.EntryListView;
 import net.bouzuya.blog.entity.Entry;
 import net.bouzuya.blog.entity.EntryList;
@@ -17,15 +17,15 @@ import io.reactivex.schedulers.Schedulers;
 
 public class EntryListPresenter implements Presenter<EntryListView> {
     private final EntryRepository entryRepository;
-    private final SelectedDateListener selectedDateListener;
+    private final EntryListViewModel entryListViewModel;
     private EntryListView view;
 
     public EntryListPresenter(
             EntryRepository entryRepository,
-            SelectedDateListener selectedDateListener
+            EntryListViewModel entryListViewModel
     ) {
         this.entryRepository = entryRepository;
-        this.selectedDateListener = selectedDateListener;
+        this.entryListViewModel = entryListViewModel;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class EntryListPresenter implements Presenter<EntryListView> {
 
     public void onSelectEntry(Entry entry) {
         String date = entry.getId().toISO8601DateString();
-        selectedDateListener.set(Optional.of(date));
+        entryListViewModel.set(Optional.of(date));
     }
 
     public Single<EntryList> loadEntryList() {

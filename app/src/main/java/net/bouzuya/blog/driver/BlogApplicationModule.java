@@ -6,8 +6,8 @@ import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
 import net.bouzuya.blog.adapter.presenter.EntryListPresenter;
 import net.bouzuya.blog.adapter.presenter.MainPresenter;
 import net.bouzuya.blog.app.repository.EntryRepository;
-import net.bouzuya.blog.driver.data.EntryDetailListener;
-import net.bouzuya.blog.driver.data.SelectedDateListener;
+import net.bouzuya.blog.driver.view_model.EntryDetailViewModel;
+import net.bouzuya.blog.driver.view_model.EntryListViewModel;
 import net.bouzuya.blog.driver.repository.EntryRepositoryImpl;
 import net.bouzuya.blog.driver.repository.request.parser.EntryDetailResponseParser;
 import net.bouzuya.blog.driver.repository.request.parser.EntryListResponseParser;
@@ -37,38 +37,38 @@ class BlogApplicationModule {
 
     @Provides
     @Singleton
-    EntryDetailListener providesEntryDetailListener(EntryRepository entryRepository) {
-        return new EntryDetailListener(entryRepository);
+    EntryDetailViewModel providesEntryDetailListener(EntryRepository entryRepository) {
+        return new EntryDetailViewModel(entryRepository);
     }
 
     @Provides
     EntryDetailPresenter providesEntryDetailPresenter(
-            EntryDetailListener entryDetailListener,
-            SelectedDateListener selectedDateListener
+            EntryDetailViewModel entryDetailViewModel,
+            EntryListViewModel entryListViewModel
     ) {
-        return new EntryDetailPresenter(entryDetailListener, selectedDateListener);
+        return new EntryDetailPresenter(entryDetailViewModel, entryListViewModel);
     }
 
     @Provides
     EntryListPresenter providesEntryListPresenter(
             EntryRepository entryRepository,
-            SelectedDateListener selectedDateListener
+            EntryListViewModel entryListViewModel
     ) {
-        return new EntryListPresenter(entryRepository, selectedDateListener);
+        return new EntryListPresenter(entryRepository, entryListViewModel);
     }
 
     @Provides
     MainPresenter providesMainPresenter(
-            EntryDetailListener entryDetailListener,
-            SelectedDateListener selectedDateListener
+            EntryDetailViewModel entryDetailViewModel,
+            EntryListViewModel entryListViewModel
     ) {
-        return new MainPresenter(entryDetailListener, selectedDateListener);
+        return new MainPresenter(entryDetailViewModel, entryListViewModel);
     }
 
     @Provides
     @Singleton
-    SelectedDateListener providesSelectedDateListener(BlogPreferences preferences) {
-        return new SelectedDateListener(preferences);
+    EntryListViewModel providesSelectedDateListener(BlogPreferences preferences) {
+        return new EntryListViewModel(preferences);
     }
 
     @Provides

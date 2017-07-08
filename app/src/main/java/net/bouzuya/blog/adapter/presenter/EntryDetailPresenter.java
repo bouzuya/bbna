@@ -1,7 +1,7 @@
 package net.bouzuya.blog.adapter.presenter;
 
-import net.bouzuya.blog.driver.data.EntryDetailListener;
-import net.bouzuya.blog.driver.data.SelectedDateListener;
+import net.bouzuya.blog.driver.view_model.EntryDetailViewModel;
+import net.bouzuya.blog.driver.view_model.EntryListViewModel;
 import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
@@ -13,18 +13,18 @@ import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 public class EntryDetailPresenter implements Presenter<EntryDetailView> {
-    private final EntryDetailListener entryDetailListener;
-    private final SelectedDateListener selectedDateListener;
+    private final EntryDetailViewModel entryDetailViewModel;
+    private final EntryListViewModel entryListViewModel;
 
     private Optional<EntryDetailView> view;
     private CompositeDisposable subscriptions;
 
     public EntryDetailPresenter(
-            EntryDetailListener entryDetailListener,
-            SelectedDateListener selectedDateListener
+            EntryDetailViewModel entryDetailViewModel,
+            EntryListViewModel entryListViewModel
     ) {
-        this.entryDetailListener = entryDetailListener;
-        this.selectedDateListener = selectedDateListener;
+        this.entryDetailViewModel = entryDetailViewModel;
+        this.entryListViewModel = entryListViewModel;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
         this.subscriptions = new CompositeDisposable();
         this.view = Optional.of(view);
         this.subscriptions.add(
-                this.selectedDateListener.observable().subscribe(new Consumer<Optional<String>>() {
+                this.entryListViewModel.observable().subscribe(new Consumer<Optional<String>>() {
                     @Override
                     public void accept(@NonNull Optional<String> selectedDate) throws Exception {
                         Timber.d("onChange: %s", selectedDate);
@@ -57,10 +57,10 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
     }
 
     public void onStart() {
-        this.view.get().loadEntryDetail(selectedDateListener.get());
+        this.view.get().loadEntryDetail(entryListViewModel.get());
     }
 
     public Single<EntryDetail> loadEntryDetail(final Optional<String> dateOptional) {
-        return entryDetailListener.load(dateOptional);
+        return entryDetailViewModel.load(dateOptional);
     }
 }

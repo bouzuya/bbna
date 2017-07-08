@@ -1,7 +1,7 @@
 package net.bouzuya.blog.adapter.presenter;
 
-import net.bouzuya.blog.driver.data.EntryDetailListener;
-import net.bouzuya.blog.driver.data.SelectedDateListener;
+import net.bouzuya.blog.driver.view_model.EntryDetailViewModel;
+import net.bouzuya.blog.driver.view_model.EntryListViewModel;
 import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
@@ -11,20 +11,20 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 
 public class MainPresenter implements Presenter<MainView> {
-    private final EntryDetailListener entryDetailListener;
-    private final SelectedDateListener selectedDateListener;
+    private final EntryDetailViewModel entryDetailViewModel;
+    private final EntryListViewModel entryListViewModel;
     private Optional<MainView> view;
     private Optional<EntryDetail> entryDetailOptional;
     private Optional<String> selectedEntryDateOptional;
     private CompositeDisposable subscriptions;
 
     public MainPresenter(
-            EntryDetailListener entryDetailListener,
-            SelectedDateListener selectedDateListener
+            EntryDetailViewModel entryDetailViewModel,
+            EntryListViewModel entryListViewModel
     ) {
-        this.entryDetailListener = entryDetailListener;
+        this.entryDetailViewModel = entryDetailViewModel;
         this.entryDetailOptional = Optional.empty();
-        this.selectedDateListener = selectedDateListener;
+        this.entryListViewModel = entryListViewModel;
         this.selectedEntryDateOptional = Optional.empty();
     }
 
@@ -33,7 +33,7 @@ public class MainPresenter implements Presenter<MainView> {
         this.subscriptions = new CompositeDisposable();
         this.view = Optional.of(view);
         this.subscriptions.add(
-                this.entryDetailListener.observable().subscribe(new Consumer<Optional<EntryDetail>>() {
+                this.entryDetailViewModel.observable().subscribe(new Consumer<Optional<EntryDetail>>() {
                     @Override
                     public void accept(@NonNull Optional<EntryDetail> value) throws Exception {
                         if (value.isPresent()) {
@@ -44,7 +44,7 @@ public class MainPresenter implements Presenter<MainView> {
                     }
                 }));
         this.subscriptions.add(
-                this.selectedDateListener.observable().subscribe(new Consumer<Optional<String>>() {
+                this.entryListViewModel.observable().subscribe(new Consumer<Optional<String>>() {
                     @Override
                     public void accept(@NonNull Optional<String> value) throws Exception {
                         if (value.isPresent()) {
