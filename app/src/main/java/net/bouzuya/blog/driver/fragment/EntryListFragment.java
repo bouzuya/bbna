@@ -13,7 +13,6 @@ import android.widget.ProgressBar;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.EntryListPresenter;
-import net.bouzuya.blog.app.repository.EntryRepository;
 import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.adapter.EntryAdapter;
 import net.bouzuya.blog.driver.view.EntryListView;
@@ -40,9 +39,6 @@ public class EntryListFragment extends Fragment implements View.OnClickListener,
     @SuppressWarnings("WeakerAccess")
     @Inject
     EntryListPresenter presenter;
-    @SuppressWarnings("WeakerAccess")
-    @Inject
-    EntryRepository entryRepository;
     private EntryAdapter adapter;
     private Unbinder unbinder;
 
