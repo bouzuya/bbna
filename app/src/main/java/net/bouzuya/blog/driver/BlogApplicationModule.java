@@ -37,17 +37,16 @@ class BlogApplicationModule {
 
     @Provides
     @Singleton
-    EntryDetailListener providesEntryDetailListener() {
-        return new EntryDetailListener();
+    EntryDetailListener providesEntryDetailListener(EntryRepository entryRepository) {
+        return new EntryDetailListener(entryRepository);
     }
 
     @Provides
     EntryDetailPresenter providesEntryDetailPresenter(
             EntryDetailListener entryDetailListener,
-            EntryRepository entryRepository,
             SelectedDateListener selectedDateListener
     ) {
-        return new EntryDetailPresenter(entryDetailListener, entryRepository, selectedDateListener);
+        return new EntryDetailPresenter(entryDetailListener, selectedDateListener);
     }
 
     @Provides
