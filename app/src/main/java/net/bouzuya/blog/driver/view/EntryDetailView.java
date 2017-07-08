@@ -1,11 +1,13 @@
 package net.bouzuya.blog.driver.view;
 
-import net.bouzuya.blog.entity.Optional;
+import net.bouzuya.blog.entity.EntryDetail;
 
 public interface EntryDetailView {
     void hideLoading();
 
     void showLoading();
 
-    void loadEntryDetail(Optional<String> selectedDate); // FIXME
+    void showEntryDetail(EntryDetail entryDetail);
+
+    void showError(Throwable e);
 }

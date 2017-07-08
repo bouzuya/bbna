@@ -23,15 +23,12 @@ import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
 import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.entity.EntryDetail;
-import net.bouzuya.blog.entity.Optional;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.SingleObserver;
-import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class EntryDetailFragment extends Fragment implements EntryDetailView {
@@ -126,37 +123,25 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
         this.progressBar.setVisibility(View.GONE);
     }
 
-    // FIXME: move to presenter
     @Override
-    public void loadEntryDetail(Optional<String> selectedDateOptional) {
-        if (webView != null) webView.setVisibility(View.INVISIBLE);
-        presenter.loadEntryDetail(selectedDateOptional)
-                .subscribe(new SingleObserver<EntryDetail>() {
-                    @Override
-                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
-                    }
+    public void showEntryDetail(EntryDetail entryDetail) {
+        View view = EntryDetailFragment.this.getView();
+        if (view == null) return;
+        EntryDetail d = entryDetail;
+        webView.loadData(toHtmlString(d), "text/html; charset=UTF-8", "UTF-8");
+        String message = "load " + d.getId().toISO8601DateString();
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+    }
 
-                    @Override
-                    public void onSuccess(@io.reactivex.annotations.NonNull EntryDetail entryDetail) {
-                        View view = EntryDetailFragment.this.getView();
-                        if (view == null) return;
-                        EntryDetail d = entryDetail;
-                        webView.loadData(toHtmlString(d), "text/html; charset=UTF-8", "UTF-8");
-                        String message = "load " + d.getId().toISO8601DateString();
-                        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                        View view = EntryDetailFragment.this.getView();
-                        if (view == null) return;
-                        EntryDetailView entryDetailView = EntryDetailFragment.this;
-                        entryDetailView.hideLoading();
-                        Timber.e("onLoadEntryDetailFinished: ", e);
-                        String message = "load error";
-                        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
-                    }
-                });
+    @Override
+    public void showError(Throwable e) {
+        View view = EntryDetailFragment.this.getView();
+        if (view == null) return;
+        EntryDetailView entryDetailView = EntryDetailFragment.this;
+        entryDetailView.hideLoading();
+        Timber.e("onLoadEntryDetailFinished: ", e);
+        String message = "load error";
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

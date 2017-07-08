@@ -1,14 +1,15 @@
 package net.bouzuya.blog.adapter.presenter;
 
+import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.driver.view_model.EntryDetailViewModel;
 import net.bouzuya.blog.driver.view_model.EntryListViewModel;
-import net.bouzuya.blog.driver.view.EntryDetailView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
-import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
@@ -40,7 +41,7 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
                         if (!EntryDetailPresenter.this.view.isPresent()) return; // do nothing
                         EntryDetailView entryDetailView = EntryDetailPresenter.this.view.get();
                         entryDetailView.showLoading();
-                        entryDetailView.loadEntryDetail(selectedDate);
+                        EntryDetailPresenter.this.loadEntryDetail(selectedDate);
                     }
                 }));
     }
@@ -57,10 +58,27 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
     }
 
     public void onStart() {
-        this.view.get().loadEntryDetail(entryListViewModel.get());
+        loadEntryDetail(entryListViewModel.get());
     }
 
-    public Single<EntryDetail> loadEntryDetail(final Optional<String> dateOptional) {
-        return entryDetailViewModel.load(dateOptional);
+    private void loadEntryDetail(Optional<String> dateOptional) {
+        entryDetailViewModel.load(dateOptional)
+                .subscribe(new SingleObserver<EntryDetail>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(@io.reactivex.annotations.NonNull EntryDetail entryDetail) {
+                        if (!view.isPresent()) return;
+                        view.get().showEntryDetail(entryDetail);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                        if (!view.isPresent()) return;
+                        view.get().showError(e);
+                    }
+                });
     }
 }
