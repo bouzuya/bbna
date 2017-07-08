@@ -36,7 +36,6 @@ public class MainPresenter implements Presenter<MainView> {
                         if (value.isPresent()) {
                             updateShareButtonForDetail(value);
                         }
-
                     }
                 }),
                 this.entryListViewModel.observable().subscribe(new Consumer<Optional<String>>() {
