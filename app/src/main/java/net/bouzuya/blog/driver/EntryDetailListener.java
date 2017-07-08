@@ -4,6 +4,7 @@ import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class EntryDetailListener {
@@ -22,6 +23,6 @@ public class EntryDetailListener {
     }
 
     public Observable<Optional<EntryDetail>> observable() {
-        return this.subject;
+        return this.subject.observeOn(AndroidSchedulers.mainThread());
     }
 }
