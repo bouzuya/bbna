@@ -3,6 +3,8 @@ package net.bouzuya.blog.driver;
 import net.bouzuya.blog.entity.Optional;
 
 import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class SelectedDateListener {
@@ -11,21 +13,25 @@ public class SelectedDateListener {
 
     public SelectedDateListener(BlogPreferences preferences) {
         this.preferences = preferences;
-        this.subject = BehaviorSubject.create();
+        this.subject = BehaviorSubject.createDefault(this.preferences.getSelectedDate());
+        // TODO: dispose
+        this.subject.distinctUntilChanged().subscribe(new Consumer<Optional<String>>() {
+            @Override
+            public void accept(@NonNull Optional<String> selectedDate) throws Exception {
+                SelectedDateListener.this.preferences.setSelectedDate(selectedDate.orElse(null));
+            }
+        });
     }
 
     public Optional<String> get() {
-        return this.preferences.getSelectedDate();
+        return this.subject.getValue();
     }
 
     public void set(Optional<String> selectedDate) {
-        Optional<String> oldSelectedDate = this.preferences.getSelectedDate();
-        if (oldSelectedDate.equals(selectedDate)) return; // not changed
-        this.preferences.setSelectedDate(selectedDate.orElse(null));
         this.subject.onNext(selectedDate);
     }
 
     public Observable<Optional<String>> observable() {
-        return this.subject;
+        return this.subject.distinctUntilChanged();
     }
 }
