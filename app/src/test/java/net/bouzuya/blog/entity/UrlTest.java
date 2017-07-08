@@ -7,7 +7,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UrlTest {
-
     @Test
     public void test() {
         Optional<Url> nullUrl = Url.parse(null);
@@ -29,7 +28,7 @@ public class UrlTest {
     }
 
     @Test
-    public void test_getters() {
+    public void testGetters() {
         Url url = Url.parse("https://blog.bouzuya.net/2006/01/02/").get();
         assertThat(url.getProtocol(), is("https:"));
         assertThat(url.getHost(), is("blog.bouzuya.net"));
