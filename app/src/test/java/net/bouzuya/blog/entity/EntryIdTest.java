@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 
 public class EntryIdTest {
     @Test
-    public void compareTo() throws Exception {
+    public void testCompareTo() throws Exception {
         EntryId entryId1 = EntryId.fromISO8601DateString("2006-01-01");
         EntryId entryId2 = EntryId.fromISO8601DateString("2006-01-02");
         assertThat(entryId1.compareTo(entryId2), is("2006-01-01".compareTo("2006-01-02"))); // < 0
@@ -19,7 +19,7 @@ public class EntryIdTest {
     }
 
     @Test
-    public void equals() throws Exception {
+    public void testEquals() throws Exception {
         EntryId entryId11 = EntryId.fromISO8601DateString("2006-01-01");
         EntryId entryId12 = EntryId.fromISO8601DateString("2006-01-01");
         EntryId entryId2 = EntryId.fromISO8601DateString("2006-01-02");
@@ -29,7 +29,7 @@ public class EntryIdTest {
     }
 
     @Test
-    public void fromISO8601DateString() throws Exception {
+    public void testFromISO8601DateString() throws Exception {
         EntryId entryId = EntryId.fromISO8601DateString("2006-01-02");
         assertThat(entryId.toISO8601DateString(), is("2006-01-02"));
         try {
