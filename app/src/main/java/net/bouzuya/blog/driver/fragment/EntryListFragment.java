@@ -31,8 +31,6 @@ import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class EntryListFragment extends Fragment implements View.OnClickListener, EntryListView {
-    private static final int ENTRY_LIST_LOADER_ID = 0;
-
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.entry_list)
     RecyclerView entryListView;

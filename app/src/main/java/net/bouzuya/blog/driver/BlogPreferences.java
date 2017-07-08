@@ -21,11 +21,6 @@ public class BlogPreferences {
         return Optional.ofNullable(preferences.getString(PREF_KEY_LATEST_DATE, null));
     }
 
-    public Optional<String> getSelectedDate() {
-        SharedPreferences preferences = getPreferences();
-        return Optional.ofNullable(preferences.getString(PREF_KEY_SELECTED_DATE, null));
-    }
-
     public void setLatestDate(String latestDate) {
         SharedPreferences preferences = getPreferences();
         boolean isOk = preferences.edit().putString(PREF_KEY_LATEST_DATE, latestDate).commit();
@@ -33,6 +28,11 @@ public class BlogPreferences {
             // TODO
             throw new IllegalStateException();
         }
+    }
+
+    public Optional<String> getSelectedDate() {
+        SharedPreferences preferences = getPreferences();
+        return Optional.ofNullable(preferences.getString(PREF_KEY_SELECTED_DATE, null));
     }
 
     public void setSelectedDate(String selectedDate) {

@@ -36,7 +36,6 @@ import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class EntryDetailFragment extends Fragment implements EntryDetailView {
-    private static final int ENTRY_DETAIL_LOADER_ID = 1;
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.indeterminate_bar)
     ProgressBar progressBar;

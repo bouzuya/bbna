@@ -51,7 +51,6 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
                         EntryDetailView entryDetailView = EntryDetailPresenter.this.view.get();
                         entryDetailView.showLoading();
                         entryDetailView.loadEntryDetail(selectedDate);
-
                     }
                 }));
     }
@@ -67,10 +66,6 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
         this.subscriptions.dispose();
     }
 
-    public void onLoadFinished(Optional<EntryDetail> entryDetailOptional) {
-        this.entryDetailListener.set(entryDetailOptional);
-    }
-
     public void onStart() {
         this.view.get().loadEntryDetail(selectedDateListener.get());
     }
@@ -84,6 +79,7 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
                         EntryId entryId = EntryId.fromISO8601DateString(dateOptional.get());
                         Result<EntryDetail> result = entryRepository.get(entryId);
                         if (result.isOk()) {
+                            entryDetailListener.set(Optional.of(result.getValue()));
                             e.onSuccess(result.getValue());
                         } else {
                             e.onError(result.getException());
