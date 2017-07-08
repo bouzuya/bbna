@@ -135,7 +135,7 @@ public class EntryDetailFragment extends Fragment implements EntryDetailView {
     // FIXME: move to presenter
     @Override
     public void loadEntryDetail(Optional<String> selectedDateOptional) {
-        webView.setVisibility(View.INVISIBLE);
+        if (webView != null) webView.setVisibility(View.INVISIBLE);
         presenter.loadEntryDetail(selectedDateOptional)
                 .subscribe(new SingleObserver<EntryDetail>() {
                     @Override
