@@ -29,9 +29,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity
-        implements MainView {
-
+public class MainActivity extends AppCompatActivity implements MainView {
     private static final int POSITION_LIST = 0;
     private static final int POSITION_DETAIL = 1;
 
@@ -77,6 +75,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void switchDetail(String title) {
+        if (viewPager == null) return;
         viewPager.setCurrentItem(POSITION_DETAIL);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) throw new IllegalStateException();
@@ -86,6 +85,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void switchList(String title) {
+        if (viewPager == null) return;
         viewPager.setCurrentItem(POSITION_LIST);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) throw new IllegalStateException();
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((BlogApplication) getApplication()).getComponent().inject(this);
+        presenter.onAttach(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -131,9 +132,9 @@ public class MainActivity extends AppCompatActivity
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
+                if (position == POSITION_LIST) {
                     presenter.onSwitchList();
-                } else if (position == 1) {
+                } else if (position == POSITION_DETAIL) {
                     presenter.onSwitchDetail();
                 } else {
                     throw new AssertionError();
@@ -147,7 +148,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.onAttach(this);
         presenter.onStart(getSelectedDateFromIntentDataOrExtra());
     }
 

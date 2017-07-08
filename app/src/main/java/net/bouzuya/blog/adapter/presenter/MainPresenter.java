@@ -14,8 +14,6 @@ public class MainPresenter implements Presenter<MainView> {
     private final EntryDetailViewModel entryDetailViewModel;
     private final EntryListViewModel entryListViewModel;
     private Optional<MainView> view;
-    private Optional<EntryDetail> entryDetailOptional;
-    private Optional<String> selectedEntryDateOptional;
     private CompositeDisposable subscriptions;
 
     public MainPresenter(
@@ -23,32 +21,26 @@ public class MainPresenter implements Presenter<MainView> {
             EntryListViewModel entryListViewModel
     ) {
         this.entryDetailViewModel = entryDetailViewModel;
-        this.entryDetailOptional = Optional.empty();
         this.entryListViewModel = entryListViewModel;
-        this.selectedEntryDateOptional = Optional.empty();
     }
 
     @Override
     public void onAttach(MainView view) {
-        this.subscriptions = new CompositeDisposable();
         this.view = Optional.of(view);
-        this.subscriptions.add(
+        this.subscriptions = new CompositeDisposable(
                 this.entryDetailViewModel.observable().subscribe(new Consumer<Optional<EntryDetail>>() {
                     @Override
                     public void accept(@NonNull Optional<EntryDetail> value) throws Exception {
                         if (value.isPresent()) {
-                            MainPresenter.this.entryDetailOptional = value;
                             updateShareButtonForDetail(value);
                         }
 
                     }
-                }));
-        this.subscriptions.add(
+                }),
                 this.entryListViewModel.observable().subscribe(new Consumer<Optional<String>>() {
                     @Override
                     public void accept(@NonNull Optional<String> value) throws Exception {
                         if (value.isPresent()) {
-                            MainPresenter.this.selectedEntryDateOptional = value;
                             MainPresenter.this.view.get().switchDetail(value.get());
                             updateShareButtonForDetail(Optional.<EntryDetail>empty());
                         }
@@ -59,8 +51,8 @@ public class MainPresenter implements Presenter<MainView> {
 
     public void onStart(Optional<String> selectedDateOptional) {
         if (!this.view.isPresent()) return; // do nothing
-        this.selectedEntryDateOptional = selectedDateOptional;
         if (selectedDateOptional.isPresent()) {
+            this.entryListViewModel.set(selectedDateOptional);
             this.view.get().switchDetail(selectedDateOptional.get());
             this.view.get().updateShareButton(Optional.<String>empty(), Optional.<String>empty());
         } else {
@@ -70,10 +62,10 @@ public class MainPresenter implements Presenter<MainView> {
     }
 
     public void onSwitchDetail() {
-        if (!selectedEntryDateOptional.isPresent()) return;
-        this.view.get().switchDetail(selectedEntryDateOptional.get());
-        if (!entryDetailOptional.isPresent()) return;
-        updateShareButtonForDetail(entryDetailOptional);
+        if (!entryListViewModel.get().isPresent()) return;
+        this.view.get().switchDetail(entryListViewModel.get().get());
+        if (!entryDetailViewModel.get().isPresent()) return;
+        updateShareButtonForDetail(entryDetailViewModel.get());
     }
 
     public void onSwitchList() {
