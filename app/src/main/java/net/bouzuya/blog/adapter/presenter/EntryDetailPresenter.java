@@ -1,6 +1,6 @@
 package net.bouzuya.blog.adapter.presenter;
 
-import net.bouzuya.blog.driver.view.EntryDetailView;
+import net.bouzuya.blog.adapter.view.EntryDetailView;
 import net.bouzuya.blog.driver.view_model.EntryDetailViewModel;
 import net.bouzuya.blog.driver.view_model.EntryListViewModel;
 import net.bouzuya.blog.entity.EntryDetail;

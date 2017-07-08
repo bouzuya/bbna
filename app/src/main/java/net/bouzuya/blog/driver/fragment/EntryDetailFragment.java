@@ -19,8 +19,8 @@ import android.widget.ProgressBar;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
+import net.bouzuya.blog.adapter.view.EntryDetailView;
 import net.bouzuya.blog.driver.BlogApplication;
-import net.bouzuya.blog.driver.view.EntryDetailView;
 
 import javax.inject.Inject;
 

@@ -6,11 +6,11 @@ import net.bouzuya.blog.adapter.presenter.EntryDetailPresenter;
 import net.bouzuya.blog.adapter.presenter.EntryListPresenter;
 import net.bouzuya.blog.adapter.presenter.MainPresenter;
 import net.bouzuya.blog.app.repository.EntryRepository;
-import net.bouzuya.blog.driver.view_model.EntryDetailViewModel;
-import net.bouzuya.blog.driver.view_model.EntryListViewModel;
 import net.bouzuya.blog.driver.repository.EntryRepositoryImpl;
 import net.bouzuya.blog.driver.repository.request.parser.EntryDetailResponseParser;
 import net.bouzuya.blog.driver.repository.request.parser.EntryListResponseParser;
+import net.bouzuya.blog.driver.view_model.EntryDetailViewModel;
+import net.bouzuya.blog.driver.view_model.EntryListViewModel;
 
 import javax.inject.Singleton;
 

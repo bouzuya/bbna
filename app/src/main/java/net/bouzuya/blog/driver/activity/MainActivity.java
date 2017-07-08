@@ -14,11 +14,11 @@ import android.view.MenuItem;
 
 import net.bouzuya.blog.R;
 import net.bouzuya.blog.adapter.presenter.MainPresenter;
+import net.bouzuya.blog.adapter.view.MainView;
 import net.bouzuya.blog.driver.AlarmUtils;
 import net.bouzuya.blog.driver.BlogApplication;
 import net.bouzuya.blog.driver.fragment.EntryDetailFragment;
 import net.bouzuya.blog.driver.fragment.EntryListFragment;
-import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.Optional;
 
 import java.util.regex.Matcher;

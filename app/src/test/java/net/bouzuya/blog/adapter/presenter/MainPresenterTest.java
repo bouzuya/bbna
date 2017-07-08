@@ -1,6 +1,6 @@
 package net.bouzuya.blog.adapter.presenter;
 
-import net.bouzuya.blog.driver.view.MainView;
+import net.bouzuya.blog.adapter.view.MainView;
 import net.bouzuya.blog.entity.Optional;
 
 import org.junit.Test;

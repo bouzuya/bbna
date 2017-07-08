@@ -1,4 +1,4 @@
-package net.bouzuya.blog.driver.view;
+package net.bouzuya.blog.adapter.view;
 
 public interface EntryDetailView {
     void hideLoading();
