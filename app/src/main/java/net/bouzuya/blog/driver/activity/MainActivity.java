@@ -161,9 +161,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
+        super.onDestroy();
         presenter.onDetach();
-        super.onStop();
     }
 
     private Optional<String> getSelectedDateFromIntentDataOrExtra() {

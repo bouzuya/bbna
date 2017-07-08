@@ -33,6 +33,6 @@ public class EntryListViewModel {
     }
 
     public Observable<Optional<String>> observable() {
-        return this.subject.distinctUntilChanged();
+        return this.subject;
     }
 }
