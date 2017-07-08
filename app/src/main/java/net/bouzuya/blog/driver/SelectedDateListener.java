@@ -2,16 +2,16 @@ package net.bouzuya.blog.driver;
 
 import net.bouzuya.blog.entity.Optional;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
 public class SelectedDateListener {
     private final BlogPreferences preferences;
-    private final List<OnChangeListener<Optional<String>>> listeners; // mutable
+    private final BehaviorSubject<Optional<String>> subject; // mutable
 
     public SelectedDateListener(BlogPreferences preferences) {
         this.preferences = preferences;
-        this.listeners = new ArrayList<>();
+        this.subject = BehaviorSubject.create();
     }
 
     public Optional<String> get() {
@@ -22,20 +22,10 @@ public class SelectedDateListener {
         Optional<String> oldSelectedDate = this.preferences.getSelectedDate();
         if (oldSelectedDate.equals(selectedDate)) return; // not changed
         this.preferences.setSelectedDate(selectedDate.orElse(null));
-        for (OnChangeListener<Optional<String>> listener : this.listeners) {
-            listener.onChange(selectedDate);
-        }
+        this.subject.onNext(selectedDate);
     }
 
-    public void subscribe(OnChangeListener<Optional<String>> listener) {
-        this.listeners.add(listener);
-    }
-
-    public void unsubscribe(OnChangeListener<Optional<String>> listener) {
-        this.listeners.remove(listener);
-    }
-
-    public interface OnChangeListener<T> {
-        void onChange(T value);
+    public Observable<Optional<String>> observable() {
+        return this.subject;
     }
 }

@@ -14,6 +14,8 @@ import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -23,7 +25,7 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
     private final SelectedDateListener selectedDateListener;
 
     private Optional<EntryDetailView> view;
-    private SelectedDateListener.OnChangeListener<Optional<String>> onChangeListener;
+    private CompositeDisposable subscriptions;
 
     public EntryDetailPresenter(
             EntryDetailListener entryDetailListener,
@@ -37,20 +39,21 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
 
     @Override
     public void onAttach(EntryDetailView view) {
+        this.subscriptions = new CompositeDisposable();
         this.view = Optional.of(view);
+        this.subscriptions.add(
+                this.selectedDateListener.observable().subscribe(new Consumer<Optional<String>>() {
+                    @Override
+                    public void accept(@NonNull Optional<String> selectedDate) throws Exception {
+                        Timber.d("onChange: %s", selectedDate);
+                        if (!selectedDate.isPresent()) return; // do nothing
+                        if (!EntryDetailPresenter.this.view.isPresent()) return; // do nothing
+                        EntryDetailView entryDetailView = EntryDetailPresenter.this.view.get();
+                        entryDetailView.showLoading();
+                        entryDetailView.loadEntryDetail(selectedDate);
 
-        this.onChangeListener = new SelectedDateListener.OnChangeListener<Optional<String>>() {
-            @Override
-            public void onChange(Optional<String> selectedDate) {
-                Timber.d("onChange: %s", selectedDate);
-                if (!selectedDate.isPresent()) return; // do nothing
-                if (!EntryDetailPresenter.this.view.isPresent()) return; // do nothing
-                EntryDetailView entryDetailView = EntryDetailPresenter.this.view.get();
-                entryDetailView.showLoading();
-                entryDetailView.loadEntryDetail(selectedDate);
-            }
-        };
-        this.selectedDateListener.subscribe(this.onChangeListener);
+                    }
+                }));
     }
 
     @Override
@@ -61,7 +64,7 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
     @Override
     public void onDetach() {
         this.view = Optional.empty();
-        this.selectedDateListener.unsubscribe(this.onChangeListener);
+        this.subscriptions.dispose();
     }
 
     public void onLoadFinished(Optional<EntryDetail> entryDetailOptional) {

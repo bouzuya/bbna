@@ -6,14 +6,18 @@ import net.bouzuya.blog.driver.view.MainView;
 import net.bouzuya.blog.entity.EntryDetail;
 import net.bouzuya.blog.entity.Optional;
 
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+
 public class MainPresenter implements Presenter<MainView> {
     private final EntryDetailListener entryDetailListener;
     private final SelectedDateListener selectedDateListener;
     private Optional<MainView> view;
     private Optional<EntryDetail> entryDetailOptional;
     private Optional<String> selectedEntryDateOptional;
-    private SelectedDateListener.OnChangeListener<Optional<String>> onSelectedDateChangeListener;
     private EntryDetailListener.OnChangeListener<Optional<EntryDetail>> onEntryDetailChangeListener;
+    private CompositeDisposable subscriptions;
 
     public MainPresenter(
             EntryDetailListener entryDetailListener,
@@ -27,6 +31,7 @@ public class MainPresenter implements Presenter<MainView> {
 
     @Override
     public void onAttach(MainView view) {
+        this.subscriptions = new CompositeDisposable();
         this.view = Optional.of(view);
         this.onEntryDetailChangeListener =
                 new EntryDetailListener.OnChangeListener<Optional<EntryDetail>>() {
@@ -39,18 +44,18 @@ public class MainPresenter implements Presenter<MainView> {
                     }
                 };
         this.entryDetailListener.subscribe(this.onEntryDetailChangeListener);
-        this.onSelectedDateChangeListener =
-                new SelectedDateListener.OnChangeListener<Optional<String>>() {
+        this.subscriptions.add(
+                this.selectedDateListener.observable().subscribe(new Consumer<Optional<String>>() {
                     @Override
-                    public void onChange(Optional<String> value) {
+                    public void accept(@NonNull Optional<String> value) throws Exception {
                         if (value.isPresent()) {
                             MainPresenter.this.selectedEntryDateOptional = value;
                             MainPresenter.this.view.get().showDetail(value.get());
                             updateShareButtonForDetail(Optional.<EntryDetail>empty());
                         }
                     }
-                };
-        this.selectedDateListener.subscribe(this.onSelectedDateChangeListener);
+                })
+        );
     }
 
     public void onStart(Optional<String> selectedDateOptional) {
@@ -86,7 +91,7 @@ public class MainPresenter implements Presenter<MainView> {
     public void onDetach() {
         this.view = Optional.empty();
         this.entryDetailListener.unsubscribe(this.onEntryDetailChangeListener);
-        this.selectedDateListener.unsubscribe(this.onSelectedDateChangeListener);
+        this.subscriptions.dispose();
     }
 
     private void updateShareButtonForDetail(Optional<EntryDetail> entryDetailOptional) {
