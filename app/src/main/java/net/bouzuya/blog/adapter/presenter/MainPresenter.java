@@ -16,7 +16,6 @@ public class MainPresenter implements Presenter<MainView> {
     private Optional<MainView> view;
     private Optional<EntryDetail> entryDetailOptional;
     private Optional<String> selectedEntryDateOptional;
-    private EntryDetailListener.OnChangeListener<Optional<EntryDetail>> onEntryDetailChangeListener;
     private CompositeDisposable subscriptions;
 
     public MainPresenter(
@@ -33,17 +32,17 @@ public class MainPresenter implements Presenter<MainView> {
     public void onAttach(MainView view) {
         this.subscriptions = new CompositeDisposable();
         this.view = Optional.of(view);
-        this.onEntryDetailChangeListener =
-                new EntryDetailListener.OnChangeListener<Optional<EntryDetail>>() {
+        this.subscriptions.add(
+                this.entryDetailListener.observable().subscribe(new Consumer<Optional<EntryDetail>>() {
                     @Override
-                    public void onChange(Optional<EntryDetail> value) {
+                    public void accept(@NonNull Optional<EntryDetail> value) throws Exception {
                         if (value.isPresent()) {
                             MainPresenter.this.entryDetailOptional = value;
                             updateShareButtonForDetail(value);
                         }
+
                     }
-                };
-        this.entryDetailListener.subscribe(this.onEntryDetailChangeListener);
+                }));
         this.subscriptions.add(
                 this.selectedDateListener.observable().subscribe(new Consumer<Optional<String>>() {
                     @Override
@@ -90,7 +89,6 @@ public class MainPresenter implements Presenter<MainView> {
     @Override
     public void onDetach() {
         this.view = Optional.empty();
-        this.entryDetailListener.unsubscribe(this.onEntryDetailChangeListener);
         this.subscriptions.dispose();
     }
 
