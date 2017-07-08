@@ -62,6 +62,19 @@ public final class EntryDetail {
         return tags;
     }
 
+    @Override
+    public String toString() {
+        return "EntryDetail{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", data='" + data + '\'' +
+                ", html='" + html + '\'' +
+                ", minutes=" + minutes +
+                ", pubdate='" + pubdate + '\'' +
+                ", tags=" + tags +
+                '}';
+    }
+
     public static final class EntryDetailBuilder {
         private EntryId id;
         private String title;
