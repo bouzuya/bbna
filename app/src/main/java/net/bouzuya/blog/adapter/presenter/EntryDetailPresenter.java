@@ -62,23 +62,62 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
     }
 
     private void loadEntryDetail(Optional<String> dateOptional) {
-        entryDetailViewModel.load(dateOptional)
+        entryDetailViewModel
+                .load(dateOptional)
                 .subscribe(new SingleObserver<EntryDetail>() {
                     @Override
                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                        if (!view.isPresent()) return;
+                        view.get().showLoading();
                     }
 
                     @Override
                     public void onSuccess(@io.reactivex.annotations.NonNull EntryDetail entryDetail) {
                         if (!view.isPresent()) return;
-                        view.get().showEntryDetail(entryDetail);
+                        view.get().hideLoading();
+                        view.get().showMessage("load " + entryDetail.getId().toISO8601DateString());
+                        view.get().showEntryDetail(toHtmlString(entryDetail));
                     }
 
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                         if (!view.isPresent()) return;
-                        view.get().showError(e);
+                        Timber.e("onLoadEntryDetailFinished: ", e);
+                        view.get().hideLoading();
+                        view.get().showMessage("load error");
                     }
                 });
     }
+
+    private String toHtmlString(EntryDetail d) {
+        return new StringBuilder()
+                .append("<html>")
+                .append("<head></head>")
+                .append("<body>")
+                .append("<article>")
+                .append("<header>")
+                .append("<h1 class=\"title\">").append(d.getTitle()).append("</h1>")
+                // .append("<p class=\"pubdate\">").append(d.getPubdate()).append("</p>")
+                // .append("<p class=\"minutes\">").append(d.getMinutes()).append("</p>")
+                // .append(d.getTags().isEmpty() ? "" : "<ul class=\"tags\"><li>")
+                // .append(this.join("</li><li>", d.getTags()))
+                // .append(d.getTags().isEmpty() ? "" : "</li></ul>")
+                .append("</header>")
+                .append("<div class=\"body\">").append(d.getHtml()).append("</div>")
+                .append("</article>")
+                .append("</body>")
+                .append("</html>")
+                .toString();
+    }
+
+//    private String join(String delimiter, List<String> list) {
+//        if (list.isEmpty()) return "";
+//        StringBuilder builder = new StringBuilder();
+//        for (String item : list) {
+//            builder.append(delimiter).append(item);
+//        }
+//        return delimiter.isEmpty()
+//                ? builder.toString()
+//                : builder.substring(delimiter.length()).toString();
+//    }
 }
