@@ -13,6 +13,7 @@ import io.reactivex.functions.Consumer;
 public class MainPresenter implements Presenter<MainView> {
     private final EntryDetailViewModel entryDetailViewModel;
     private final EntryListViewModel entryListViewModel;
+    private boolean isList;
     private Optional<MainView> view;
     private CompositeDisposable subscriptions;
     private Optional<String> shareTitle;
@@ -24,6 +25,7 @@ public class MainPresenter implements Presenter<MainView> {
     ) {
         this.entryDetailViewModel = entryDetailViewModel;
         this.entryListViewModel = entryListViewModel;
+        this.isList = true;
     }
 
     @Override
@@ -57,18 +59,24 @@ public class MainPresenter implements Presenter<MainView> {
     public void onStart(Optional<String> selectedDateOptional) {
         if (!this.view.isPresent()) return; // do nothing
         if (selectedDateOptional.isPresent()) {
+            this.isList = false;
             this.entryListViewModel.set(selectedDateOptional);
             this.view.get().switchDetail(selectedDateOptional.get());
             this.shareTitle = Optional.empty();
             this.shareUrl = Optional.empty();
             this.view.get().hideShareButton();
+        } else if (this.entryListViewModel.get().isPresent() && !this.isList) {
+            this.isList = false;
+            this.view.get().switchDetail(this.entryListViewModel.get().get());
         } else {
+            this.isList = true;
             this.view.get().switchList("blog.bouzuya.net");
             updateShareButtonForList();
         }
     }
 
     public void onSwitchDetail() {
+        this.isList = false;
         if (!entryListViewModel.get().isPresent()) return;
         this.view.get().switchDetail(entryListViewModel.get().get());
         if (!entryDetailViewModel.get().isPresent()) return;
@@ -76,6 +84,7 @@ public class MainPresenter implements Presenter<MainView> {
     }
 
     public void onSwitchList() {
+        this.isList = true;
         this.view.get().switchList("blog.bouzuya.net");
         updateShareButtonForList();
     }
