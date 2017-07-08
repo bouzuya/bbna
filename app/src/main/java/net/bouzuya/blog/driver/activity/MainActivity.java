@@ -29,7 +29,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements MainView {
@@ -86,10 +85,9 @@ public class MainActivity extends AppCompatActivity
         if (actionBar == null) throw new IllegalStateException();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(date);
-        // reset share button
-        this.updateShareButton(Optional.<String>empty(), Optional.<String>empty());
     }
 
+    @Override
     public void showList() {
         viewPager.setCurrentItem(POSITION_LIST);
         ActionBar actionBar = getSupportActionBar();
@@ -119,9 +117,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
-                    case 0:
+                    case POSITION_LIST:
                         return EntryListFragment.newInstance();
-                    case 1:
+                    case POSITION_DETAIL:
                         return EntryDetailFragment.newInstance();
                     default:
                         throw new AssertionError();
@@ -151,18 +149,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onStart() {
-        Timber.d("onStart: ");
         super.onStart();
-
         presenter.onAttach(this);
         presenter.onStart(getSelectedDateFromIntentDataOrExtra());
     }
 
     @Override
     protected void onStop() {
-        Timber.d("onStop: ");
         presenter.onDetach();
-
         super.onStop();
     }
 
