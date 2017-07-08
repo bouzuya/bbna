@@ -18,7 +18,7 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
     private final EntryListViewModel entryListViewModel;
 
     private Optional<EntryDetailView> view;
-    private CompositeDisposable subscriptions;
+    private CompositeDisposable disposables;
 
     public EntryDetailPresenter(
             EntryDetailViewModel entryDetailViewModel,
@@ -30,9 +30,8 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
 
     @Override
     public void onAttach(EntryDetailView view) {
-        this.subscriptions = new CompositeDisposable();
         this.view = Optional.of(view);
-        this.subscriptions.add(
+        this.disposables = new CompositeDisposable(
                 this.entryListViewModel.observable().subscribe(new Consumer<Optional<String>>() {
                     @Override
                     public void accept(@NonNull Optional<String> selectedDate) throws Exception {
@@ -54,7 +53,7 @@ public class EntryDetailPresenter implements Presenter<EntryDetailView> {
     @Override
     public void onDetach() {
         this.view = Optional.empty();
-        this.subscriptions.dispose();
+        this.disposables.dispose();
     }
 
     public void onStart() {
