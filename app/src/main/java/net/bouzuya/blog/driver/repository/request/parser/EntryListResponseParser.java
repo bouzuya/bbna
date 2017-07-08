@@ -53,7 +53,7 @@ public class EntryListResponseParser implements ResponseParser<EntryList> {
             String date = jsonEntry.get("date").getAsString();
             EntryId entryId = EntryId.fromISO8601DateString(date);
             String title = jsonEntry.get("title").getAsString();
-            return new Entry(entryId, title);
+            return Entry.of(entryId, title);
         }
     }
 }

@@ -14,8 +14,8 @@ public class EntryListTest {
 
     @Test
     public void fromEntryArray() throws Exception {
-        Entry entry1 = new Entry(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
-        Entry entry2 = new Entry(EntryId.fromISO8601DateString("2006-01-03"), "title 2");
+        Entry entry1 = Entry.of(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
+        Entry entry2 = Entry.of(EntryId.fromISO8601DateString("2006-01-03"), "title 2");
         Entry[] entryArray = new Entry[]{entry1, entry2};
         EntryList entryList = EntryList.fromEntryArray(entryArray);
         assertThat(entryList.size(), is(2));
@@ -25,7 +25,7 @@ public class EntryListTest {
 
     @Test
     public void get() throws Exception {
-        Entry entry1 = new Entry(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
+        Entry entry1 = Entry.of(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
         Entry[] entryArray = new Entry[]{entry1};
         EntryList entryList = EntryList.fromEntryArray(entryArray);
         assertThat(entryList.get(0), is(entry1));
@@ -34,8 +34,8 @@ public class EntryListTest {
 
     @Test
     public void getLatestEntry() throws Exception {
-        Entry entry1 = new Entry(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
-        Entry entry2 = new Entry(EntryId.fromISO8601DateString("2006-01-03"), "title 2");
+        Entry entry1 = Entry.of(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
+        Entry entry2 = Entry.of(EntryId.fromISO8601DateString("2006-01-03"), "title 2");
         Entry[] entryArray = new Entry[]{entry1, entry2};
         EntryList entryList = EntryList.fromEntryArray(entryArray);
         assertThat(entryList.getLatestEntry().get(), is(entry2));
@@ -43,8 +43,8 @@ public class EntryListTest {
 
     @Test
     public void size() throws Exception {
-        Entry entry1 = new Entry(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
-        Entry entry2 = new Entry(EntryId.fromISO8601DateString("2006-01-03"), "title 2");
+        Entry entry1 = Entry.of(EntryId.fromISO8601DateString("2006-01-02"), "title 1");
+        Entry entry2 = Entry.of(EntryId.fromISO8601DateString("2006-01-03"), "title 2");
         Entry[] entryArray = new Entry[]{entry1, entry2};
         EntryList entryList = EntryList.fromEntryArray(entryArray);
         assertThat(entryList.size(), is(2));
