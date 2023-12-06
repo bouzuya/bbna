@@ -2,5 +2,4 @@
 
 blog.bouzuya.net for Android.
 
-https://play.google.com/store/apps/details?id=net.bouzuya.blog
-
+<https://play.google.com/store/apps/details?id=net.bouzuya.blog>
