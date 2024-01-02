@@ -8,6 +8,16 @@ services:
     volumes:
       - .:/home/bouzuya/bbna
       - backend-cargo-build-target:/home/bouzuya/bbna/backend/target
+  frontend:
+    build: ./frontend/
+    env_file: ./frontend/.env
+    ports:
+      - "19000:19000"
+    tty: true
+    volumes:
+      - .:/home/bouzuya/bbna
+      - frontend-node-modules:/home/bouzuya/bbna/frontend/node_modules
 
 volumes:
   backend-cargo-build-target:
+  frontend-node-modules:

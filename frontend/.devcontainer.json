@@ -1,0 +1,20 @@
+{
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "prettier.trailingComma": "all",
+        "typescript.preferences.importModuleSpecifier": "non-relative"
+      }
+    }
+  },
+  "dockerComposeFile": "../compose.yaml",
+  "name": "frontend",
+  "service": "frontend",
+  "workspaceFolder": "/home/bouzuya/bbna"
+}
