@@ -1,9 +1,9 @@
-import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
+import { getExpoConfigExtra } from "@/config";
 
 Notifications.setNotificationHandler({
   handleNotification: () =>
@@ -13,28 +13,6 @@ Notifications.setNotificationHandler({
       shouldShowAlert: true,
     }),
 });
-
-function getEasProjectId(): string {
-  const extra = Constants.expoConfig?.extra;
-  if (extra === undefined) {
-    throw new Error("extra is undefined");
-  }
-  const eas: unknown = extra.eas;
-  if (eas === undefined) {
-    throw new Error("extra.eas key not found");
-  }
-  if (typeof eas !== "object" || eas === null) {
-    throw new Error("eas is not object");
-  }
-  if (!("projectId" in eas)) {
-    throw new Error("eas.projectId key not found");
-  }
-  const { projectId } = eas;
-  if (typeof projectId !== "string") {
-    throw new Error("projectId is not string");
-  }
-  return projectId;
-}
 
 export function Root() {
   const [expoPushToken, setExpoPushToken] = useState<string>("");
@@ -97,6 +75,8 @@ export function Root() {
 }
 
 async function getExpoPushToken(): Promise<string> {
+  const projectId = getExpoConfigExtra().eas.projectId;
+
   if (!Device.isDevice) {
     throw new Error("Must use physical device for Push Notifications");
   }
@@ -122,7 +102,7 @@ async function getExpoPushToken(): Promise<string> {
   }
   return (
     await Notifications.getExpoPushTokenAsync({
-      projectId: getEasProjectId(),
+      projectId,
     })
   ).data;
 }

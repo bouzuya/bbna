@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "dependencies": {
     "expo": "~49.0.15",
+    "expo-constants": "~14.4.2",
+    "expo-dev-client": "~2.4.12",
     "expo-device": "~5.4.0",
     "expo-notifications": "~0.20.1",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
-    "react-native": "0.72.6",
-    "expo-dev-client": "~2.4.12",
-    "expo-constants": "~14.4.2"
+    "react-native": "0.72.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -21,7 +21,8 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^3.1.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.1"
   },
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
@@ -32,6 +33,7 @@
     "format:write": "prettier --write .",
     "lint": "eslint .",
     "start": "expo start",
+    "test": "vitest",
     "web": "expo start --web"
   }
 }
