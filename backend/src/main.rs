@@ -55,9 +55,14 @@ async fn create_notification(
     Ok(StatusCode::CREATED)
 }
 
+async fn get_root() -> &'static str {
+    "OK"
+}
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let router = Router::new()
+        .route("/", routing::get(get_root))
         .route("/expo_push_tokens", routing::post(create_expo_push_token))
         .route(
             "/expo_push_tokens/:expo_push_token_id",
