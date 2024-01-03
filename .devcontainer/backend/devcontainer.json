@@ -8,8 +8,9 @@
       ]
     }
   },
-  "dockerComposeFile": "../compose.yaml",
+  "dockerComposeFile": "../../compose.yaml",
   "name": "backend",
   "service": "backend",
+  "shutdownAction": "none",
   "workspaceFolder": "/home/bouzuya/bbna"
 }

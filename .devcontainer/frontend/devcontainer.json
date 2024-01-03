@@ -13,8 +13,9 @@
       }
     }
   },
-  "dockerComposeFile": "../compose.yaml",
+  "dockerComposeFile": "../../compose.yaml",
   "name": "frontend",
   "service": "frontend",
+  "shutdownAction": "none",
   "workspaceFolder": "/home/bouzuya/bbna"
 }
