@@ -8,7 +8,7 @@
       ]
     }
   },
-  "dockerComposeFile": "../../compose.yaml",
+  "dockerComposeFile": ["../../compose.yaml", "compose.yaml"],
   "name": "backend",
   "service": "backend",
   "shutdownAction": "none",
