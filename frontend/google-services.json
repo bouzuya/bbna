@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "117520723198",
+    "project_id": "bouzuya-lab-expo-push",
+    "storage_bucket": "bouzuya-lab-expo-push.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117520723198:android:1aa92ed30b72f4941b09af",
+        "android_client_info": {
+          "package_name": "net.bouzuya.lab.expo_push"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWLaIJUW9JDV4taJsjboFQj6zpSNA_Ais"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
