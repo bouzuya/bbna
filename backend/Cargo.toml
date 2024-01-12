@@ -12,3 +12,7 @@ tokio = { version = "1.35.1", features = ["full"] }
 
 [patch.crates-io]
 expo_push_notification_client = { git = "https://github.com/katayama8000/expo-push-notification-client-rust", branch = "main" }
+
+[dev-dependencies]
+serde_json = "1.0.111"
+tower = { version = "0.4.13", features = ["util"] }
