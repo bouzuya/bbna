@@ -1,11 +1,14 @@
+mod command;
 mod handler;
 
-use handler::{route, App};
+use command::App;
+use handler::route;
 use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let router = route(App::default());
+    let state = App::default();
+    let router = route(state);
     let listener = TcpListener::bind("0.0.0.0:3000").await?;
     Ok(axum::serve(listener, router).await?)
 }
@@ -20,8 +23,6 @@ mod tests {
     };
     use tower::ServiceExt;
 
-    use crate::handler::CreateExpoPushTokenRequestBody;
-
     use super::*;
 
     #[tokio::test]
@@ -34,24 +35,6 @@ mod tests {
         let response = router.oneshot(request).await?;
         assert_eq!(response.status(), StatusCode::OK);
         assert_eq!(response.into_body_string().await?, "OK");
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn test_create_expo_push_token() -> anyhow::Result<()> {
-        let router = route(App::default());
-        let request = Request::builder()
-            .method("POST")
-            .uri("/expo_push_tokens")
-            .header(CONTENT_TYPE, "application/json")
-            .body(Body::from(serde_json::to_string(
-                &CreateExpoPushTokenRequestBody {
-                    expo_push_token: "ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]".to_string(),
-                },
-            )?))?;
-        let response = router.oneshot(request).await?;
-        assert_eq!(response.status(), StatusCode::CREATED);
-        assert_eq!(response.into_body_string().await?, "");
         Ok(())
     }
 
@@ -76,7 +59,7 @@ mod tests {
     }
 
     #[async_trait]
-    trait ResponseExt {
+    pub trait ResponseExt {
         async fn into_body_string(self) -> anyhow::Result<String>;
     }
 
