@@ -74,7 +74,7 @@ sequenceDiagram
   user -->> frontend : Grant permissions
   frontend ->> expo : Create ExpoPushToken (expo-notifications)
   expo -->> frontend : (ExpoPushToken)
-  frontend ->> backend : Register ExpoPushToken
+  frontend ->> backend : Create ExpoPushToken
   backend ->> db : Write ExpoPushToken
   backend -->> frontend : OK
 ```
@@ -95,7 +95,7 @@ sequenceDiagram
   backend ->> backend : Check updates
   backend ->> db : Read ExpoPushTokens
   db -->> backend : (ExpoPushTokens)
-  backend ->> expo : Send push notifications
+  backend ->> expo : Create notifications
   expo -->> backend : (ExpoPushTickets)
   backend ->> db : Write ExpoPushTickets
   backend -->> scheduler : OK
@@ -117,4 +117,19 @@ sequenceDiagram
   expo -->> backend : (ExpoPushReceipt)
   backend ->> db : Delete invalid ExpoPushTokens
   backend -->> scheduler : OK
+```
+
+### Unregister ExpoPushToken
+
+```mermaid
+sequenceDiagram
+  participant user
+  participant frontend
+  participant backend
+  participant db
+
+  user ->> frontend : Run
+  frontend ->> backend : Delete ExpoPushToken
+  backend ->> db : Delete ExpoPushToken
+  backend -->> frontend : OK
 ```
