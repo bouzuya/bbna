@@ -3,6 +3,7 @@
     "vscode": {
       "extensions": [
         "GitHub.copilot",
+        "bierner.markdown-mermaid",
         "ms-azuretools.vscode-docker",
         "rust-lang.rust-analyzer"
       ]
