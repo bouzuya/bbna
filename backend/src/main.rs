@@ -8,7 +8,7 @@ use tokio::net::TcpListener;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let state = App::default();
-    let router = route(state);
+    let router = route().with_state(state);
     let listener = TcpListener::bind("0.0.0.0:3000").await?;
     Ok(axum::serve(listener, router).await?)
 }
@@ -16,12 +16,6 @@ async fn main() -> anyhow::Result<()> {
 #[cfg(test)]
 mod tests {
     use axum::{async_trait, response::Response};
-
-    #[tokio::test]
-    async fn test_create_notifications() -> anyhow::Result<()> {
-        // TODO
-        Ok(())
-    }
 
     #[async_trait]
     pub trait ResponseExt {

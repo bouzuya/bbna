@@ -4,10 +4,12 @@ use async_trait::async_trait;
 use tokio::sync::Mutex;
 
 use self::{
-    create_expo_push_token::CanCreateExpoPushToken, delete_expo_push_token::CanDeleteExpoPushToken,
+    create_expo_push_token::CanCreateExpoPushToken, create_notification::CanCreateNotification,
+    delete_expo_push_token::CanDeleteExpoPushToken,
 };
 
 pub mod create_expo_push_token;
+pub mod create_notification;
 pub mod delete_expo_push_token;
 
 #[derive(Clone, Debug, Default)]
@@ -23,6 +25,16 @@ impl CanCreateExpoPushToken for App {
         input: create_expo_push_token::Input,
     ) -> Result<create_expo_push_token::Output, create_expo_push_token::Error> {
         create_expo_push_token::handle(self, input).await
+    }
+}
+
+#[async_trait]
+impl CanCreateNotification for App {
+    async fn create_notification(
+        &self,
+        input: create_notification::Input,
+    ) -> Result<create_notification::Output, create_notification::Error> {
+        create_notification::handle(self, input).await
     }
 }
 
