@@ -6,11 +6,13 @@ use tokio::sync::Mutex;
 use self::{
     create_expo_push_token::CanCreateExpoPushToken, create_notification::CanCreateNotification,
     delete_expo_push_token::CanDeleteExpoPushToken,
+    delete_invalid_expo_push_tokens::CanDeleteInvalidExpoPushTokens,
 };
 
 pub mod create_expo_push_token;
 pub mod create_notification;
 pub mod delete_expo_push_token;
+pub mod delete_invalid_expo_push_tokens;
 
 #[derive(Clone, Debug, Default)]
 pub struct App {
@@ -45,5 +47,16 @@ impl CanDeleteExpoPushToken for App {
         input: delete_expo_push_token::Input,
     ) -> Result<delete_expo_push_token::Output, delete_expo_push_token::Error> {
         delete_expo_push_token::handle(self, input).await
+    }
+}
+
+#[async_trait]
+impl CanDeleteInvalidExpoPushTokens for App {
+    async fn delete_invalid_expo_push_tokens(
+        &self,
+        input: delete_invalid_expo_push_tokens::Input,
+    ) -> Result<delete_invalid_expo_push_tokens::Output, delete_invalid_expo_push_tokens::Error>
+    {
+        delete_invalid_expo_push_tokens::handle(self, input).await
     }
 }
