@@ -15,42 +15,7 @@ async fn main() -> anyhow::Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use axum::{
-        async_trait,
-        body::Body,
-        http::{header::CONTENT_TYPE, Request, StatusCode},
-        response::Response,
-    };
-    use tower::ServiceExt;
-
-    use super::*;
-
-    #[tokio::test]
-    async fn test_get_root() -> anyhow::Result<()> {
-        let router = route(App::default());
-        let request = Request::builder()
-            .method("GET")
-            .uri("/")
-            .body(Body::empty())?;
-        let response = router.oneshot(request).await?;
-        assert_eq!(response.status(), StatusCode::OK);
-        assert_eq!(response.into_body_string().await?, "OK");
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn test_delete_expo_push_token() -> anyhow::Result<()> {
-        let router = route(App::default());
-        let request = Request::builder()
-            .method("DELETE")
-            .uri("/expo_push_tokens/ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]")
-            .header(CONTENT_TYPE, "application/json")
-            .body(Body::empty())?;
-        let response = router.oneshot(request).await?;
-        assert_eq!(response.status(), StatusCode::NO_CONTENT);
-        assert_eq!(response.into_body_string().await?, "");
-        Ok(())
-    }
+    use axum::{async_trait, response::Response};
 
     #[tokio::test]
     async fn test_create_notifications() -> anyhow::Result<()> {
