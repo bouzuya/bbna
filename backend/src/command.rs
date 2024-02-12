@@ -17,6 +17,7 @@ pub mod delete_invalid_expo_push_tokens;
 #[derive(Clone, Debug, Default)]
 pub struct App {
     // TODO: hide
+    pub expo_push_tickets: Arc<Mutex<HashSet<String>>>,
     pub expo_push_tokens: Arc<Mutex<HashSet<String>>>,
 }
 
