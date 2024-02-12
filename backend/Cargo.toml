@@ -7,13 +7,10 @@ edition = "2021"
 anyhow = "1.0.78"
 async-trait = "0.1.77"
 axum = "0.7.3"
-expo_push_notification_client = "0.1.0"
+expo_push_notification_client = "0.2.2"
 serde = { version = "1.0.193", features = ["derive"] }
 thiserror = "1.0.56"
 tokio = { version = "1.35.1", features = ["full"] }
-
-[patch.crates-io]
-expo_push_notification_client = { git = "https://github.com/katayama8000/expo-push-notification-client-rust", branch = "main" }
 
 [dev-dependencies]
 mockall = "0.12.1"
