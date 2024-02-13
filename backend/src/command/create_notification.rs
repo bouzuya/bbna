@@ -27,7 +27,7 @@ pub async fn handle(state: &App, _: Input) -> Result<Output, Error> {
         .send_push_notifications(ExpoPushMessage::builder(expo_push_tokens.clone()).build()?)
         .await?;
 
-    state.expo_push_tickets.lock().await.extend(
+    state.expo_push_ticket_ids.lock().await.extend(
         expo_push_tickets
             .into_iter()
             .map(|ticket| match ticket {

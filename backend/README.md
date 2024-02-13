@@ -5,7 +5,6 @@
 - ☐ Authentication
   - ☐ Create Notification
   - ☐ Delete invalid ExpoPushTokens
-- ☐ `DELETE /invalid_expo_push_tokens`
 
 ## Endpoints
 
