@@ -6,10 +6,7 @@ pub fn route<T>() -> Router<T>
 where
     T: Clone + CanDeleteInvalidExpoPushTokens + Send + Sync + 'static,
 {
-    Router::new().route(
-        "/expo_push_tokens/:expo_push_token",
-        routing::delete(handler::<T>),
-    )
+    Router::new().route("/invalid_expo_push_tokens", routing::delete(handler::<T>))
 }
 
 async fn handler<T>(State(app): State<T>) -> Result<StatusCode, StatusCode>
