@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - directory: /backend/
+    package-ecosystem: cargo
+    schedule:
+      day: tuesday
+      interval: weekly
+      time: "15:00"
+  - directory: /backend/
+    package-ecosystem: docker
+    schedule:
+      day: tuesday
+      interval: weekly
+      time: "15:00"
