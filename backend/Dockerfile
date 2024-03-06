@@ -1,4 +1,4 @@
-FROM rust:1.75.0-bookworm
+FROM rust:1.76.0-bookworm
 
 RUN useradd --create-home bouzuya \
   && mkdir -p /home/bouzuya/bbna
