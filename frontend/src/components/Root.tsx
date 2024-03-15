@@ -2,6 +2,7 @@ import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { getExpoConfigExtra } from "@/config";
 import { getExpoPushToken } from "@/notifications";
 
 Notifications.setNotificationHandler({
@@ -22,9 +23,10 @@ export function Root() {
     void (async () => {
       const token = await getExpoPushToken();
       if (token === null) return;
+      const apiUrl = getExpoConfigExtra().apiUrl;
 
       await (async (expoPushToken: string): Promise<void> => {
-        const response = await fetch("http://10.0.0.6:3000/expo_push_tokens", {
+        const response = await fetch(`${apiUrl}/expo_push_tokens`, {
           body: JSON.stringify({ expo_push_token: expoPushToken }),
           headers: {
             "Content-Type": "application/json",
