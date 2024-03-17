@@ -40,6 +40,8 @@ describe("EntryList", () => {
   //   expect(getByText(mockEntry.date)).toBeTruthy();
   // });
 
+  // TODO: test click list item
+
   function buildEntry(): Entry {
     return {
       date: "2020-01-02",

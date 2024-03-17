@@ -2,6 +2,7 @@ import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { EntryDetail } from "@/components/EntryDetail";
 import { EntryList } from "@/components/EntryList";
 import {
   NavigationContainer,
@@ -104,6 +105,7 @@ export function Root() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="EntryDetail" component={EntryDetail} />
         <Stack.Screen name="EntryList" component={EntryList} />
         <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>

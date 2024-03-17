@@ -10,10 +10,15 @@ type ParamList = {
   Home: undefined;
 };
 
-export const useNavigation = ReactNavigation.useNavigation<
-  NativeStackNavigationProp<ParamList>
->;
-
 export const NavigationContainer = ReactNavigation.NavigationContainer;
 
 export const Stack = createNativeStackNavigator<ParamList>();
+
+export const useNavigation: () => NativeStackNavigationProp<ParamList> =
+  ReactNavigation.useNavigation<NativeStackNavigationProp<ParamList>>;
+
+export function useRoute<
+  T extends keyof ParamList,
+>(): ReactNavigation.RouteProp<ParamList, T> {
+  return ReactNavigation.useRoute<ReactNavigation.RouteProp<ParamList, T>>();
+}

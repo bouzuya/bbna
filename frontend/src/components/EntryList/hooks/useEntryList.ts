@@ -1,10 +1,13 @@
+import { useCallback } from "react";
 import useSWR from "swr";
+import { useNavigation } from "@/components/Root/hooks/useNavigation";
 import type { Entry } from "@/types/Entry";
 
 export function useEntryList(): {
   entryList: Entry[] | null;
   onClickEntry: (date: string) => void;
 } {
+  const navigation = useNavigation();
   const { data: entryList } = useSWR<Entry[]>(
     "https://blog.bouzuya.net/posts.json",
     (key: string) =>
@@ -16,9 +19,13 @@ export function useEntryList(): {
           ),
         ),
   );
-  const onClickEntry = (date: string) => {
-    console.log(`onClickEntry(date = ${date})`);
-  };
+  const onClickEntry = useCallback(
+    (date: string) => {
+      console.log(`onClickEntry(date = ${date})`);
+      navigation.push("EntryDetail", { date });
+    },
+    [navigation],
+  );
   return {
     entryList: entryList ?? null,
     onClickEntry,
