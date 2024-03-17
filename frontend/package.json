@@ -13,9 +13,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@testing-library/react-native": "^12.4.3",
     "@types/react": "^18.2.46",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
@@ -23,7 +25,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^3.1.1",
     "typescript": "^5.3.3",
-    "vitest": "^1.1.1"
+    "vitest": "^1.1.1",
+    "vitest-react-native": "^0.1.5"
   },
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
