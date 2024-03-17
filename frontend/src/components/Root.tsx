@@ -1,11 +1,13 @@
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { EntryList } from "@/components/EntryList";
+import {
+  NavigationContainer,
+  Stack,
+  useNavigation,
+} from "@/components/Root/hooks/useNavigation";
 import { getExpoConfigExtra } from "@/config";
 import { getExpoPushToken } from "@/notifications";
 
@@ -18,16 +20,11 @@ Notifications.setNotificationHandler({
     }),
 });
 
-type ParamList = {
-  EntryList: undefined;
-  Home: undefined;
-};
-
 function Home(): JSX.Element {
   const [expoPushToken, setExpoPushToken] = useState<string>("");
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null);
-  const navigation = useNavigation<NativeStackNavigationProp<ParamList>>();
+  const navigation = useNavigation();
 
   useEffect(() => {
     void (async () => {
@@ -102,8 +99,6 @@ function Home(): JSX.Element {
     </View>
   );
 }
-
-const Stack = createNativeStackNavigator<ParamList>();
 
 export function Root() {
   return (
