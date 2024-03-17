@@ -9,7 +9,7 @@ export function useEntryList(): {
     "https://blog.bouzuya.net/posts.json",
     (key: string) =>
       fetch(key)
-        .then((res) => res.json() as Promise<Entry[]>)
+        .then((res): Promise<Entry[]> => res.json())
         .then((data) =>
           data.sort(({ date: a }, { date: b }) =>
             a === b ? 0 : a < b ? 1 : -1,
