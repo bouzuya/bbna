@@ -4,7 +4,6 @@ import { EntryListItem } from "@/components/EntryListItem";
 
 export function EntryList(): JSX.Element {
   const { entryList, onClickEntry } = useEntryList();
-  console.log(entryList);
   return (
     <View style={styles.container}>
       <FlatList
