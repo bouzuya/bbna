@@ -20,7 +20,11 @@ export function Root() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="EntryList">
         <Stack.Screen name="EntryDetail" component={EntryDetail} />
-        <Stack.Screen name="EntryList" component={EntryList} />
+        <Stack.Screen
+          name="EntryList"
+          component={EntryList}
+          options={{ title: "blog.bouzuya.net" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
