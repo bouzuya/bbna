@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useRoute } from "@/hooks/useNavigation";
+import { useEntryDetail } from "@/hooks/useEntryDetail";
 
 export function EntryDetail(): JSX.Element {
-  const route = useRoute<"EntryDetail">();
+  const { date } = useEntryDetail();
+
   return (
     <View style={styles.container}>
-      <Text>Entry Detail {route.params.date}</Text>
+      <Text>Entry Detail {date}</Text>
     </View>
   );
 }
