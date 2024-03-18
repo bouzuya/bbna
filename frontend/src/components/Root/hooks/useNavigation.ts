@@ -7,7 +7,6 @@ type ParamList = {
     date: string;
   };
   EntryList: undefined;
-  Home: undefined;
 };
 
 export const NavigationContainer = ReactNavigation.NavigationContainer;
