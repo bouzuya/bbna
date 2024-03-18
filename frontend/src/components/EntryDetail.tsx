@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useRoute } from "@/components/Root/hooks/useNavigation";
+import { useRoute } from "@/hooks/useNavigation";
 
 export function EntryDetail(): JSX.Element {
   const route = useRoute<"EntryDetail">();

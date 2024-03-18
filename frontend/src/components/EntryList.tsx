@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useEntryList } from "@/components/EntryList/hooks/useEntryList";
 import { EntryListItem } from "@/components/EntryListItem";
+import { useEntryList } from "@/hooks/useEntryList";
 
 export function EntryList(): JSX.Element {
   const { entryList, onClickEntry } = useEntryList();

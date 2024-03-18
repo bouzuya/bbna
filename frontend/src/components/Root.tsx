@@ -2,11 +2,8 @@ import * as Notifications from "expo-notifications";
 import React from "react";
 import { EntryDetail } from "@/components/EntryDetail";
 import { EntryList } from "@/components/EntryList";
-import {
-  NavigationContainer,
-  Stack,
-} from "@/components/Root/hooks/useNavigation";
-import { useRoot } from "@/components/Root/hooks/useRoot";
+import { NavigationContainer, Stack } from "@/hooks/useNavigation";
+import { useRoot } from "@/hooks/useRoot";
 
 Notifications.setNotificationHandler({
   handleNotification: () =>

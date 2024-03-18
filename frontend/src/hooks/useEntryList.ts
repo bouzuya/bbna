@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import useSWR from "swr";
-import { useNavigation } from "@/components/Root/hooks/useNavigation";
+import { useNavigation } from "@/hooks/useNavigation";
 import type { Entry } from "@/types/Entry";
 
 export function useEntryList(): {
