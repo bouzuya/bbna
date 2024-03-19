@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Text, Pressable, TouchableOpacity, Share } from "react-native";
 import useSWR from "swr";
 import { useNavigation, useRoute } from "@/hooks/useNavigation";
 import type { EntryDetail } from "@/types/EntryDetail";
@@ -18,7 +19,9 @@ export function useEntryDetail(): {
   );
 
   useEffect(() => {
-    navigation.setOptions({ title: `${date} ${entryDetail?.title ?? ""}` });
+    navigation.setOptions({
+      title: date,
+    });
   }, [date, entryDetail, navigation]);
 
   return { date, entryDetail: entryDetail ?? null };

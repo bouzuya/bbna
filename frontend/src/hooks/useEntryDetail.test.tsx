@@ -3,7 +3,6 @@ import * as Swr from "swr";
 import type { MockInstance } from "vitest";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useEntryDetail } from "@/hooks/useEntryDetail";
-import * as UseRoute from "@/hooks/useNavigation";
 import * as UseNavigation from "@/hooks/useNavigation";
 
 vi.mock("swr", () => ({
@@ -24,7 +23,7 @@ describe("useEntryDetail", () => {
         setOptions: mockSetOptions,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any as ReturnType<typeof UseNavigation.useNavigation>);
-    mockUseRoute = vi.spyOn(UseRoute, "useRoute").mockReturnValue({
+    mockUseRoute = vi.spyOn(UseNavigation, "useRoute").mockReturnValue({
       key: "",
       name: "EntryDetail",
       params: { date: "2020-01-02" },
@@ -63,6 +62,6 @@ describe("useEntryDetail", () => {
     expect(result.current.date).toBe("2020-01-02");
     expect(result.current.entryDetail).toBe(null);
     expect(mockUseNavigation).toHaveBeenCalledTimes(1);
-    expect(mockSetOptions).toHaveBeenCalledWith({ title: "2020-01-02 " });
+    expect(mockSetOptions).toHaveBeenCalledWith({ title: "2020-01-02" });
   });
 });

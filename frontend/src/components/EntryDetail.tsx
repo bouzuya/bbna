@@ -1,4 +1,10 @@
-import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Markdown from "react-native-markdown-display";
 import { useEntryDetail } from "@/hooks/useEntryDetail";
 
@@ -21,12 +27,15 @@ export function EntryDetail(): JSX.Element {
         </View>
       ) : (
         <ScrollView>
+          <Text style={{ fontSize: 28, padding: 16, fontWeight: "bold" }}>
+            {entryDetail.title}
+          </Text>
           <Markdown
             style={{
               body: { fontSize: 16, padding: 16, paddingVertical: 32 },
-              heading1: { fontSize: 28, fontWeight: "bold", paddingBottom: 24 },
-              heading2: { fontSize: 24, fontWeight: "bold", paddingBottom: 24 },
-              heading3: { fontSize: 20, fontWeight: "bold", paddingBottom: 24 },
+              heading1: { fontSize: 24, fontWeight: "bold", paddingBottom: 24 },
+              heading2: { fontSize: 20, fontWeight: "bold", paddingBottom: 24 },
+              heading3: { fontSize: 16, fontWeight: "bold", paddingBottom: 16 },
               heading4: { fontSize: 16, fontWeight: "bold", paddingBottom: 16 },
               heading5: { fontSize: 16, fontWeight: "bold", paddingBottom: 16 },
               heading6: { fontSize: 16, fontWeight: "bold", paddingBottom: 16 },
