@@ -1,5 +1,6 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect } from "react";
-import { Text, Pressable, TouchableOpacity, Share } from "react-native";
+import { Share, TouchableOpacity } from "react-native";
 import useSWR from "swr";
 import { useNavigation, useRoute } from "@/hooks/useNavigation";
 import type { EntryDetail } from "@/types/EntryDetail";
@@ -21,6 +22,22 @@ export function useEntryDetail(): {
   useEffect(() => {
     navigation.setOptions({
       title: date,
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => {
+            void Share.share({
+              message: `https://blog.bouzuya.net/${date.replaceAll("-", "/")}/`,
+            });
+          }}
+        >
+          <MaterialCommunityIcons
+            color="black"
+            name="share-variant-outline"
+            size={24}
+            style={{ marginRight: 4 }}
+          />
+        </TouchableOpacity>
+      ),
     });
   }, [date, entryDetail, navigation]);
 
