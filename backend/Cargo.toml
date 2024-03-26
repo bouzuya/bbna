@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.78"
 async-trait = "0.1.77"
-axum = "0.7.3"
+axum = "0.7.5"
 expo_push_notification_client = "0.2.2"
 serde = { version = "1.0.193", features = ["derive"] }
 thiserror = "1.0.56"
